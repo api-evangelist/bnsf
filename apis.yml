@@ -4,17 +4,23 @@ apis:
   - aid: bnsf:bnsf
     name: BNSF
     tags:
+      - Shipping
+      - Freight
+      - Railroad
       - Trains
     humanURL: ' https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/'
     properties:
       - url: ' https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/'
         type: Documentation
     description: >-
-      Our API Center will enhance your business’s shipping experience with us.
-      Here’s information for anyone just getting started with APIs, as well as
+      Our API Center will enhance your businesss shipping experience with us.
+      Heres information for anyone just getting started with APIs, as well as
       experienced Web developers. 
 name: BNSF
 tags:
+  - Shipping
+  - Freight
+  - Railroad
   - Trains
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
@@ -23,9 +29,17 @@ created: '2025-02-06'
 modified: '2025-02-28'
 position: Consumer
 description: >-
-  Our API Center will enhance your business’s shipping experience with us.
-  Here’s information for anyone just getting started with APIs, as well as
-  experienced Web developers. 
+  BNSF Railway, a subsidiary of Berkshire Hathaway Inc., is one of the largest
+  freight railroad networks in North America. The company operates an extensive
+  network of over 32,000 route miles in 28 states and three Canadian provinces,
+  serving major markets in the United States and connecting with Mexico through
+  rail lines in Texas. BNSF transports a wide range of goods, including consumer
+  products, agricultural commodities, coal, and industrial materials, making it
+  a vital link in the supply chain for businesses across the continent. The
+  company prides itself on its commitment to safety, efficiency, and
+  environmental responsibility, using cutting-edge technology and sustainable
+  practices to deliver goods efficiently while minimizing its impact on the
+  environment.
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
