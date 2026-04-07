@@ -1,13 +1,12 @@
 aid: bnsf
-url: 
-  https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml
 apis:
   - aid: bnsf:bnsf
     name: BNSF
     tags:
-      - Shipping
       - Freight
       - Railroad
+      - Shipping
       - Trains
     humanURL: ' https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/'
     properties:
@@ -22,9 +21,9 @@ apis:
       to ensure the efficient and reliable transportation of goods across the continent.
 name: BNSF
 tags:
-  - Shipping
   - Freight
   - Railroad
+  - Shipping
   - Trains
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
