@@ -123,6 +123,8 @@ apis:
         url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
 
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/bnsf-railway
   - type: Website
     url: https://www.bnsf.com
   - type: Portal
