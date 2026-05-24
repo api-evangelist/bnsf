@@ -1,0 +1,58 @@
+openapi: 3.1.0
+info:
+  title: BNSF Customer API
+  description: |
+    BNSF Railway customer-facing API platform covering shipment tracing, hub
+    operations, prices, schedules, waybill management, reference files, and
+    diagnostics. All requests require certificate-based mutual authentication
+    (mTLS) using approved client certificates. Only endpoints explicitly
+    surfaced in BNSF's public Developer's Console documentation are described
+    below; the full catalog is exposed to authenticated customers through the
+    same base URL.
+  version: "1.0.0"
+  contact:
+    name: BNSF API Support
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+servers:
+  - url: https://api.bnsf.com:6443
+    description: Production
+  - url: https://api-trial.bnsf.com:6443
+    description: Trial
+security:
+  - MutualTLS: []
+tags:
+  - name: Diagnostics
+  - name: Reference Files
+paths:
+  /healthcheck:
+    get:
+      operationId: healthCheck
+      summary: Service health check
+      description: Returns service status confirming connectivity and mTLS handshake.
+      tags: [Diagnostics]
+      responses:
+        '200':
+          description: Service is healthy.
+          content:
+            application/xml:
+              schema:
+                type: string
+                example: "<status>OK</status>"
+  /v1/cars:
+    get:
+      operationId: getCars
+      summary: Retrieve car reference data
+      description: |
+        Sample endpoint documented in the BNSF API Postman quickstart, returning
+        reference data about railcars in the customer's scope.
+      tags: [Reference Files]
+      responses:
+        '200':
+          description: Car reference data
+components:
+  securitySchemes:
+    MutualTLS:
+      type: mutualTLS
+      description: |
+        BNSF customer APIs require certificate-based mutual TLS using a client
+        certificate (PEM) issued by an approved Certificate Authority.
