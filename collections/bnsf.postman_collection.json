@@ -1,0 +1,173 @@
+{
+  "item": [
+    {
+      "id": "4cd05f7d-32d4-4fe2-8261-ad60d879db01",
+      "name": "Diagnostics",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "556e0bf0-2c54-4c9d-b14b-500b36a088fb",
+          "name": "Service health check",
+          "request": {
+            "name": "Service health check",
+            "description": {
+              "content": "Returns service status confirming connectivity and mTLS handshake.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "healthcheck"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "082bebf8-26a6-4eb6-9fe8-36cce29c4725",
+              "name": "Service is healthy.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element><status>OK</status></element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "0dadffff-b283-44a3-a956-c80dac7de26a",
+      "name": "Reference Files",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d3ff3827-5a9f-4562-8321-cd3927834a93",
+          "name": "Retrieve car reference data",
+          "request": {
+            "name": "Retrieve car reference data",
+            "description": {
+              "content": "Sample endpoint documented in the BNSF API Postman quickstart, returning\nreference data about railcars in the customer's scope.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "cars"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "df8ccbc6-46be-4822-a703-79a8c79eeee8",
+              "name": "Car reference data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "cars"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.bnsf.com:6443",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f99fda1b-7088-4806-aded-b3333ffaad99",
+    "name": "BNSF Customer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "BNSF Railway customer-facing API platform covering shipment tracing, hub\noperations, prices, schedules, waybill management, reference files, and\ndiagnostics. All requests require certificate-based mutual authentication\n(mTLS) using approved client certificates. Only endpoints explicitly\nsurfaced in BNSF's public Developer's Console documentation are described\nbelow; the full catalog is exposed to authenticated customers through the\nsame base URL.\n\n\nContact Support:\n Name: BNSF API Support",
+      "type": "text/plain"
+    }
+  }
+}
