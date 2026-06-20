@@ -6,7 +6,7 @@ description: >-
   over 32,000 route miles in 28 states and three Canadian provinces, serving major
   markets in the United States and connecting with Mexico through rail lines in Texas.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml
 created: '2025-02-06'
 modified: '2026-04-21'
