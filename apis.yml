@@ -131,7 +131,7 @@ common:
     url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
   - type: Documentation
     url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-  - type: DeveloperConsole
+  - type: Console
     url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/
   - type: Support
     url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
