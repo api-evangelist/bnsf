@@ -123,6 +123,10 @@ apis:
         url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
 
 common:
+  - type: DomainSecurity
+    url: security/bnsf-domain-security.yml
+  - type: Authentication
+    url: authentication/bnsf-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/bnsf-railway
   - type: Website

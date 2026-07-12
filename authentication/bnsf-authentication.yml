@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/bnsf-openapi.yml
+summary:
+  types:
+  - mutualTLS
+schemes:
+- name: MutualTLS
+  type: mutualTLS
+  description: |-
+    BNSF customer APIs require certificate-based mutual TLS using a client
+    certificate (PEM) issued by an approved Certificate Authority.
+  sources:
+  - openapi/bnsf-openapi.yml
