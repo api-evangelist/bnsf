@@ -123,6 +123,8 @@ apis:
         url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
 
 common:
+  - type: AgenticAccess
+    url: agentic-access/bnsf-agentic-access.yml
   - type: DomainSecurity
     url: security/bnsf-domain-security.yml
   - type: Authentication
