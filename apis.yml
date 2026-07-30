@@ -6,7 +6,20 @@ description: >-
   over 32,000 route miles in 28 states and three Canadian provinces, serving major
   markets in the United States and connecting with Mexico through rail lines in Texas.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium · Requires approval
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/bnsf.png
 url: https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml
 created: '2025-02-06'
 modified: '2026-04-21'
@@ -19,109 +32,117 @@ tags:
   - Intermodal
   - Logistics
 apis:
-  - aid: bnsf:bnsf-tracing-api
-    name: BNSF Tracing API
-    description: >-
-      The BNSF Tracing API provides real-time shipment tracking from origin to destination
-      for automotive VINs, carload railcars, intermodal units, and trains. Supports
-      bulk queries of up to 300 vehicles or units per request with detailed trip plan
-      and event data.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Railroad
-      - Tracking
-      - Tracing
-      - Shipping
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-      - type: Portal
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/
-
-  - aid: bnsf:bnsf-hub-operations-api
-    name: BNSF Hub Operations API
-    description: >-
-      The BNSF Hub Operations API provides access to intermodal facility data including
-      container and trailer delivery details, storage locations, driver pickup and delivery
-      information, dray bookings, gate operations, and unit status for intermodal hubs
-      across the BNSF network.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Intermodal
-      - Hub
-      - Logistics
-      - Operations
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-
-  - aid: bnsf:bnsf-pricing-rates-api
-    name: BNSF Pricing & Rates API
-    description: >-
-      The BNSF Pricing & Rates API provides access to freight shipping prices and rates
-      for both carload and intermodal shipments, enabling customers to obtain BNSF
-      shipping costs programmatically.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Pricing
-      - Rates
-      - Shipping
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-
-  - aid: bnsf:bnsf-schedules-api
-    name: BNSF Schedules API
-    description: >-
-      The BNSF Schedules API provides intermodal transit schedules enabling customers
-      to view planned departure and arrival times to help schedule freight shipments
-      across the BNSF rail network.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Schedules
-      - Transit
-      - Intermodal
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-
-  - aid: bnsf:bnsf-waybill-management-api
-    name: BNSF Waybill Management API
-    description: >-
-      The BNSF Waybill Management API enables customers to submit bills of lading with
-      transit details and retrieve submissions for carload shipments. Supports electronic
-      submission and retrieval of waybill documentation for freight management.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Waybill
-      - Documentation
-      - Carload
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-
-  - aid: bnsf:bnsf-reference-files-api
-    name: BNSF Reference Files API
-    description: >-
-      The BNSF Reference Files API provides access to reference data including city
-      names, commodity descriptions (STCC codes), station data, event codes, and
-      hazardous materials information used in freight operations and waybill processing.
-    humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
-    tags:
-      - Freight
-      - Reference
-      - Data
-      - STCC
-      - Stations
-    properties:
-      - type: Documentation
-        url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
-
+- aid: bnsf:bnsf-tracing-api
+  name: BNSF Tracing API
+  description: >-
+    The BNSF Tracing API provides real-time shipment tracking from origin to destination for automotive
+    VINs, carload railcars, intermodal units, and trains. Supports bulk queries of up to 300 vehicles
+    or units per request with detailed trip plan and event data.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Railroad
+  - Tracking
+  - Tracing
+  - Shipping
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+  - type: Portal
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/
+- aid: bnsf:bnsf-hub-operations-api
+  name: BNSF Hub Operations API
+  description: >-
+    The BNSF Hub Operations API provides access to intermodal facility data including container and trailer
+    delivery details, storage locations, driver pickup and delivery information, dray bookings, gate operations,
+    and unit status for intermodal hubs across the BNSF network.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Intermodal
+  - Hub
+  - Logistics
+  - Operations
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- aid: bnsf:bnsf-pricing-rates-api
+  name: BNSF Pricing & Rates API
+  description: >-
+    The BNSF Pricing & Rates API provides access to freight shipping prices and rates for both carload
+    and intermodal shipments, enabling customers to obtain BNSF shipping costs programmatically.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Pricing
+  - Rates
+  - Shipping
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- aid: bnsf:bnsf-schedules-api
+  name: BNSF Schedules API
+  description: >-
+    The BNSF Schedules API provides intermodal transit schedules enabling customers to view planned departure
+    and arrival times to help schedule freight shipments across the BNSF rail network.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Schedules
+  - Transit
+  - Intermodal
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- aid: bnsf:bnsf-waybill-management-api
+  name: BNSF Waybill Management API
+  description: >-
+    The BNSF Waybill Management API enables customers to submit bills of lading with transit details and
+    retrieve submissions for carload shipments. Supports electronic submission and retrieval of waybill
+    documentation for freight management.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Waybill
+  - Documentation
+  - Carload
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- aid: bnsf:bnsf-reference-files-api
+  name: BNSF Reference Files API
+  description: >-
+    The BNSF Reference Files API provides access to reference data including city names, commodity descriptions
+    (STCC codes), station data, event codes, and hazardous materials information used in freight operations
+    and waybill processing.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Freight
+  - Reference
+  - Data
+  - STCC
+  - Stations
+  properties:
+  - type: Documentation
+    url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- aid: bnsf:bnsf-diagnostics-api
+  name: BNSF Diagnostics API
+  description: The Diagnostics API from BNSF — 1 operation(s) for diagnostics.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Diagnostics
+  properties:
+  - type: OpenAPI
+    url: openapi/bnsf-diagnostics-api-openapi.yml
+- aid: bnsf:bnsf-reference-files-api
+  name: BNSF Reference Files API
+  description: The Reference Files API from BNSF — 1 operation(s) for reference files.
+  humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  tags:
+  - Reference Files
+  properties:
+  - type: OpenAPI
+    url: openapi/bnsf-reference-files-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/bnsf-agentic-access.yml
