@@ -1,0 +1,16 @@
+{
+  "provider": "bnsf",
+  "sources": [
+    "bnsf-diagnostics-api-openapi.yml",
+    "bnsf-reference-files-api-openapi.yml"
+  ],
+  "outputs": [
+    "bnsf-diagnostics-api-openapi.yml",
+    "bnsf-reference-files-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
