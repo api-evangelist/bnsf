@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BNSF Customer Diagnostics API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Diagnostics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Service health check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bnsf.com:6443/healthcheck"
+          },
+          "docs": "Returns service status confirming connectivity and mTLS handshake."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

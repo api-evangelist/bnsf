@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "BNSF Customer Diagnostics Reference Files API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reference Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve car reference data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.bnsf.com:6443/v1/cars"
+          },
+          "docs": "Sample endpoint documented in the BNSF API Postman quickstart, returning\nreference data about railcars in the customer's scope.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

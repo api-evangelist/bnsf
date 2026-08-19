@@ -1,0 +1,102 @@
+{
+  "item": [
+    {
+      "id": "ad34261a-dede-479f-8c50-ef993a99a471",
+      "name": "Diagnostics",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c3ecd465-5f75-4dd9-93b6-03be06645989",
+          "name": "Service health check",
+          "request": {
+            "name": "Service health check",
+            "description": {
+              "content": "Returns service status confirming connectivity and mTLS handshake.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "healthcheck"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "60747724-20d8-4cc1-be98-7f761bbc006e",
+              "name": "Service is healthy.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "healthcheck"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element><status>OK</status></element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.bnsf.com:6443",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6ec4a247-388b-4ae6-8079-a08bb6bea11a",
+    "name": "BNSF Customer Diagnostics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "BNSF Railway customer-facing API platform covering shipment tracing, hub\noperations, prices, schedules, waybill management, reference files, and\ndiagnostics. All requests require certificate-based mutual authentication\n(mTLS) using approved client certificates. Only endpoints explicitly\nsurfaced in BNSF's public Developer's Console documentation are described\nbelow; the full catalog is exposed to authenticated customers through the\nsame base URL.\n\n\nContact Support:\n Name: BNSF API Support",
+      "type": "text/plain"
+    }
+  }
+}
