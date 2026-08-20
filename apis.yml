@@ -62,6 +62,11 @@ apis:
   - Intermodal
   - Hub
   - Logistics
+  tags_raw:
+  - Freight
+  - Intermodal
+  - Hub
+  - Logistics
   - Operations
   properties:
   - type: Documentation
