@@ -6,6 +6,17 @@ description: >-
   over 32,000 route miles in 28 states and three Canadian provinces, serving major
   markets in the United States and connecting with Mexico through rail lines in Texas.
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: approval
