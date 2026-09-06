@@ -1,0 +1,48 @@
+generated: '2026-09-06'
+method: generated
+source: Grounded in the operationIds of the eight BNSF OpenAPI documents in openapi/, harvested from https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  on 2026-09-06, plus BNSF's own Getting Started, API Support and Push Notifications pages.
+description: Packaged Agent Skills for the BNSF Customer API. BNSF publishes no skills, no AGENTS.md and
+  no agent guidance of its own; these are written by API Evangelist against BNSF's published contracts.
+  Every operationId referenced exists in the specs in openapi/ — none is invented.
+provider: BNSF
+skill_count: 6
+cross_cutting_rules:
+- Mutual TLS with a BNSF-registered client certificate on port 6443 is the only authentication. No API
+  key, no bearer token.
+- Data visibility follows the waybill. An empty result means your company is not named on it.
+- 27 of 59 operations are Restricted Services requiring separate authorisation and Production-only access.
+- No idempotency key exists anywhere on the surface. Never blind-retry a write.
+- Gateway throttles are 1 request/second and 15 requests/minute per partner per service, plus a shared
+  100 requests/minute per service across all partners. No Retry-After header is returned.
+skills:
+- name: bnsf-trace-a-carload-shipment
+  file: bnsf-trace-a-carload-shipment.md
+  api: bnsf:bnsf-trace
+  consequence: read-only
+  restricted_operations: 0
+- name: bnsf-trace-intermodal-and-automotive
+  file: bnsf-trace-intermodal-and-automotive.md
+  api: bnsf:bnsf-trace
+  consequence: read-only
+  restricted_operations: 0
+- name: bnsf-intermodal-gate-flow
+  file: bnsf-intermodal-gate-flow.md
+  api: bnsf:bnsf-intermodal-hub-operations
+  consequence: mutating — two operations are irreversible
+  restricted_operations: 9
+- name: bnsf-submit-and-retrieve-a-waybill
+  file: bnsf-submit-and-retrieve-a-waybill.md
+  api: bnsf:bnsf-waybill
+  consequence: mutating — POST /v1/bol has no published reversal
+  restricted_operations: 1
+- name: bnsf-price-rate-and-invoice-lookup
+  file: bnsf-price-rate-and-invoice-lookup.md
+  api: bnsf:bnsf-prices
+  consequence: read-only
+  restricted_operations: 3
+- name: bnsf-resolve-rail-reference-codes
+  file: bnsf-resolve-rail-reference-codes.md
+  api: bnsf:bnsf-reference-files
+  consequence: read-only
+  restricted_operations: 0

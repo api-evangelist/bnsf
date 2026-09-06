@@ -1,0 +1,3362 @@
+openapi: 3.0.0
+info:
+  title: BNSF Intermodal Hub Operations API
+  description: 'Intermodal facility operations across the BNSF hub network: dray bookings and dray plans, driver vehicle inspection
+    reports, flips, lot locations, ingate and outgate registration and validation, pre-gate creation and cancellation, J1
+    gate receipts, pickup numbers, street en-route reporting, unit details, domestic empties and parking updates.'
+  termsOfService: http://www.bnsf.com/site-terms-of-use.html
+  contact:
+    name: BNSF Customer API
+    email: CustomerAPI@bnsf.com
+  version: '1.0'
+servers:
+- url: https://api.bnsf.com:6443
+  description: Production
+- url: https://api-trial.bnsf.com:6443
+  description: Trial
+paths:
+  /v1/dray-booking/open:
+    get:
+      tags:
+      - Intermodal Hub Operations
+      summary: Dray open booking details.
+      parameters:
+      - name: drayageBookingNumber
+        in: query
+        description: drayageBookingNumber
+        required: true
+        schema:
+          type: string
+          title: Schema
+          example: 'SH0987654 '
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrayBookingResponse'
+        '400':
+          description: '**Bad Request**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Invalid Booking Number
+                  httpResponseCode:
+                    type: string
+                    example: '400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: '**Not Found**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Not Found
+                  httpResponseCode:
+                    type: string
+                    example: '404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: getV1DrayBookingOpen
+  '/v1/dray-plan/list-units ':
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Dray Plan List Units- Returns a list of dray plans for a given supplier633 and list of unit id’s.
+      parameters:
+      - name: supplier633
+        in: query
+        required: true
+        schema:
+          type: string
+          example: APARTNERS633
+      requestBody:
+        $ref: '#/components/requestBodies/drayPlanListUnits'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrayPlan'
+        '400':
+          description: '**Bad Request**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Invalid Booking Number
+                  httpResponseCode:
+                    type: string
+                    example: '400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: '**Not Found**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Not Found
+                  httpResponseCode:
+                    type: string
+                    example: '404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1DrayPlanListUnits
+  /v1/dray-plan/initial/{equipmentInitial}/number/{equipmentNumber}:
+    delete:
+      tags:
+      - Intermodal Hub Operations
+      summary: Dray Plan- Remove dray plans.
+      parameters:
+      - name: equipmentInitial
+        in: path
+        required: true
+        schema:
+          type: string
+        example: BNSF
+      - name: equipmentNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '12345'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+        '400':
+          description: '**Bad Request**
+
+
+            The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.
+
+            '
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: '**Not Found**
+
+
+            The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does
+            not exist. Please consult the documentation.
+
+            '
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: deleteV1DrayPlanInitialByEquipmentInitialNumberByEquipmentNumber
+  /v1/dray-plan/units:
+    get:
+      tags:
+      - Intermodal Hub Operations
+      summary: Dray Plan- Capture an intermodal container's dwell profile from dray carriers and steamship lines.
+      parameters:
+      - name: supplier633
+        in: query
+        description: Supplier 633
+        required: true
+        schema:
+          type: string
+          title: Schema
+          example: APARTNERS633
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrayPlan'
+        '400':
+          description: '**Bad Request**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Invalid Booking Number
+                  httpResponseCode:
+                    type: string
+                    example: '400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: '**Not Found**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Not Found
+                  httpResponseCode:
+                    type: string
+                    example: '404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: getV1DrayPlanUnits
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Dray Plan- Create dray plans.
+      parameters:
+      - name: supplier633
+        in: query
+        required: true
+        schema:
+          type: string
+          example: APARTNERS633
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DrayPlan'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrayPlan'
+        '400':
+          description: '**Bad Request**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Invalid Booking Number
+                  httpResponseCode:
+                    type: string
+                    example: '400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          description: '**Not Found**'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                      example: Not Found
+                  httpResponseCode:
+                    type: string
+                    example: '404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1DrayPlanUnits
+  /v2/dvir:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Driver Vehicle Inspection Report - Submit chassis defects (Y/N) within BNSF intermodal hubs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DvirInputBean'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  httpErrors:
+                    type: array
+                    title: httpErrors
+                    description: Response error of the API
+                    items:
+                      type: string
+                      example: Error
+                  httpResponseCode:
+                    type: number
+                    format: float
+                    title: httpResponseCode
+                    description: Response status of the API
+                    example: 0
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2Dvir
+  /v1/flips:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Flips - Returns details on authorized flips for given units.
+      requestBody:
+        $ref: '#/components/requestBodies/flipInputList'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/equipmentFlip'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1Flips
+  /v1/hub:
+    get:
+      tags:
+      - Intermodal Hub Operations
+      summary: Hub - Returns a list of valid lot locations at a given hub facility.
+      parameters:
+      - name: station333
+        in: query
+        description: The location of the most recently reported event
+        required: true
+        schema:
+          type: string
+          example: LOSANGELE
+        example: DALLAS
+      - name: stationStateCode
+        in: query
+        description: The location state of the most recently reported event
+        required: true
+        schema:
+          type: string
+          example: CA
+        example: TX
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Intermodal_Station'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1Hub
+  /v2/ingate:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Ingate - Returns way-billed units that can be registered prior to arrival at a hub facility.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gate_Move_Request'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngateResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2Ingate
+  /v1/ingate-management/current:
+    get:
+      tags:
+      - Intermodal Hub Operations
+      summary: 'Current Gate Target - Returns all ingate targets related to the authorized list of 633s. **Prerequisites:
+        Access to the “Ingate Planning” web tool is REQUIRED before using this endpoint.'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json1:
+              schema:
+                type: object
+                properties:
+                  ContainerIngateTargets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        containerTargetCountEffectiveDate:
+                          type: string
+                          description: Date on which the given allocation of containers is being considered effective for
+                            the given shipper.
+                          example: 2024/08/05
+                        containerTargetCountExpirationDate:
+                          type: string
+                          description: Date on which the given allocation of containers is being considered no more effective
+                            for the given shipper.
+                          example: 2024/08/05
+                        containerIngateStation333:
+                          type: string
+                          description: Station at which containers are ingated.
+                          example: CICERO
+                        containerIngateStationStateCode:
+                          type: string
+                          description: State code in which the station at which containers are ingated is located.
+                          example: IL
+                        ingateOutgateMaxCode:
+                          type: string
+                          description: Code indicating the side of the gate, Ingate or Outgate, at which given Ingate Outgate
+                            Maximum Allowed Container Count limit applies.
+                          example: IG
+                        ingateOutgateMaxDate:
+                          type: string
+                          description: Date on which the given Ingate Outgate Code is set.
+                          example: '2024-08-05'
+                        containerIngateOutgateCountCode:
+                          type: string
+                          description: 'Code defining whether the given container allocation count is applicable to a customer
+                            or pool of chassis.\nValid Values Include: P (Pool of Chassis), C (Customer).'
+                          example: P
+                        customer633Shipper:
+                          type: string
+                          description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's
+                            full Legal Name through the use of a standardized programmatic process.
+                          example: JBHUNTRANSPO
+                        ingateOutgateTargetAllowedContainerCount:
+                          type: integer
+                          description: Count of maximum container allowed to either ingate or outgate at the given station
+                            for the given effective period and shipper.
+                          example: 270
+                        ingateOutgateCount:
+                          type: integer
+                          description: Count of actual containers either ingated or outgated at the given station for a day.
+                          example: 181
+                        lastMaintenanceTimestamp:
+                          type: string
+                          description: The Date, Time** with fractional seconds, and Time Zone**** when a user, system, or
+                            DBMS process initially persists (saves) any data or persists any modification to data (including
+                            a logical delete).
+                          example: 2024-07-27T22:03:16.705+0000
+                        lastMaintenanceId:
+                          type: string
+                          description: The ID of the user, system, or DBMS process that triggered the initial persistence
+                            (saving) of any data or the persistence of any modification to data (including a logical delete).
+                          example: IMDPSCO2
+                        containerDestinationStation333:
+                          type: string
+                          description: Destination Station of outgating containers.
+                          example: ANYWHERE
+                        containerDestinationStationStateCode:
+                          type: string
+                          description: State code in which the destination Station of outgating containers is located.
+                          example: US
+                        controlFreightQuoteNumber:
+                          type: string
+                          description: Applicable freight rate quote number. TSS waybill supports only up to 12 characters
+                            for storing quote.
+                          example: $1000.00
+                        internationalDomesticCode:
+                          type: string
+                          description: 'Code defining the originating location of the containers.\nValid Values Include: I
+                            (International), D (Domestic), B (Both).'
+                          example: D
+                        truckerSCAC:
+                          type: string
+                          description: Company abbreviation of the trucker company.
+                          example: FXFW
+                        reportFilterCode:
+                          type: string
+                          description: Repeat filter code. Currently when a filter is added it is good for one day only. This
+                            indicator will be used to determine if the user wants to continue to repeat the filter. Valid
+                            values are Y or N.
+                          example: Y
+                        containerCalculatedLengthFeet:
+                          type: string
+                          description: The calculated length, in feet of Container.
+                          example: '28'
+                        ingateHazardousMaterialProfileCode:
+                          type: string
+                          description: 'Indicates whether given container has been identified as prohibiting the ingate of
+                            hazardous material or not.\nValid Values Are: Y (Yes), N (No).'
+                          example: Y
+                        ingateErrorMessageText:
+                          type: string
+                          description: Manually entered message describing the errors encountered while ingating the containers.
+                          example: Error message
+                        intermodalPlanCode:
+                          type: string
+                          description: Code indicating the intermodal plan service supplied. (20=rail owned door to door service,
+                            40=steamship stack operator owned, door to door domestic shipment, etc.) Also known as the intermodal
+                            service code.
+                          example: '20'
+                        equipmentLoadEmptyCode:
+                          type: string
+                          description: 'Code that is used to convey whether a piece of rail conveyance equipment (i.e., a
+                            railcar) is being shipped while laden with cargo or while empty, as is the case if it does not
+                            pick up another load at its destination.\nValid values are: L (Loaded), E (Empty), RE (Revenue
+                            Empty). For intermodal equipment a ''C'' is for chassis and will not be counted as loaded or empty.'
+                          example: E
+                        countCumulativeTypeCode:
+                          type: string
+                          description: 'Code which identifies the type of accumulation associated with the count. Valid values
+                            include: D (this applies to a daily count), C (this applies to a cumulative count).'
+                          example: D
+                        createUserId:
+                          type: string
+                          description: The BNSF ID of the user or program that created the row. (Also known as Create User
+                            ID.)
+                          example: USERID
+                        createDatetime:
+                          type: string
+                          description: The create timestamp. (Also known as Create Date/Time.)
+                          example: 2022-05-14T10:47:32.667+0000
+                        serviceLevelCode:
+                          type: string
+                          description: 'One-character code used to distinguish differently priced services BNSF provides for
+                            customers relative to volumes and other considerations. Also gives Marketing the ability to prioritize
+                            shippers within a service level based on seasonal requirements.\nValid Values Include: R (REGULAR),
+                            S (STACK), G (GUARANTEED), W (WEEKLY), Y (EMPTY), V (STANDBY), etc..'
+                          example: P
+                        tofcCofcCode:
+                          type: string
+                          description: 'A code indicating TOFC(trailer on flat car) or COFC(container on flat car) movement.
+                            Also used to determine stacked/non-stacked flat cars. Values are: T (TOFC), C (COFC).'
+                          example: TOFC
+                        businessSubUnitCode:
+                          type: string
+                          description: Code defining the specific group within each profit center targeted at a specific customer
+                            group.
+                          example: Group
+                        businessForecastCode:
+                          type: string
+                          description: Code that indicates within which Business Forecast a shipment exists.
+                          example: Business Forecast
+                        intermodalHoldingCode3:
+                          type: string
+                          description: Code indicating intermodal handling. It is also used as the unit loading priority.   H=Hot,
+                            D=Double stack. Loading priority values go from 1 (highest priority) to 9 (lowest priority).
+                          example: H
+                        ingateCustomerExceptionCommentText:
+                          type: string
+                          description: A comment, entered by a user on why an ingate rule had a customer exception.
+                          example: Comment
+                        ingateLocationExceptionCommentText:
+                          type: string
+                          description: A comment, entered by a user on why an ingate rule had a location exception.
+                          example: Comment
+                        beneficialOwnerFullName:
+                          type: string
+                          description: Full name of the legal entity considered to be the owner of the goods in a shipment,
+                            the Beneficial Owner is the party on whose behalf the shipment is being handled by a third party.
+                          example: John Doe
+                        basisStation:
+                          type: string
+                          description: The difference between a cash grain price and a futures price. Cash price at a specific
+                            333 location minus specific futures price = BASIS
+                          example: '0'
+                        dayOfTheWeekCode:
+                          type: string
+                          description: Number identifying the day of the week and used in a calculation. (1=Sunday, 2=Monday,
+                            3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday)
+                          example: '7'
+                        timezone:
+                          type: string
+                          description: Code which identifies the US (United States) Time Zone a Station is located within.
+                          example: American/Chicago
+                      nullable: false
+                    nullable: false
+                nullable: false
+        '400':
+          description: '**Bad Request**
+
+
+            The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+        '403':
+          description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\
+            \n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive\
+            \ an email letting you know. If you have not received the email, please wait up to five business days. Let us\
+            \ know via API Support if you still have not received the email after five business days.\n   * You can also get\
+            \ this error if your certificate is not configured properly on your side. Please review the Mutual Authentication\
+            \ in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient\
+            \ privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration\
+            \ form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\"\
+            \ field.\n"
+        '404':
+          description: '**Not Found**
+
+
+            The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does
+            not exist. Please consult the documentation.'
+        '405':
+          description: '**Method Not Allowed**
+
+
+            The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For
+            example, you may be using GET when POST is required. Please consult the documentation.'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such\
+            \ exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle\
+            \ limits. "
+        '500':
+          description: '**Internal Server Error**
+
+
+            The server encountered an unexpected condition which prevented it from fulfilling the request. This is always
+            a problem on the server side. Our internal support systems will be made aware.'
+        '504':
+          description: '**Gateway Timeout**
+
+
+            The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then
+            try again.'
+      deprecated: false
+      operationId: getV1IngateManagementCurrent
+  /v2/ingate/validate:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Validate Ingate - Returns required/missing information needed for ingate.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gate_Move_Request'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  httpErrors:
+                    type: array
+                    items:
+                      type: string
+                  httpResponseCode:
+                    type: number
+                    format: float
+                    description: Response Status of the API
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2IngateValidate
+  /v1/j1-receipts:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: J1 Receipts - Returns a list of J1 Gate Receipts.
+      description: The j1-receipts request accepts up to 100 units.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Schema
+              required:
+              - unitList
+              - endDate
+              - startDate
+              properties:
+                unitList:
+                  $ref: '#/components/schemas/unit_list'
+                endDate:
+                  type: string
+                  example: '2020-07-18'
+                startDate:
+                  type: string
+                  example: '2020-07-18'
+                j1ReceiptData:
+                  type: boolean
+                  example: false
+                j1ReceiptPdf:
+                  type: boolean
+                  example: false
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/j1_receipt_response'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1J1Receipts
+  /v2/outgate:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Outgate - Returns way-billed units that can be registered prior to exiting at a hub facility.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gate_Move_Request'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutgateResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2Outgate
+  /v2/outgate/validate:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Validate Outgate - Returns required/missing information needed for outgate.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gate_Move_Request'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutgateResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2OutgateValidate
+  /v1/pickup-number:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Pickup Number - Validate and/or retrieve pickup numbers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pickup_Number_Request'
+      responses:
+        '200':
+          description: '** No Content **
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pickup_Number'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 5 API Request Per Second, Per Partner, Per Service\n\
+            * 100 API Requests Per Minute, Per Partner, Per Service\n* 500 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1PickupNumber
+  /v1/pregate/in:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Pre-Ingate - Advanced creation of an ingate ahead of arriving at a hub facility.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Intermodal_Pregate'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  railpassId:
+                    type: string
+                    description: RailPASS ID
+                    example: '12345'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1PregateIn
+    delete:
+      tags:
+      - Intermodal Hub Operations
+      summary: Cancel a pre-ingate.
+      parameters:
+      - name: equipmentInitial
+        in: query
+        required: true
+        schema:
+          type: string
+          example: BNSF
+      - name: equipmentNumber
+        in: query
+        required: true
+        schema:
+          type: string
+          example: '12345'
+      - name: truckerDriverLicenseNumber
+        in: query
+        required: true
+        schema:
+          type: string
+          example: '123456789'
+      - name: truckerDriverLicenseStateCode
+        in: query
+        required: true
+        schema:
+          type: string
+          example: TX
+      responses:
+        '204':
+          description: '** No Content **
+
+
+            The request has succeeded.'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: deleteV1PregateIn
+  /v1/pregate/out:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Pre-Outgate - Advanced creation of an outgate ahead of exiting a hub facility.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Intermodal_Pregate'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  railpassId:
+                    type: string
+                    description: RailPASS ID
+                    example: '12345'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1PregateOut
+    delete:
+      tags:
+      - Intermodal Hub Operations
+      summary: Cancel a pre-outgate.
+      parameters:
+      - name: equipmentInitial
+        in: query
+        required: true
+        schema:
+          type: string
+          example: BNSF
+      - name: equipmentNumber
+        in: query
+        required: true
+        schema:
+          type: string
+          example: '12345'
+      - name: truckerDriverLicenseNumber
+        in: query
+        required: true
+        schema:
+          type: string
+          example: '123456789'
+      - name: truckerDriverLicenseStateCode
+        in: query
+        required: true
+        schema:
+          type: string
+          example: TX
+      responses:
+        '204':
+          description: '** No Content **
+
+
+            The request has succeeded.'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: deleteV1PregateOut
+  /v2/street-en-route:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Street En-route - Report pre-arrival to hub and returns rail waybill ingate completeness check and missing
+        elements (if any).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gate_Move_Request'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreetEnRouteResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV2StreetEnRoute
+  /v3/unit-details:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Unit Details - Returns hub information (e.g., Lot Location) for units at a BNSF Facility (Equivalent to DLL
+        on bnsf.com).
+      description: 'The unit-details request accepts up to 500 units.
+
+
+        <b>Changelog</b>
+
+        <ul>
+
+        <li>June 1, 2021: Added response attributes equipmentLotRowSpotTierLocationName and equipmentLotRowSpotTierStatusName.</li>
+
+        <li>April 26, 2021: Removed pickup number. See new Pickup Number service; updated attribute names to conform to BNSF
+        naming standards.</li>
+
+        </ul>'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/intermodalUnits'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntermodalUnits'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV3UnitDetails
+  /v3/unit-details/domestic-empties:
+    get:
+      tags:
+      - Intermodal Hub Operations
+      summary: Domestic Empties - Returns a list of empty units ready for pickup at a BNSF facility.
+      parameters:
+      - name: station333
+        in: query
+        description: The location of the most recently reported event
+        required: true
+        schema:
+          type: string
+          example: LOSANGELE
+        example: DALLAS
+      - name: stationStateCode
+        in: query
+        description: The location state of the most recently reported event
+        required: true
+        schema:
+          type: string
+          example: CA
+        example: TX
+      - name: equipmentInitial
+        in: query
+        description: The initials used in the equipment identification for the shipment
+        required: true
+        schema:
+          type: string
+          example: BNSF
+        example: BNSF
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntermodalUnits'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: getV3UnitDetailsDomesticEmpties
+  /v1/update-parking:
+    post:
+      tags:
+      - Intermodal Hub Operations
+      summary: Update Parking - Update a unit's parking information at a Hub facility (i.e. Lot, Row, Spot).
+      requestBody:
+        $ref: '#/components/requestBodies/updateParkingInput'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon\
+            \ receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with\
+            \ the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      security:
+      - Restricted: []
+      operationId: postV1UpdateParking
+components:
+  schemas:
+    drayBooking:
+      type: object
+      title: DrayBooking
+      properties:
+        drayageBookingNumber:
+          type: string
+          description: An agreement between BNSF and a trucking company who will complete the dray move. Which is just the
+            movement of equipment to another location such as a different lot.
+          example: SH0987654
+        destinationStateCode:
+          type: string
+          description: The State code for a given destination defined by a standardized State code, as assigned by a national
+            body such as the US Postal Service.
+          example: CA
+        destinationStation333:
+          type: string
+          description: Name of a City, defined as a destination for a movement, which has been abbreviated from the City's
+            Full Name through the use of a standardized programmatic algorithm.
+          example: CITCOMMER
+        destinationStationLotLocationName:
+          type: string
+          description: The name given to a location within a specific lot as assigned by the destination station. This is
+            where equipment, material, or shipments are to be placed for a given period of time.
+          example: SAG
+        originStateCode:
+          type: string
+          description: The State code for a given origin defined by a standardized State code, as assigned by a national body
+            such as the US Postal Service.
+          example: CA
+        originStation333:
+          type: string
+          description: Name of a City, defined as the origin of a shipment, which has been abbreviated from the City's Full
+            Name through the use of a standardized programmatic process.
+          example: LOSANGELE
+        originStationLotLocationName:
+          type: string
+          description: The name given to a location within a specific lot as assigned by the origin station. This is where
+            equipment, material, or shipments are to be placed for a given period of time.
+          example: MAIN
+        drayageMovementMethodName:
+          type: string
+          description: The method to be used to move equipment, material, or shipments in drayage from one location to another.
+          example: Shuttle
+        drayageShuttleTypeName:
+          type: string
+          description: Value which defines the shuttle type applied to drayage (UnitSpecific, Generic, etc.).
+          example: UnitSpecific
+        drayageShuttleMovementTypeName:
+          type: string
+          description: Value which defines if the movement of drayaged equipment is from one lot to another lot or from one
+            yard to another yard.
+          example: Yard
+        truckerScac:
+          type: string
+          description: The SCAC (Standard Carrier Alpha Code) assigned to a Trucking Company.
+          example: BNSF
+        units:
+          type: array
+          items:
+            type: object
+            title: Equipment
+            properties:
+              equipmentInitial:
+                type: string
+                description: Equipment Initial is the prefix or alphabetic part of an equipment unit's identifying number.
+              equipmentNumber:
+                type: string
+                description: Equipment Number is the sequencing or serial part of an equipment unit's identifying number.
+    DrayBookingResponse:
+      type: object
+      title: DrayBookingResponse
+      properties:
+        httpErrors:
+          type: array
+          items:
+            type: string
+        httpResponseCode:
+          type: integer
+          format: int32
+          example: 200
+        drayBooking:
+          $ref: '#/components/schemas/drayBooking'
+    DrayPlan:
+      type: object
+      title: Dray Plan
+      properties:
+        intermodalUnits:
+          type: array
+          title: Intermodal Units
+          items:
+            type: object
+            required:
+            - equipmentInitial
+            - equipmentNumber
+            - supplier633
+            properties:
+              authorizedSuppliers:
+                type: array
+                title: Authorized Suppliers
+                description: List of authorized suppliers.
+                items:
+                  type: string
+                  description: Standardized code which uniquely represents a authorized Supplier. Value is assigned by putting
+                    the Legal Name of a supplier through a computer algorithm
+                  example: APARTNERS633
+                nullable: false
+              beneficialCargoOwner633:
+                type: string
+                title: Beneficial Cargo Owner 633
+                description: Name of the person or legal entity who owns or has title to the cargo being transported. Value
+                  abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.
+                maxLength: 12
+                example: APARTNERS633
+              beneficialCargoOwnerFullName:
+                type: string
+                title: Beneficial Cargo Owner Full Name
+                description: Full name of the legal entity considered to be the owner of the shipment cargo, the Beneficial
+                  Owner is the party on whose behalf the shipment cargo is being handled by a third party.
+                maxLength: 35
+                example: BCO Full Company Name
+              containerDestinationZipcode:
+                type: string
+                title: ContainerDestination Zip Code
+                description: Container Destination Zip Code
+                maxLength: 5
+                example: '76107'
+              containerIntermodalLotLocationName:
+                type: string
+                title: Container Intermodal Lot Location Name
+                description: Intermodal lot location of the given container.
+                example: 7 / 2 / 0000
+              containerOutgatePrivateChassisIndicator:
+                type: string
+                title: Container Outgate Private Chassis Indicator
+                description: Indicates whether the givenunit will be outgated with a private chassis.
+                maxLength: 1
+                example: Y
+              containerPeelPileIndicataor:
+                type: string
+                title: Container Peel Pile Indicataor
+                description: "Indicates if the given container is a candidate for a peel pile at the destination lot. \nA\
+                  \ stack of containers in Intermodal facilities organized in such way that drayage carrier drivers can lift\
+                  \ (aka peel) the top one off as opposed to waiting for or moving a specific one that could be located anywhere\
+                  \ in the pile, cutting the dwell time on a container and mitigating demurrage expenses."
+                maxLength: 1
+                example: Y
+              createDatetime:
+                type: string
+                format: date-time
+                title: Create Datetime
+                description: Created Timestamp
+                example: '2024-03-11 12:17:19.12'
+              createUserId:
+                type: string
+                title: Create User Id
+                description: Created by User
+                maxLength: 128
+                example: ABCD
+              destETADate:
+                type: string
+                format: date
+                title: Container Destination ETA Date
+                description: Approximate date that the container will arrive at a destination location.
+                maxLength: 10
+                example: '2023-09-20'
+              destETATime:
+                type: string
+                title: Container Destination ETA Time
+                description: ETA (Estimated Time of Arrival) is the time when a container is expected to arrive at a certain
+                  place or destination.
+                maxLength: 10
+                example: '20:07:00'
+              destinationLocationDwellIndicatorDateTime:
+                type: string
+                format: date-time
+                title: Destination Location Dwell Indicator DateTime
+                description: Date and time the given supplier 633 sets the Destination Location Dwell Indicator.
+                example: '2023-11-03 13:52:04.856'
+              destinationLocationDwellIndicatorModificationIndicator:
+                type: string
+                title: Destination Location Dwell Indicator Modification Indicator
+                description: Indicates whether the given Destination Location Dwell Indicator can be modified or not.
+                maxLength: 1
+                example: Y
+              destinationLocationDwellIndicatorUserFullName:
+                type: string
+                title: Destination Location Dwell Indicator User Full Name
+                description: Full name of the user that sets the Destination Location Dwell Indicator.
+                maxLength: 128
+                example: Full Name
+              destinationLocationDwellIndicatorUserId:
+                type: string
+                title: Destination Location Dwell Indicator User Id
+                description: User id that sets the Destination Location Dwell Indicator.
+                maxLength: 128
+                example: ABCS
+              drayageCarrier633:
+                type: string
+                title: Drayage Carrier 633
+                description: Is the abbreviated 12-character transportation drayage carrier as defined by the BNSF operating
+                  department using the first 6 letters of the first name, the first 3 letters of the second name, and the
+                  first 3 letters of the last name.
+                maxLength: 12
+                example: APARTNERS633
+              drayageCarrierFullName:
+                type: string
+                title: Drayage Carrier Full Name
+                description: Full name of the legal entity considered to be the drayage carrier.
+                maxLength: 35
+                example: APARTNERS633 full name
+              dwellAtDestinationIndicator:
+                type: string
+                title: Dwell at  Destination Indicator
+                description: 'Indicates whether or not there will be a dwell at the destination location.
+
+                  Valid Values Are: Y(Yes), N(no).'
+                maxLength: 1
+                example: Y
+              equipmentInitial:
+                type: string
+                title: Equipment Initial
+                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                maxLength: 6
+                example: ABCD
+              equipmentNumber:
+                type: string
+                title: Equipment Number
+                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                maxLength: 6
+                example: '12345'
+              intermodalDrayageCarrierFirstNotificationCode:
+                type: string
+                title: IntermodalDrayageCarrierFirstNotificationCode
+                description: Code defining the notification being sent to given intermodal drayage carrier.
+                maxLength: 3
+                example: NFI
+              intermodalDrayageCarrierSecondNotificationCode:
+                type: string
+                title: IntermodalDrayageCarrierSecondNotificationCode
+                description: Code defining the notification being sent to given intermodal drayage carrier.
+                maxLength: 3
+                example: NFI
+              intermodalDrayageCarrierThirdNotificationCode:
+                type: string
+                title: IntermodalDrayageCarrierThirdNotificationCode
+                description: Code defining the notification being sent to given intermodal drayage carrier.
+                maxLength: 3
+                example: NFI
+              supplier633:
+                type: string
+                title: Supplier 633
+                description: Standardized code which uniquely represents a Supplier. Value is assigned by putting the Legal
+                  Name of a supplier through a computer algorithm
+                maxLength: 12
+                example: APARTNERS633
+              truckerScac:
+                type: string
+                title: Trucker SCAC
+                description: SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used
+                  to designate a transportation trucking company. SCACs are assigned by NMFTA (National Motor Freight Traffic
+                  Association).
+                example: HJBU
+              updateUserId:
+                type: string
+                title: Update User Id
+                description: Last Update User
+                maxLength: 128
+                example: ABCD
+              updateDatetime:
+                type: string
+                format: date-time
+                title: Update Datetime
+                description: Last Update Timestamp
+                example: '2023-12-26 17:41:38.969'
+            nullable: false
+          nullable: false
+      nullable: false
+    DvirInputBean:
+      type: object
+      title: DvirInputBean
+      required:
+      - chassisInitial
+      - chassisNumber
+      - dvirRequiredIndicator
+      - station333
+      - stationStateCode
+      properties:
+        chassisInitial:
+          type: string
+          title: chassisInitial
+          description: The chassis identification initial used for the shipment
+          example: ABCD
+        chassisNumber:
+          type: string
+          title: chassisNumber
+          description: The chassis identification number used for the shipment
+          example: '1234'
+        dvirRequiredIndicator:
+          type: string
+          title: dvirRequiredIndicator
+          description: Driver Vehicle Inspection Report required indicator
+          example: Y
+        station333:
+          type: string
+          title: station333
+          description: The location of the most recently reported event
+          example: ALLIANCE
+        stationStateCode:
+          type: string
+          title: stationStateCode
+          description: The location state of the most recently reported event
+          example: TX
+    empties_domestic_response:
+      type: object
+      title: empties_domestic_response
+      properties:
+        errors:
+          type: array
+          title: Errors
+          items:
+            type: string
+        status:
+          type: number
+          format: float
+          title: Status
+          description: Response status of the API
+          example: 0
+        unitList:
+          $ref: '#/components/schemas/unit_information'
+    equipmentFlip:
+      type: object
+      title: Equipment Flip
+      properties:
+        equipmentFlips:
+          type: array
+          description: A flip is a type of lift movement at an intermodal facility which can include the lifting of a container
+            from the ground to a chassis or from a chassis to a different chassis.
+          items:
+            type: object
+            required:
+            - equipmentInitial
+            - equipmentNumber
+            properties:
+              equipmentInitial:
+                type: string
+                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                example: BNSF
+              equipmentNumber:
+                type: string
+                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                example: '123456'
+              equipmentFlipAuthorizedDatetime:
+                type: string
+                description: The Date and Time when the flip is authorized and the equipment can be picked up. This value
+                  is formatted using the ISO 8601 Standard.
+                example: '2021-03-29T12:00:00Z'
+              equipmentFlipAuthorizationStatusCode:
+                type: string
+                description: 'A code that represents the current status of a flip authorization. '
+                example: A
+              equipmentLengthFeet:
+                type: string
+                description: The length, in feet, of a piece of rail equipment.
+                example: '40'
+              shipper633:
+                type: string
+                description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full
+                  Legal Name through the use of a standardized programmatic process.
+                example: ACMESHIPPR
+              station333:
+                type: string
+                description: Name of a City which has been abbreviated from the City's Full Name through the use of a standardized
+                  programmatic algorithm.
+                example: TRAINTWN
+              stationStateCode:
+                type: string
+                description: The State code for a given station defined by a standardized State code, as assigned by a national
+                  body such as the US Postal Service.
+                example: TX
+              billableCostIndicator:
+                type: string
+                description: Flag indicating if the associated cost is billable?
+                example: Y
+              equipmentFlipRequestReasonNote:
+                type: string
+                description: Freeform note that describes the reason for the Equipment Flip Request.
+                example: BAD ORDER CHASSIS
+              patron633:
+                type: string
+                description: Name of a Patron, a Customer who ships or wants to ship with BNSF, that has been abbreviated
+                  from the Customer's full Legal Name through the use of a standardized programmatic process.
+                example: ACMEPATRON
+              chassisInitial:
+                type: string
+                description: Chassis Initial is the prefix or alphabetic part of a chassis unit's identifying number.
+                example: ACME
+              chassisNumber:
+                type: string
+                description: Chassis Number is the sequencing or serial part of an Chassis unit's identifying number.
+                example: '999999'
+              chassisAttachedDatetime:
+                type: string
+                description: The Date and Time when the equipment was attached. This value is formatted using the ISO 8601
+                  Standard.
+                example: '2021-03-29T12:00:00Z'
+              derivedEquipmentStatusName:
+                type: string
+                description: BNSF derived value which defines the status for a piece of equipment.
+                example: No details found for unit
+            nullable: false
+          nullable: false
+      nullable: false
+    Gate_Move_Request:
+      type: object
+      description: JSON document used to send and receive information related to a Customer's Drayage Booking requests.
+      required:
+      - carKindCode
+      - equipmentInitial
+      - equipmentLengthFeet
+      - equipmentNumber
+      - railpassId
+      - shipper633
+      - station333
+      - stationStateCode
+      - tractorLicensePlateNumber
+      - tractorLicenseStateCode
+      - tractorStencilId
+      - truckerDriverLicenseNumber
+      - truckerDriverLicenseStateCode
+      - truckingScac
+      properties:
+        carKindCode:
+          type: string
+          description: Code that identifies the physical characteristics for equipment as defined by BNSF Railway itself.
+            Value is used when car characteristics are required for business decision making.
+          example: K
+        chassisInitial:
+          type: string
+          description: Chassis Initial is the prefix or alphabetic part of a chassis unit's identifying number.
+          example: ABCD
+        chassisNumber:
+          type: string
+          description: Chassis Number is the sequencing or serial part of an Chassis unit's identifying number.
+          example: '123456'
+        equipmentDoorSealNumber:
+          type: string
+          description: Identification number for a seal. A seal is typically applied to a door on Intermodal Equipment (Containers
+            or Trailers) prior to transit.
+          example: '12345'
+        equipmentInitial:
+          type: string
+          description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+          example: ABCD
+        equipmentLengthFeet:
+          type: string
+          description: The length, in feet, of a piece of rail equipment.
+          example: '40'
+        equipmentNumber:
+          type: string
+          description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+          example: '1'
+        pickupNumber:
+          type: string
+          description: A security number provided to the notify party which allows the vehicle to outgate from (leave) a BNSF
+            facility. The truck driver must provide the pickup number at the time of outgate.
+          example: '1234'
+        railpassId:
+          type: string
+          description: RailPASS ID
+          example: ABC12
+        shipper633:
+          type: string
+          description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full Legal
+            Name through the use of a standardized programmatic process.
+          example: BNSFRAILWAY
+        station333:
+          type: string
+          description: Name of a City which has been abbreviated from the City's Full Name through the use of a standardized
+            programmatic algorithm.
+          example: ALLIANCE
+        stationStateCode:
+          type: string
+          description: The State code for a given station defined by a standardized State code, as assigned by a national
+            body such as the US Postal Service.
+          example: TX
+        tractorLicensePlateNumber:
+          type: string
+          description: The license plate number attached to the tractor portion of a tractor trailer (AKA Semi).
+          example: '1234567'
+        tractorLicenseStateCode:
+          type: string
+          description: Code indicating the state the tractor license plate was issued from.  A tractor is a portion of a tractor
+            trailer (AKA Semi).
+          example: TX
+        tractorStencilId:
+          type: string
+          description: A unique alphanumeric value stenciled on the tractor of a tractor-trailer (semi truck) by the owner
+            of the trailer.
+          example: STENCIL
+        truckerDriverLicenseNumber:
+          type: string
+          description: The Drivers License Number of an intermodal truck driver.
+          example: '13456'
+        truckerDriverLicenseStateCode:
+          type: string
+          description: State where drivers license was issued from.
+          example: TX
+        truckerGateActionCode:
+          type: string
+          description: Derived code indicating the action it is believed a trucker is trying to make at the associated gate.
+          example: L
+        truckingScac:
+          type: string
+          description: The SCAC (Standard Carrier Alpha Code) assigned to a Trucking Company.
+          example: BNSF
+    IngateResponse:
+      type: object
+      title: IngateResponse
+      properties:
+        equipmentLotLocationInstructions:
+          type: string
+          title: equipmentLotLocationInstructions
+          description: Parking instructions for driver
+          example: 1234Proceed to lot A5
+        httpResponseCode:
+          type: number
+          format: float
+          title: httpResponseCode
+          description: Response status of the API
+          example: 0
+        railpassId:
+          type: string
+          title: railpassId
+          description: RailPASS ID
+          example: '12345'
+    Intermodal_Pregate:
+      type: object
+      required:
+      - dvirRequiredIndicator
+      - equipmentLengthFeet
+      - gateEquipmentMovementTypeCode
+      - shipper633
+      - station333
+      - stationStateCode
+      - truckerDriverLicenseNumber
+      - truckerDriverLicenseStateCode
+      - truckerGateActionCode
+      - truckingScac
+      properties:
+        carKindCode:
+          type: string
+          description: Code that identifies the physical characteristics for equipment as defined by BNSF Railway itself.
+            Value is used when car characteristics are required for business decision making.
+          example: K18
+        chassisInitial:
+          type: string
+          description: Chassis Initial is the prefix or alphabetic part of a chassis unit's identifying number.
+          example: DEF
+        chassisNumber:
+          type: string
+          description: Chassis Number is the sequencing or serial part of an Chassis unit's identifying number.
+          example: '5678'
+        dvirRequiredIndicator:
+          type: string
+          description: Indicates if a DVIR (Driver Vehicle Inspection Report) is required to be performed.
+          example: Y
+        equipmentDoorSealNumber:
+          type: string
+          description: Identification number for a seal. A seal is typically applied to a door on Intermodal Equipment (Containers
+            or Trailers) prior to transit.
+          example: '12345'
+        equipmentInitial:
+          type: string
+          description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+          example: ABC
+        equipmentLengthFeet:
+          type: string
+          title: equipmentLengthFeet
+          description: The length, in feet, of a piece of rail equipment.
+          example: '10'
+        equipmentNumber:
+          type: string
+          description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+          example: '1234'
+        estimatedGateMoveDatetime:
+          type: string
+          description: Date and Time when the gate move is estimated to occur.
+          example: '2021-05-03T21:15:44.900Z'
+        gateEquipmentMovementTypeCode:
+          type: string
+          description: 'A code that defines the type of movement a piece of equipment is to make at the time it enters an
+            intermodal gate. '
+          example: U
+        pickupNumber:
+          type: string
+          description: A security number provided to the notify party which allows the vehicle to outgate from (leave) a BNSF
+            facility. The truck driver must provide the pickup number at the time of outgate.
+          example: '12345'
+        railpassId:
+          type: string
+          example: 1ABCD
+        shipper633:
+          type: string
+          description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full Legal
+            Name through the use of a standardized programmatic process.
+          example: JBHUNTRANSPO
+        station333:
+          type: string
+          description: Name of a City which has been abbreviated from the City's Full Name through the use of a standardized
+            programmatic algorithm.
+          example: ALLIANCE
+        stationStateCode:
+          type: string
+          description: The State code for a given station defined by a standardized State code, as assigned by a national
+            body such as the US Postal Service.
+          example: TX
+        tractorLicensePlateNumber:
+          type: string
+          description: The license plate number attached to the tractor portion of a tractor trailer (AKA Semi).
+          example: AB123
+        tractorLicenseStateCode:
+          type: string
+          description: Code indicating the state the tractor license plate was issued from. A tractor is a portion of a tractor
+            trailer (AKA Semi).
+          example: TX
+        tractorStencilId:
+          type: string
+          description: A unique alphanumeric value stenciled on the tractor of a tractor-trailer (semi truck) by the owner
+            of the trailer.
+          example: ABC123
+        truckerDriverLicenseNumber:
+          type: string
+          description: The Drivers License Number of an intermodal truck driver.
+          example: AA12345
+        truckerDriverLicenseStateCode:
+          type: string
+          description: State where drivers license was issued from.
+          example: TX
+        truckerGateActionCode:
+          type: string
+          description: Derived code indicating the action it is believed a trucker is trying to make at the associated gate.
+          example: L
+        truckingScac:
+          type: string
+          description: The SCAC (Standard Carrier Alpha Code) assigned to a Trucking Company.
+          example: BNSF
+    Intermodal_Station:
+      type: object
+      description: Contains information related to Intermodal Stations and any details related to them.
+      required:
+      - station333
+      - stationStateCode
+      properties:
+        equipmentLotLocations:
+          type: array
+          description: List of all Equipment Lot Locations found within the boundaries of a given Intermodal Station.
+          items:
+            type: object
+            required:
+            - equipmentLotLocationName
+            properties:
+              equipmentLotLocationName:
+                type: string
+                description: The name of the lot where equipment is located.
+                example: A
+            nullable: false
+          nullable: false
+        station333:
+          type: string
+          description: Name of a City which has been abbreviated from the City's Full Name through the use of a standardized
+            programmatic algorithm.
+          example: TRAINTWN
+        stationStateCode:
+          type: string
+          description: The State code for a given station defined by a standardized State code, as assigned by a national
+            body such as the US Postal Service.
+          example: TX
+      nullable: false
+    IntermodalUnits:
+      type: object
+      properties:
+        intermodalUnits:
+          type: array
+          items:
+            type: object
+            properties:
+              attachedIntermodalUnits:
+                type: array
+                items:
+                  type: object
+              carInitial:
+                type: string
+                title: Car Initial
+                description: Car Initial is the prefix or alphabetic part of a railcar's identifying number.
+                example: INIT
+              carKindCode:
+                type: string
+                description: Code that identifies the physical characteristics for equipment as defined by BNSF Railway itself.
+                example: 'K18 '
+              carKindTypeCode:
+                type: string
+                description: First character of a Car Kind Code which is used to define the type of car.
+                example: K
+              carNumber:
+                type: string
+                description: Car Number is the sequencing or serial part of a railcar's identifying number.
+                example: A1B2
+              derivedBadOrderIndicator:
+                type: string
+                description: BNSF derived value which indicates if a Bad Order exists for the associated equipment.
+                example: Y
+              derivedEquipmentStatusName:
+                type: string
+                description: 'BNSF derived value which defines the status for a piece of equipment. '
+                example: On the Ground
+              destinationStateCode:
+                type: string
+                description: The State code for a given destination defined by a standardized State code, as assigned by a
+                  national body such as the US Postal Service.
+                example: TX
+              destinationStation333:
+                type: string
+                description: Name of a City, defined as a destination for a movement, which has been abbreviated from the
+                  City's Full Name through the use of a standardized programmatic algorithm.
+                example: ALLIANCE
+              equipmentDoorSealNumber:
+                type: string
+                description: Identification number for a seal. A seal is typically applied to a door on Intermodal Equipment
+                  (Containers or Trailers) prior to transit.
+                example: '123456'
+              equipmentGradeCode:
+                type: string
+                description: Code that defines the grade, quality, applied to a piece of equipment.
+                example: H
+              equipmentGrossScaleWeightPounds:
+                type: string
+                description: The gross scale weight of a piece of equipment as measured in pounds.
+                example: '1000'
+              equipmentInitial:
+                type: string
+                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                example: ABCD
+              equipmentLengthFeet:
+                type: string
+                description: The length, in feet, of a piece of rail equipment.
+                example: '40'
+              equipmentLocationCode:
+                type: string
+                description: Code which defines the location of a piece of equipment.
+                example: G
+              equipmentLotLocationName:
+                type: string
+                description: The name of the lot where equipment is located.
+                example: A
+              equipmentLotRowLocationName:
+                type: string
+                description: The name of the row, within a lot, where equipment is located.
+                example: '1'
+              equipmentLotRowSpotLocationName:
+                type: string
+                description: The name of the spot, within a row that is within a lot, where equipment is located.
+                example: '1'
+              equipmentLotRowSpotTierLocationName:
+                type: string
+                description: Name of the tier (within a spot, that is within a row, that is within a lot) where the equipment
+                  is located. 1 is the bottom of the stack with the number increasing throughout the stack.
+                example: '2'
+              equipmentLotRowSpotTierStatusName:
+                type: string
+                description: 'Value that defines the placement status of a piece of equipment that is stacked within a tier
+                  in a Lot, Row, Spot location.
+
+                  Valid Values Include: (blank), Not Stacked, In Stack, Top Of Stack.'
+                example: Top Of Stack
+              equipmentNumber:
+                type: string
+                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                example: '123456'
+              equipmentOutsideHeightFeet:
+                type: string
+                description: The height, in feet, of the outside of a piece of equipment.
+                example: '10'
+              equipmentOutsideHeightInches:
+                type: string
+                description: The height, in inches, of the outside of a piece of equipment which is in addition to the height
+                  in feet.
+                example: '6'
+              equipmentTareWeightPounds:
+                type: string
+                description: The weight of an empty vehicle or container, as measured in pounds, without cargo. Sometimes
+                  referred to as Unladen Weight.
+                example: '1000'
+              estimatedEquipmentUnloadDatetime:
+                type: string
+                description: Date and Time when a shipment is estimated to deramped, unloaded, from the train. This represents
+                  the complete Date (YYYY/MM/DD), on the Gregorian calendar, along with a valid complete Time (HHMMSSx)
+                example: '2021-04-19T14:47:37.068Z'
+              eventCode:
+                type: string
+                description: Code used to define an event or activity occurring on the rail network.
+                example: DR
+              eventDatetime:
+                type: string
+                description: Date and Time when a given event was created. This represents the complete Date (YYYY/MM/DD),
+                  on the Gregorian calendar, along with a valid complete Time (HHMMSSx)
+                example: '2021-04-19T14:47:37.068Z'
+              fullWaybillIndicator:
+                type: string
+                description: Indicates if the associated Waybill is a Full Waybill.
+                example: Y
+              lastPassedStateCode:
+                type: string
+                description: The State code for a station through which a something (a shipment, a piece of equipment, a train,
+                  etc.) has passed, as defined by a standardized State code, as assigned by a national body such as the US
+                  Postal Service.
+                example: TX
+              lastPassedStation333:
+                type: string
+                description: Name of a City through which something (a shipment, a piece of equipment, a train, etc.) has
+                  passed. This name has been abbreviated from the City's Full Name through the use of a standardized programmatic
+                  algorithm.
+                example: ALLIANCE
+              loadEmptyChassisCode:
+                type: string
+                description: Code that defines if a piece of equipment is loaded, empty, or is a chassis.
+                example: L
+              lockedEstimatedPickupNotificationDatetime:
+                type: string
+                description: The locked Date and Time when a shipment is estimated to be ready for pickup. This represents
+                  the complete Date (YYYY/MM/DD), on the Gregorian calendar, along with a valid complete Time (HHMMSSx).
+                example: '2021-04-19T14:47:37.068Z'
+              originStation333:
+                type: string
+                description: Name of a City, defined as the origin of a shipment, which has been abbreviated from the City's
+                  Full Name through the use of a standardized programmatic process.
+                example: ALLIANCE
+              originStationStateCode:
+                type: string
+                description: The State code for a given origin defined by a standardized State code, as assigned by a national
+                  body such as the US Postal Service.
+                example: TX
+              shipmentLastFreeStorageDate:
+                type: string
+                description: The last date a shipment is considered to be eligible for free storage (YYYY/MM/DD).  After this
+                  date Storage Fees will begin to accrue.
+                example: '2021-01-01'
+              shipmentNetScaleWeightPounds:
+                type: string
+                description: The net scale weight of a shipment, as measured in pounds.
+                example: '1000'
+              shipper633:
+                type: string
+                description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full
+                  Legal Name through the use of a standardized programmatic process.
+                example: BNSFRAILWAY
+              station333:
+                type: string
+                description: Name of a City which has been abbreviated from the City's Full Name through the use of a standardized
+                  programmatic algorithm.
+                example: ALLIANCE
+              stationStateCode:
+                type: string
+                description: The State code for a given station defined by a standardized State code, as assigned by a national
+                  body such as the US Postal Service.
+                example: TX
+              trackNumber:
+                type: string
+                description: Number used to uniquely identify a track at a station.
+                example: '1234'
+              truckingScac:
+                type: string
+                description: Standard Carrier Alpha Code (SCAC) assigned to the truck carrying the shipment
+                example: BNSF
+              waybillHazardousMaterialIndicator:
+                type: string
+                description: Indicates if the associated shipment has a Hazardous Material Profile on the Waybill.
+                example: N
+    intermodalUnits:
+      type: object
+      title: intermodalUnitsRequest
+      properties:
+        intermodalUnits:
+          type: array
+          items:
+            type: object
+            properties:
+              equipmentInitial:
+                type: string
+                example: BNSF
+              equipmentNumber:
+                type: string
+                example: '123456'
+    j1_receipt:
+      type: object
+      title: j1_receipt
+      properties:
+        agsDefectFoundIndicator:
+          type: string
+          title: agsDefectFoundIndicator
+          description: Indicates if a defect was found via the automated gate system (AGS)
+          example: N
+        attachedDispositionCode:
+          type: string
+          title: attachedDispositionCode
+          description: Code indicating disposition of chassis attachment to equipment. (D=Dual, F=Flip, A=same as chassis,
+            Blank = nodecision of disposition at gate time)
+          example: D
+        attachedUnit:
+          $ref: '#/components/schemas/unit_information'
+        badOrderIndicator:
+          type: boolean
+          title: badOrderIndicator
+          description: Indicates if the unit is bad ordered
+          example: true
+        booth:
+          type: string
+          title: booth
+          description: Intermodal checkpoint boot where inspection document printer is housed (1, 2, 10, 99, etc.)
+          example: '1'
+        carInitial:
+          type: string
+          title: carInitial
+          description: Car initial
+          example: ABCD
+        carKindCarTypeCode:
+          type: string
+          title: carKindCarTypeCode
+          description: First character of car kind
+          example: K
+        carKindCode:
+          type: string
+          title: carKindCode
+          description: Car Kind
+          example: KC
+        carNumber:
+          type: string
+          title: carNumber
+          description: Car number
+          example: '123456'
+        commodityDescription:
+          type: string
+          title: commodityDescription
+          description: Commodity description
+          example: MEDICAL SUPP
+        destinationReleasedCustomer633:
+          type: string
+          title: destinationReleasedCustomer633
+          description: Customer that shipment was actually released to
+          example: CUSTOMER
+        destinationStateCode:
+          type: string
+          title: destinationStateCode
+          description: The destination hub state of the shipment
+          example: CA
+        destinationStation333:
+          type: string
+          title: destinationStation333
+          description: The destination hub station of the shipment
+          example: LOSANGELE
+        driverLicenseNumber:
+          type: string
+          title: driverLicenseNumber
+          description: Driver license number
+          example: '123456'
+        equipmentControlCode:
+          type: string
+          title: equipmentControlCode
+          description: Code indicating system/foreign or private control of equipment
+          example: L
+        errorMessage:
+          type: string
+          title: errorMessage
+          description: Error message
+          example: Unit details not available
+        estimatedDerampDate:
+          type: string
+          title: estimatedDerampDate
+          description: The estimated deramp date
+          example: '2020-07-07'
+        estimatedDerampTime:
+          type: string
+          title: estimatedDerampTime
+          description: The estimated deramp time
+          example: '9:00'
+        eventCode:
+          type: string
+          title: eventCode
+          description: Code indicating the event/activity abbreviation
+          example: TA
+        eventDate:
+          type: string
+          title: eventDate
+          description: Event date
+          example: '2020-07-07'
+        eventTime:
+          type: string
+          title: eventTime
+          description: Event time
+          example: '12:00:00'
+        flightVoyageNumber:
+          type: string
+          title: flightVoyageNumber
+          description: Number of the flight or voyage on which the cargo traveled
+          example: '123456'
+        fullBilledIndicator:
+          type: boolean
+          title: fullBilledIndicator
+          description: Last pass state
+          example: true
+        gateEditCode:
+          type: string
+          title: gateEditCode
+          example: A
+        gateEditMessage:
+          type: string
+          title: gateEditMessage
+        grossWeightPounds:
+          type: string
+          title: grossWeightPounds
+          description: Gross weigth of the unit, in pounds
+          example: '10000'
+        hazmatDescription:
+          type: string
+          title: hazmatDescription
+          description: Description of the hazmat
+          example: DANGEROUS
+        hazmatIndicator:
+          type: boolean
+          title: hazmatIndicator
+          description: Net weight of the unit, in pounds
+          example: true
+        heightFeet:
+          type: string
+          title: heightFeet
+          description: Height of the unit, in feet
+          example: '9'
+        heightInches:
+          type: string
+          title: heightInches
+          description: Height of the unit, in inches
+          example: '12'
+        historicalVoyageBookingNumber:
+          type: string
+          title: historicalVoyageBookingNumber
+          description: Historical voyage booking number
+          example: '123456'
+        ingateGrossWeightPounds:
+          type: string
+          title: ingateGrossWeightPounds
+          description: Ingate gross weight in pounds
+          example: '40000'
+        ingateHazardousPlacardCode:
+          type: string
+          title: ingateHazardousPlacardCode
+          description: Driver's declaration of hazardous shipment placecard code
+          example: CM
+        ingateHazmatDeclarationIndicator:
+          type: string
+          title: ingateHazmatDeclarationIndicator
+          description: Drivers declaration to identify the need for hazardous papers
+          example: N
+        ingateSealNumber:
+          type: string
+          title: ingateSealNumber
+          description: Seal Number
+          example: ABC123
+        intermodalDriverFirstName:
+          type: string
+          title: intermodalDriverFirstName
+          description: 'Intermodal driver''s first name
+
+            '
+          example: First
+        intermodalDriverLastName:
+          type: string
+          title: intermodalDriverLastName
+          description: 'intermodal driver''s last name
+
+            '
+          example: Last
+        intermodalEquipmentProviderDOTNumber:
+          type: string
+          title: intermodalEquipmentProviderDOTNumber
+          description: 'A department of transportation (DOT) identification number for an intermodal equipment provider (IEP)
+            compan
+
+            '
+          example: '123456'
+        intermodalUnitCertificationDate:
+          type: string
+          title: intermodalUnitCertificationDate
+          description: 'Intermodal unit certification date
+
+            '
+          example: '2020-07-08'
+        lastFreeDayDate:
+          type: string
+          title: lastFreeDayDate
+          description: Last free day for storage clock
+          example: '2020-07-07'
+        lastPassingStation333:
+          type: string
+          title: lastPassingStation333
+          description: 'Last pass station
+
+            '
+          example: ALLIANCE
+        lastPassingStationStateCode:
+          type: string
+          title: lastPassingStationStateCode
+          description: 'Last pass state
+
+            '
+          example: TX
+        lengthFeet:
+          type: string
+          title: lengthFeet
+          description: 'Length of the unit, in feet
+
+            '
+          example: '70'
+        loadEmptyChassisCode:
+          type: string
+          title: loadEmptyChassisCode
+          description: 'Code indicating if the unit is loaded, empty or a chassis (L, E, C)
+
+            '
+          example: L
+        loadSheetCofcWeightPounds:
+          type: string
+          title: loadSheetCofcWeightPounds
+          description: 'Load sheet COFC weight in pounds
+
+            '
+          example: '5000'
+        loadSheetTofcWeightPounds:
+          type: string
+          title: loadSheetTofcWeightPounds
+          description: 'Load sheet TOFC weight in pounds
+
+            '
+          example: '5000'
+        lockedEstimatedNotificationDate(1):
+          type: string
+          title: Locked Estimated Notification Date
+          description: The confirmed estimated date that the customer will be notified of delivery
+          example: 10/31/2019
+        lockedEstimatedNotificationTime:
+          type: string
+          title: Locked Estimated Notification Time
+          description: The confirmed estimated time that the customer will be notified of delivery
+          example: 01:00
+        netWeightPounds:
+          type: string
+          title: Net Weight Pounds
+          description: Net weight of the unit, in pounds
+          example: '1000'
+        originStation333:
+          type: string
+          title: Origin Station333
+          description: The origin hub station of the shipment
+          example: CHICAGO
+        originStationStateCode:
+          type: string
+          title: originStationStateCode
+          description: The origin hub state of the shipment
+          example: IL
+        parkingAssignment:
+          $ref: '#/components/schemas/unit_location'
+        patron633:
+          type: string
+          title: patron633
+          description: 'Shipping patron (customer) name in 633 format
+
+            '
+          example: BNSF
+        patronName:
+          type: string
+          title: patronName
+          description: 'Full spelling of a Patron Name
+
+            '
+          example: BNSF Railway
+        platformCode:
+          type: string
+          title: platformCode
+          description: 'Code indicating which platform. (B=platform at brake end of car, C=first platform from brake end of
+            car platform, etc.)
+
+            '
+          example: B
+        platformPositionCode:
+          type: string
+          title: platformPositionCode
+          description: 'Code indicating which platform position on car(1= first position from bench on lower platform, T=
+            Top position, etc.)
+
+            '
+          example: T
+        poolMarketingCode:
+          type: string
+          title: poolMarketingCode
+          description: 'Code indicating marketed or pool intermodal equipment (M=Marketed, P=Pooled)
+
+            '
+          example: P
+        railCarrierScac:
+          type: string
+          title: railCarrierScac
+          description: 'Railroad carrier Standard Carrier Alpha Code (SCAC)
+
+            '
+          example: ABCD
+        railControlledCode:
+          type: string
+          title: railControlledCode
+          description: 'Code which identifies if the associated equipment is considered to be controlled by Rail or Non-Rail
+
+            '
+          example: N
+        railpassId:
+          type: string
+          title: railpassId
+          description: 'RailPASS ID
+
+            '
+          example: '12345'
+        refrigerationMountPositionCode:
+          type: string
+          title: refrigerationMountPositionCode
+          description: 'Code indicating the refrigeration unit position mounting. (N=Nosemount, U=Undermount)
+
+            '
+          example: N
+        releaseNumber:
+          type: string
+          title: releaseNumber
+          description: 'Release number
+
+            '
+          example: L12345
+        roadabilityConditionDefectCode:
+          type: string
+          title: roadabilityConditionDefectCode
+          description: 'Code representing the type of defect in roadability condition
+
+            '
+          example: '01'
+        shipmentLadingWeightPounds:
+          type: string
+          title: shipmentLadingWeightPounds
+          description: 'Net weight of shipment landing in pounds
+
+            '
+          example: '40000'
+        shipper633:
+          type: string
+          title: Shipper633
+          example: JBHUNTRANSPO
+        station333:
+          type: string
+          title: Station333
+          description: The location of the most recently reported event
+          example: ALLIANCE
+        stationStateCode:
+          type: string
+          title: stationStateCode
+          description: The location state of the most recently reported event
+          example: TX
+        stopOrderDescription:
+          type: string
+          title: stopOrderDescription
+          description: 'Freeform description of the stoporder
+
+            '
+          example: Do not stop at gate
+        tareWeightPounds:
+          type: string
+          title: tareWeightPounds
+          description: 'Tare weight is the weight of the empty unit
+
+            '
+          example: '1000'
+        tofcCofcCode:
+          type: string
+          title: tofcCofcCode
+          description: 'Code indicating TOFC(Trailer on flat car) or COFC (container on flat car). T = TOFC, C = COFC
+
+            '
+          example: T
+        tractorLicensePlateNumber:
+          type: string
+          title: tractorLicensePlateNumber
+          description: 'Tractor license plate number
+
+            '
+          example: '123456'
+        tractorWeightPounds:
+          type: string
+          title: tractorWeightPounds
+          description: 'Tractor weight in pounds
+
+            '
+          example: '1000'
+        truckCarrierScac:
+          type: string
+          title: truckCarrierScac
+          example: JBHU
+        truckNumber:
+          type: string
+          title: truckNumber
+          description: 'Truck number
+
+            '
+          example: '123456'
+        trueKingPinIndicator:
+          type: integer
+          format: int32
+          title: trueKingPinIndicator
+          description: 'Adjusted kingpin setting in inches
+
+            '
+          example: 36
+        unitGradeCode:
+          type: string
+          title: unitGradeCode
+          description: 'Code indicating the grade of the unit
+
+            '
+          example: H
+        unitInitial:
+          type: string
+          title: Unit Initial
+          description: The initials used in the equipment identification for the shipment
+          example: JBHU
+        unitLocation (1):
+          $ref: '#/components/schemas/unit_location'
+        unitLocationCode:
+          type: string
+          title: Unit Location Code
+          description: Code indicating the location of the unit e.g. G = Ground
+          example: G
+        unitNumber:
+          type: string
+          title: Unit Number
+          description: The numbers used in  the equipment identification for the shipment
+          example: '12345'
+        unitStatusCode:
+          type: string
+          title: unitStatusCode
+          description: Current status of the unit
+          example: In Inv on Ground
+        unitWhatDamageDescriptions:
+          type: array
+          title: unitWhatDamageDescriptions
+          description: 'Descriptions of what damages the unit has (Automatic Airing System - Left Front, etc.)
+
+            '
+          items:
+            type: string
+            example: Automatic Airing System
+        unitWhyDamageDescriptions:
+          type: array
+          title: unitWhyDamageDescriptions
+          description: 'Descriptions of the cause of the damages (Bent, Broken etc.)
+
+            '
+          items:
+            type: string
+            example: Broken
+        vesselName:
+          type: string
+          title: vesselName
+          description: 'Name of sailing vessel
+
+            '
+          example: OOCL TOKYO
+        voyageBookingNumber:
+          type: string
+          title: voyageBookingNumber
+          description: 'Booking number assigned by the carrier for space reservation on a voyage
+
+            '
+          example: '123456'
+        waybillId:
+          type: string
+          title: waybillId
+          description: 'BNSF assigned identifier of a waybill
+
+            '
+          example: '0248-05-21 02:45:48'
+        waybillVersion:
+          type: string
+          title: waybillVersion
+          description: 'Waybill version
+
+            '
+          example: '1'
+    j1_receipt_response:
+      type: object
+      title: j1_receipt_response
+      properties:
+        errors:
+          type: array
+          title: errors
+          description: J1 Receipt PDF base64 encoded data
+          items:
+            type: string
+        j1Details:
+          $ref: '#/components/schemas/j1_response'
+        status:
+          type: number
+          format: float
+          title: status
+          description: Response status of the API
+          example: 0
+    j1_response:
+      type: object
+      title: j1_response
+      properties:
+        j1PdfData:
+          type: string
+          title: j1PdfData
+          description: J1 Receipt PDF base64 encoded data
+          example: JVBERi0...
+        J1 Receipt:
+          $ref: '#/components/schemas/j1_receipt'
+        unitInitial:
+          type: string
+          title: unitInitial
+          description: The initials used in the equipment identification for the shipment
+          example: JBHU
+        unitNumber:
+          type: string
+          title: unitNumber
+          description: The numbers used in  the equipment identification for the shipment
+          example: '12345'
+    OutgateResponse:
+      type: object
+      title: OutgateResponse
+      properties:
+        railpassId:
+          type: string
+          title: railpassId
+          description: RailPASS ID
+          example: '12345'
+        httpResponseCode:
+          type: number
+          format: float
+          title: httpResponseCode
+          description: Response status of the API
+          example: 0
+    Pickup_Number:
+      type: object
+      title: Pickup Number
+      properties:
+        pickupNumber:
+          type: string
+          title: pickupNumber
+          description: A security number provided to the notify party which allows the vehicle to outgate from (leave) a BNSF
+            facility. The truck driver must provide the pickup number at the time of outgate.
+          example: '772454'
+        pickupNumberValidIndicator:
+          type: string
+          title: pickupNumberValidIndicator
+          description: Indicates if the pickup number is valid.
+          enum:
+          - 'Yes'
+          - 'No'
+          example: 'Yes'
+    Pickup_Number_Request:
+      type: object
+      title: Pickup Number Request
+      required:
+      - equipmentInitial
+      - equipmentNumber
+      properties:
+        equipmentInitial:
+          type: string
+          title: equipmentInitial
+          description: The initials used in the equipment identification for the shipment.
+          example: BNSF
+        equipmentNumber:
+          type: string
+          title: equipmentNumber
+          description: The numbers used in the equipment identification for the shipment.
+          example: '12345'
+        pickupNumber:
+          type: string
+          title: pickupNumber
+          description: A security number provided to the notify party which allows the vehicle to outgate from (leave) a BNSF
+            facility. The truck driver must provide the pickup number at the time of outgate.
+          example: '772454'
+    StreetEnRouteResponse:
+      type: object
+      title: StreetEnRouteResponse
+      required:
+      - chassisInitial
+      - chassisNumber
+      - dvirRequiredIndicator
+      properties:
+        chassisInitial:
+          type: string
+          title: chassisInitial
+          description: The chassis identification initial used for the shipment
+          example: ABCD
+        chassisNumber:
+          type: string
+          title: chassisNumber
+          description: The chassis identification number used for the shipment
+          example: '1234'
+        dvirRequiredIndicator:
+          type: string
+          title: dvirRequiredIndicator
+          description: Driver Vehicle Inspection Report required indicator
+          example: Y
+        httpErrors:
+          type: array
+          title: httpErrors
+          items:
+            type: string
+            example: Invalid unit
+        httpResponseCode:
+          type: number
+          format: float
+          title: httpResponseCode
+          description: Response status of the API
+          example: 0
+        railpassId:
+          type: string
+          title: railpassId
+          description: RailPASS ID
+          example: '12345'
+    unit_list:
+      type: array
+      title: unit_list
+      items:
+        type: string
+        example: JBHU722223
+      minItems: 1
+      maxItems: 100
+      example:
+      - JBHU722223
+      - JBHU722254
+    unit_location:
+      type: object
+      title: unit_location
+      properties:
+        lotLocation:
+          type: string
+          title: Lot Location
+          description: This is the is the lot where the intermodal unit is placed for pickup by the trucker
+          example: A
+        rowLocation:
+          type: string
+          title: Row Location
+          description: This is the is the row where the intermodal unit is placed for pickup by the trucker
+          example: '12'
+        spotLocation:
+          type: string
+          title: Spot Location
+          description: This is the is the spot where the intermodal unit is placed for pickup by the trucker
+          example: '2'
+    unit_information:
+      type: object
+      title: unit_information
+      properties:
+        badOrderIndicator:
+          type: boolean
+          title: Bad Order Indicator
+          description: Indicates if the unit is bad ordered
+          example: true
+        carKindCarTypeCode:
+          type: string
+          title: Car Kind Car Type Code
+          description: First character of car kind
+          example: K
+        carKindCode:
+          type: string
+          title: Car Kind Code
+          description: Car kind
+          example: KC
+        destinationStateCode:
+          type: string
+          title: Destination State Code
+          description: The destination hub state of the shipment
+          example: CA
+        destinationStation333:
+          type: string
+          title: Destination Station333
+          description: The destination hub station of the shipment
+          example: LOSANGELE
+        errorMessage:
+          type: string
+          title: Error Message
+          description: Error message
+          example: Unit details not available
+        estimatedDerampDate:
+          type: string
+          title: Estimated Deramp Date
+          description: The estimated deramp date
+          example: 10/31/2019
+        estimatedDerampTime:
+          type: string
+          title: Estimated Deramp Time
+          description: The estimated deramp time
+          example: 01:00
+        eventCode:
+          type: string
+          title: Event Code
+          description: Code indicating the event/activity abbreviation
+          example: TA
+        eventDate:
+          type: string
+          title: Event Date
+          description: Event date
+          example: 7/7/2020
+        eventTime:
+          type: string
+          title: Event Time
+          description: Event time
+          example: 12:00:00 PM
+        fullBilledIndicator:
+          type: boolean
+          title: Full Billed Indicator
+          description: Full billed indicator
+          example: true
+        gateEditCode:
+          type: string
+          title: Gate Edit Code
+          description: Code indicating if there are gate instructions
+          example: A
+        gateEditMessage:
+          type: string
+          title: Gate Edit Message
+          description: Gate instructions
+          example: 'INGATE AT CHICAGO CORWITH   '
+        grossWeightPounds:
+          type: string
+          title: Gross Weight Pounds
+          description: Gross weigth of the unit, in pounds
+          example: '10000'
+        hazmatIndicator:
+          type: boolean
+          title: Hazmat Indicator
+          description: Hazardous material indicator
+          example: true
+        heightFeet:
+          type: string
+          title: Height Feet
+          description: Height of the unit, in feet
+          example: '9'
+        heightInches:
+          type: string
+          title: Height Inches
+          description: Height of the unit, in inches
+          example: '10'
+        ingateSealNumber:
+          type: string
+          title: Ingate Seal Number
+          description: Seal Number
+          example: ABC123
+        lastFreeDayDate:
+          type: string
+          title: Last Free Day Date
+          description: Last free day for storage clock
+          example: '2020-07-07'
+        lastPassingStation333:
+          type: string
+          title: Last Passing Station333
+          description: Last pass station
+          example: ALLIANCE
+        lastPassingStationStateCode:
+          type: string
+          title: Last Passing Station State Code
+          description: Last pass state
+          example: TX
+        lengthFeet:
+          type: string
+          title: Length Feet
+          description: Length of the unit, in feet
+          example: '53'
+        loadEmptyChassisCode:
+          type: string
+          title: Load Empty Chassis Code
+          description: Code indicating if the unit is loaded, empty or a chassis (L, E, C)
+          example: L
+        lockedEstimatedNotificationDate:
+          type: string
+          title: Locked Estimated Notification Date
+          description: The confirmed estimated date that the customer will be notified of delivery
+          example: 10/31/2019
+        lockedEstimatedNotificationTime:
+          type: string
+          title: Locked Estimated Notification Time
+          description: The confirmed estimated time that the customer will be notified of delivery
+          example: 01:00
+        netWeightPounds:
+          type: string
+          title: Net Weight Pounds
+          description: Net weight of the unit, in pounds
+          example: '1000'
+        originStation333:
+          type: string
+          title: Origin Station333
+          description: The origin hub station of the shipment
+          example: CHICAGO
+        originStationStateCode:
+          type: string
+          title: Origin Station State Code
+          description: The origin hub state of the shipment
+          example: IL
+        parkingAssignment:
+          $ref: '#/components/schemas/unit_location'
+        poolMarketingCode:
+          type: string
+          title: Pool Marketing Code
+          description: Code indicating marketed or pool intermodal equipment (M=Marketed, P=Pooled)
+          example: P
+        railpassId:
+          type: string
+          title: Railpass Id
+          description: RailPASS ID
+          example: '12345'
+        releaseNumber:
+          type: string
+          title: Release Number
+          description: Release number
+          example: L12345
+        shipper633:
+          type: string
+          title: Shipper633
+          description: Company or customer sending rail shipment at origin
+          example: JBHUNTRANSPO
+        station333:
+          type: string
+          title: Station333
+          description: The location of the most recently reported event
+          example: ALLIANCE
+        stationStateCode:
+          type: string
+          title: Station State Code
+          description: The location state of the most recently reported event
+          example: TX
+        tareWeightPounds:
+          type: string
+          title: Tare Weight Pounds
+          description: Tare weight is the weight of the empty unit
+          example: '10000'
+        truckCarrierScac:
+          type: string
+          title: Truck Carrier Scac
+          description: Standard Carrier Alpha Code (SCAC) assigned to the truck carrying the shipment
+          example: JBHU
+        unitGradeCode:
+          type: string
+          title: Unit Grade Code
+          description: Code indicating the grade of the unit
+          example: H
+        unitInitial:
+          type: string
+          title: Unit Initial
+          description: The initials used in the equipment identification for the shipment
+          example: JBHU
+        'unitLocation ':
+          $ref: '#/components/schemas/unit_location'
+        unitLocationCode:
+          type: string
+          title: Unit Location Code
+          description: Code indicating the location of the unit e.g. G = Ground
+          example: G
+        unitNumber:
+          type: string
+          title: Unit Number
+          description: The numbers used in  the equipment identification for the shipment
+          example: '12345'
+        unitStatusCode:
+          type: string
+          title: Unit Status Code
+          description: Current status of the unit
+          example: In Inv on Ground
+  responses:
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+    '401':
+      description: '**Unauthorized**
+
+
+        Indicates that the request requires user authentication information. The client MAY repeat the request with a suitable
+        Authorization.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n\
+        \   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an\
+        \ email letting you know. If you have not received the email, please wait up to five business days. Let us know via\
+        \ API Support if you still have not received the email after five business days.\n   * You can also get this error\
+        \ if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting\
+        \ Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing\
+        \ a restricted service for which you do not have permission. You can use our Registration form to request access.\
+        \ Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not
+        exist. Please consult the documentation.'
+    '405':
+      description: '**Method Not Allowed**
+
+
+        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example,
+        you may be using GET when POST is required. Please consult the documentation.'
+    '429':
+      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and\
+        \ performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15\
+        \ API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed\
+        \ these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions,\
+        \ you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+    '500':
+      description: '**Internal Server Error**
+
+
+        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem
+        on the server side. Our internal support systems will be made aware.'
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try
+        again.'
+  requestBodies:
+    postEquipmentDll:
+      content:
+        application/json:
+          schema:
+            type: object
+            title: Schema
+            properties:
+              equipment_list:
+                type: array
+                title: Equipment List
+                items:
+                  type: string
+                  minLength: 5
+                  maxLength: 10
+                  example: BNFZ103071
+                minItems: 1
+                maxItems: 300
+    flipInputList:
+      content:
+        application/json:
+          schema:
+            type: object
+            title: Schema
+            properties:
+              flipInputList:
+                type: array
+                title: flipInputList
+                items:
+                  type: object
+                  properties:
+                    equipmentInitial:
+                      type: string
+                      example: BNSF
+                    equipmentNumber:
+                      type: string
+                      example: '12345'
+                    station333:
+                      type: string
+                      example: DALLAS
+                    stationStateCode:
+                      type: string
+                      example: TX
+                  nullable: false
+                minItems: 1
+                maxItems: 300
+    updateParkingInput:
+      content:
+        application/json:
+          schema:
+            type: object
+            title: Schema
+            properties:
+              equipmentInitial:
+                type: string
+                example: BNSF
+              equipmentLotLocationName:
+                type: string
+                example: A
+              equipmentLotRowLocationName:
+                type: string
+                example: A
+              equipmentLotRowSpotLocationName:
+                type: string
+                example: A
+              equipmentNumber:
+                type: string
+                example: '12345'
+              station333:
+                type: string
+                example: DALLAS
+              stationStateCode:
+                type: string
+                example: TX
+              truckerDriverLicenseNumber:
+                type: string
+                example: '12345'
+              truckerDriverLicenseStateCode:
+                type: string
+                example: TX
+    Dray_Plan_Delete:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              equipmentInitial:
+                type: string
+                title: equipmentInitial
+                example: ABCD
+              equipmentNumber:
+                type: string
+                title: equipmentNumber
+                example: '123456'
+            nullable: false
+    drayPlanListUnits:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              intermodalUnits:
+                type: array
+                title: intermodalUnits
+                items:
+                  type: object
+                  properties:
+                    equipmentInitial:
+                      type: string
+                      title: Equipment Initial
+                      description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                      example: ABCD
+                    equipmentNumber:
+                      type: string
+                      title: Equipment Number
+                      description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                      example: '12345'
+                  nullable: false
+                nullable: false
+            nullable: false
+  securitySchemes:
+    MutualTLS:
+      type: mutualTLS
+      description: 'BNSF requires certificate-based mutual TLS (two-way authentication). Client certificates must be x509
+        PEM, issued by a recognised public Certificate Authority (Domain Validation, Organization Validation, Extended Validation
+        or S/MIME), effective no longer than 36 months, with Extended Key Usage including Client Authentication (OID 1.3.6.1.5.5.7.3.2).
+        Self-signed, private, Let''s Encrypt, webCARES and Cloudflare-issued certificates are not accepted. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/'
+    Restricted:
+      type: mutualTLS
+      description: 'Restricted Service. The same client certificate applies, but the certificate must additionally be authorised
+        for this service by BNSF API Support. Unauthorised callers receive 403 "Insufficient privileges". Restricted Services
+        are only available in the Production environment. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/'
+tags:
+- name: Intermodal Hub Operations
+security:
+- MutualTLS: []
+x-generated-from: openapi/_original/bnsf-intermodal-hub-operations-openapi.json

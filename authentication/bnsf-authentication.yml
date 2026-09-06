@@ -1,14 +1,82 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/bnsf-openapi.yml
+generated: '2026-09-06'
+method: searched
+source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/
+description: >-
+  The BNSF Customer API has exactly one authentication mechanism: certificate-based mutual TLS.
+  There is no API key, no bearer token, no OAuth and no OpenID Connect anywhere on the surface.
+  Identity is the client certificate itself, and authorisation — which shipments a caller may see —
+  is bound to the company on that certificate through the BNSF.com profile it is registered against.
 summary:
   types:
   - mutualTLS
+  api_key: false
+  oauth2: false
+  openid_connect: false
+  http_bearer: false
+  tiers: 2
 schemes:
 - name: MutualTLS
   type: mutualTLS
-  description: |-
-    BNSF customer APIs require certificate-based mutual TLS using a client
-    certificate (PEM) issued by an approved Certificate Authority.
+  transport: TLS client certificate on port 6443
+  description: >-
+    Two-way TLS. The client validates BNSF's server certificate and BNSF validates the client's.
+    Applies to every operation on every service.
+  certificate_requirements:
+  - x509 PEM format, unencrypted for use in Postman
+  - issued by a recognised public Certificate Authority; Domain Validation, Organization Validation,
+    Extended Validation and S/MIME (email) certificates are all accepted
+  - self-signed and private certificates are NOT accepted
+  - certificates from Let's Encrypt, webCARES and Cloudflare.com are explicitly NOT accepted
+  - effective period no longer than 36 months
+  - Organization Name must match the company name on the BNSF.com profile
+  - Common Name must be the domain name (TLS/SSL) or the email address (S/MIME)
+  - the domain of the registering email address must match the certificate's domain
+  - Extended Key Usage must include Client Authentication (OID 1.3.6.1.5.5.7.3.2)
+  accepted_cas_named_by_provider:
+  - Entrust
+  - Sectigo
+  - GoDaddy
+  - Comodo
+  - DigiCert
   sources:
-  - openapi/bnsf-openapi.yml
+  - https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+- name: Restricted
+  type: mutualTLS
+  description: >-
+    A second authorisation tier layered on the same client certificate. Operations flagged as
+    Restricted Services require the certificate to be separately approved for that service; an
+    unapproved caller receives HTTP 403 with "Insufficient privileges". Restricted Services are
+    available in the Production environment only, and BNSF requires at least one unrestricted
+    service to be working before it will move a caller to Production.
+  request_channel: Customer Portal "Message Us" — Business Segment, Web Support, Reason "Application
+    Programming Interface (API)", Sub Reason "Restricted Services"
+  operations_declared_restricted_in_the_specs: 27
+  operations_total: 59
+  restricted_share: 46%
+  sources:
+  - https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+  - https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/
+authorization_model:
+  subject: the company named on the client certificate, bound to a BNSF.com User ID
+  data_scope: >-
+    A caller only receives data for equipment whose waybill names their company. A company not on
+    the waybill sees an empty result, not an error. Third-party visibility is granted either by
+    being added to the waybill in the ZS monitoring role at waybill creation, or by a Letter of
+    Authorization (LOA) issued by the shipper through the BNSF Customer Portal.
+  sources:
+  - https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+onboarding:
+  self_service: false
+  steps:
+  - Obtain a BNSF.com User ID for an individual in the organisation (one per company is normally enough).
+  - Obtain a conforming client certificate from an accepted Certificate Authority.
+  - Register the certificate through the Customer Portal "Message Us" box — Business Segment,
+    Web Support, Reason "Application Programming Interface (API)", Sub Reason "API Registration".
+  - Wait for BNSF to complete configuration; the provider states this takes up to five business days
+    and is confirmed by email.
+  provisioning_sla_days: 5
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/

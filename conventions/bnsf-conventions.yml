@@ -1,0 +1,192 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  BNSF's eight published OpenAPI documents under
+  https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/ plus the Getting Started,
+  Catalog and API Support pages on the same host.
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+description: >-
+  Cross-cutting runtime semantics for the BNSF Customer API, read from the provider's own OpenAPI
+  documents and developer pages. Covers 59 operations across eight services on one gateway host.
+
+auth:
+  style: mutual TLS (client certificate)
+  header: none — identity is the TLS client certificate, not a header
+  port: 6443
+  note: >-
+    There is no Authorization header anywhere on this surface. Callers that cannot present a client
+    certificate get a 13-byte HTTP 403 from the gateway before any routing happens.
+  detail: authentication/bnsf-authentication.yml
+
+idempotency:
+  supported: false
+  coverage: none
+  header: null
+  scope: []
+  retention: null
+  evidence: >-
+    No Idempotency-Key or equivalent header appears in any of the 59 operations across BNSF's eight
+    published OpenAPI documents, and no developer page mentions replay protection, request keys or
+    deduplication. Mutating operations include irreversible ones — POST /v1/bol submits a bill of
+    lading, POST /v2/ingate and POST /v2/outgate register gate movements — with no documented way to
+    make a retry safe.
+  consequence: >-
+    A client that times out on a write cannot safely retry it. Combined with the documented 504
+    Gateway Timeout behaviour ("wait about one minute then try again") this is a real hazard: the
+    provider's own guidance is to retry an operation that has no replay protection.
+
+dry_run_mode:
+  supported: true
+  coverage: partial
+  mechanism: dedicated validation operations, not a flag on the write itself
+  operations:
+  - operationId: postV2IngateValidate
+    path: POST /v2/ingate/validate
+    rehearses: POST /v2/ingate
+    description: Returns required/missing information needed for ingate.
+  - operationId: postV2OutgateValidate
+    path: POST /v2/outgate/validate
+    rehearses: POST /v2/outgate
+    description: Returns required/missing information needed for outgate.
+  - operationId: postV2StreetEnRoute
+    path: POST /v2/street-en-route
+    rehearses: the ingate that follows arrival at the hub
+    description: >-
+      Reports pre-arrival to a hub and returns a rail-waybill ingate completeness check plus any
+      missing elements.
+  note: >-
+    Genuine rehearsal, but only for the intermodal gate flow. The waybill, pricing, automotive gate
+    and trace surfaces have no dry-run equivalent.
+
+reversibility:
+  grade: documented
+  rationale: >-
+    Four write operations have a documented reversal path. None of the four states a window, and no
+    page or spec on the BNSF developer surface states a time limit for any reversal, so this cannot
+    be graded verified. Asserting a window BNSF does not publish would be an invention.
+  reversible:
+  - action: POST /v1/pregate/in (create a pre-ingate)
+    reversal: DELETE /v1/pregate/in
+    reversal_operationId: deleteV1PregateIn
+    described_by_provider_as: Cancel a pre-ingate.
+    window: not stated
+    source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+  - action: POST /v1/pregate/out (create a pre-outgate)
+    reversal: DELETE /v1/pregate/out
+    reversal_operationId: deleteV1PregateOut
+    described_by_provider_as: Cancel a pre-outgate.
+    window: not stated
+    source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+  - action: POST /v1/dray-plan/units (create dray plans)
+    reversal: DELETE /v1/dray-plan/initial/{equipmentInitial}/number/{equipmentNumber}
+    reversal_operationId: deleteV1DrayPlanInitialByEquipmentInitialNumberByEquipmentNumber
+    described_by_provider_as: Dray Plan - Remove dray plans.
+    window: not stated
+    source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+  - action: POST /v1/vehicles/addHold (place a hold on a VIN at origin or destination)
+    reversal: POST /v1/vehicles/releaseHold
+    reversal_operationId: postV1VehiclesReleaseHold
+    described_by_provider_as: This enables Haulway and OEM to release existing Hold on a VIN.
+    window: not stated
+    source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+  irreversible:
+  - POST /v1/bol — submits a bill of lading; no void, cancel or amend operation is published
+  - POST /v2/ingate — registers a gate-in; no reversal published
+  - POST /v2/outgate — registers a gate-out; no reversal published
+  - POST /v1/exit-request — automotive haul-away gate exit; no reversal published
+  - POST /v1/pregate/automotive/haulaway-entry — automotive gate entry; no reversal published
+  - POST /v2/dvir — driver vehicle inspection report; no reversal published
+  - POST /v1/update-parking — overwrites a unit's lot/row/spot; no restore or prior-value read
+  - POST /v1/analytic-event — telemetry submission; no reversal published
+  note: >-
+    The heaviest commercial write on the surface — submitting a bill of lading — is the one with no
+    published reversal and no idempotency. An agent should treat POST /v1/bol as terminal.
+
+pagination:
+  style: page-number with a size parameter
+  params:
+  - name: page
+    in: query
+    description: 1-indexed page number; "?page=2" returns the next set.
+  - name: limit
+    in: query
+    description: Records per page. The default and the maximum are the same value.
+  default_page_size: 2000
+  max_page_size: 2000
+  response_fields:
+    envelope: elements
+    total: null
+    next_cursor: null
+  note: >-
+    Applies to the list endpoints on the trace surface (GET /v1/cars, GET /v1/units). No total count
+    and no next-page link is returned, so a client walks pages until a short page comes back.
+  coverage: partial — the reference-files, prices, waybill and hub surfaces expose no paging params.
+
+response_envelope:
+  shape: '{ "elements": [ ... ] }'
+  note: >-
+    Collection responses wrap the array in an `elements` property with additionalProperties false.
+    Single-object responses are returned bare.
+
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: false
+  note: No customer-defined metadata or tagging field is exposed on any request body.
+
+request_id_tracing:
+  supported: false
+  note: >-
+    No correlation-id or request-id header is documented on request or response, and no response
+    object in the eight specs declares a headers block. There is no published way to quote a request
+    back to BNSF API Support other than describing it.
+
+versioning:
+  style: path segment
+  versions_in_use:
+  - v1
+  - v2
+  - v3
+  note: >-
+    Versions are per-operation, not per-service: /v1/pregate/in and /v2/ingate and /v3/unit-details
+    all live in the same Intermodal Hub Operations document. There is no Accept-header or query
+    version negotiation, and no version is published in a header.
+  detail: lifecycle/bnsf-lifecycle.yml
+
+error_envelope:
+  format: not RFC 9457
+  media_type: application/json
+  note: >-
+    BNSF documents nine status codes with prose descriptions shared across every operation, but
+    publishes no error body schema for any of them — the 4xx/5xx responses in the specs carry a
+    description and no content. The only error body shape stated anywhere is the 403 example
+    "message": "Insufficient privileges" quoted in the shared 403 description. There is no problem
+    type, no error code vocabulary and no machine-readable remediation.
+  detail: errors/bnsf-problem-types.yml
+
+rate_limit_signaling:
+  status_code: 429
+  headers: none published
+  note: >-
+    Limits are published as prose inside the shared 429 response of every spec (1 request/second and
+    15 requests/minute per partner per service, 100 requests/minute per service) but no RateLimit-*,
+    X-RateLimit-* or Retry-After header is documented. The runtime signal an agent needs does not
+    exist; only the status code does.
+  detail: rate-limits/bnsf-rate-limits.yml
+
+content_types:
+  request: application/json
+  response: application/json
+  exception: >-
+    GET /healthcheck returns XML — the literal body <status>ok</status> — not JSON, despite the rest
+    of the surface being JSON. Observed live on 2026-09-06 at
+    https://api.bnsf.com:6443/healthcheck (HTTP 200, anonymous).
+
+environments:
+  production: https://api.bnsf.com:6443
+  trial: https://api-trial.bnsf.com:6443
+  detail: sandbox/bnsf-sandbox.yml

@@ -1,0 +1,82 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements to the BNSF Prices and Rates API
+  version: 1.0.0
+extends: openapi/_original/bnsf-prices-openapi.json
+x-generated: '2026-09-06'
+x-method: generated
+x-source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json
+x-note: 'Captures every change API Evangelist made between the verbatim harvested document in openapi/_original/
+  and the working document in openapi/. No BNSF-authored field is altered: the overlay only fills in metadata BNSF
+  left empty (title, description, tags, operationIds, securitySchemes) and adds the Trial server BNSF documents
+  in prose.'
+actions:
+- target: $.info
+  description: BNSF publishes this document with an empty info.title and info.description. Supply the service name
+    BNSF uses for it in its own API Catalog, and a description written from that catalog entry.
+  update:
+    title: BNSF Prices and Rates API
+    description: 'Freight pricing for BNSF carload and intermodal shipments: prices within a BNSF Price Authority,
+      open invoices by patron code, and rail-mile inquiry for BNSF local and Rule 11 shipments.'
+- target: $.servers
+  description: The published document names only the Production host. BNSF documents a Trial host on the same port
+    in Getting Started; add it so the trial environment is machine-readable.
+  update:
+  - url: https://api.bnsf.com:6443
+    description: Production
+  - url: https://api-trial.bnsf.com:6443
+    description: Trial
+- target: $.tags
+  description: The published document declares no tags and labels every operation "Requests". Replace with the service
+    name BNSF uses in its Catalog.
+  update:
+  - name: Prices and Rates
+- target: $.components.securitySchemes
+  description: The published document declares no securitySchemes at all, while referencing a "Restricted" scheme
+    in security requirements. Define both schemes from the Getting Started and API Support pages.
+  update:
+    MutualTLS:
+      type: mutualTLS
+      description: 'BNSF requires certificate-based mutual TLS (two-way authentication). Client certificates must
+        be x509 PEM, issued by a recognised public Certificate Authority (Domain Validation, Organization Validation,
+        Extended Validation or S/MIME), effective no longer than 36 months, with Extended Key Usage including Client
+        Authentication (OID 1.3.6.1.5.5.7.3.2). Self-signed, private, Let''s Encrypt, webCARES and Cloudflare-issued
+        certificates are not accepted. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/'
+    Restricted:
+      type: mutualTLS
+      description: 'Restricted Service. The same client certificate applies, but the certificate must additionally
+        be authorised for this service by BNSF API Support. Unauthorised callers receive 403 "Insufficient privileges".
+        Restricted Services are only available in the Production environment. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/'
+- target: $.security
+  description: Declare the document-level requirement of mutual TLS, which BNSF states in prose but omits from the
+    machine-readable contract.
+  update:
+  - MutualTLS: []
+- target: $.paths['/v1/carload-rates'].post
+  description: The published operation has no operationId and is tagged "Requests". Assign a stable operationId
+    derived from method and path, and retag to the service.
+  update:
+    operationId: postV1CarloadRates
+    tags:
+    - Prices and Rates
+- target: $.paths['/v1/intermodal-rates'].post
+  description: The published operation has no operationId and is tagged "Requests". Assign a stable operationId
+    derived from method and path, and retag to the service.
+  update:
+    operationId: postV1IntermodalRates
+    tags:
+    - Prices and Rates
+- target: $.paths['/v1/invoices'].post
+  description: The published operation has no operationId and is tagged "Requests". Assign a stable operationId
+    derived from method and path, and retag to the service.
+  update:
+    operationId: postV1Invoices
+    tags:
+    - Prices and Rates
+- target: $.paths['/v1/rail-miles'].post
+  description: The published operation has no operationId and is tagged "Requests". Assign a stable operationId
+    derived from method and path, and retag to the service.
+  update:
+    operationId: postV1RailMiles
+    tags:
+    - Prices and Rates

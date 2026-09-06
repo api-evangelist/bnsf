@@ -64,13 +64,14 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-BNSF Railway, a subsidiary of Berkshire Hathaway Inc., is one of the largest freight railroad networks in North America. The company operates an extensive network of over 32,000 route miles in 28 states and three Canadian provinces, serving major markets in the United States and connecting with Mexico through rail lines in Texas.
+BNSF Railway, a subsidiary of Berkshire Hathaway Inc., operates one of the largest freight rail networks in North America — more than 32,000 route miles across 28 states and three Canadian provinces, connecting to Mexico through rail lines in Texas. BNSF publishes a genuine customer-facing API programme: eight OpenAPI 3.0 documents totalling 59 operations covering shipment tracing, intermodal and automotive hub gate operations, freight pricing and invoices, intermodal schedules, waybill management, rail reference data and diagnostics, plus a six-event webhook push surface. Every call is authenticated with certificate-based mutual TLS on port 6443; there is no API key and no OAuth, and 27 of the 59 operations are Restricted Services requiring separate authorisation.
 
 **APIs.json:** [https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml)
 
 ## Scope
 
 - **Type:** Index
+- **Position:** Producing
 
 ## Tags
 
@@ -80,19 +81,22 @@ BNSF Railway, a subsidiary of Berkshire Hathaway Inc., is one of the largest fre
 - Trains
 - Intermodal
 - Logistics
+- Supply Chain
+- Transportation
 
 ## Timestamps
 
 - **Created:** 2025-02-06
-- **Modified:** 2026-04-21
+- **Modified:** 2026-09-06
 
 ## APIs
 
 ### BNSF Tracing API
 
-The BNSF Tracing API provides real-time shipment tracking from origin to destination for automotive VINs, carload railcars, intermodal units, and trains. Supports bulk queries of up to 300 vehicles or units per request with detailed trip plan and event data.
+The BNSF Tracing API provides real-time shipment tracing from origin to destination for automotive VINs, carload railcars, intermodal units and unit trains. Fifteen operations cover position, trip plans and significant-event history. Bulk POST forms accept up to 300 VINs, cars or units per request and up to 25 unit trains; list endpoints page at a default and maximum of 2,000 records. None of the fifteen is a Restricted Service, which makes this the surface a newly registered caller can use first.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
@@ -101,19 +105,23 @@ The BNSF Tracing API provides real-time shipment tracking from origin to destina
 - Tracking
 - Tracing
 - Shipping
+- Intermodal
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Portal](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-trace-openapi.yml](openapi/bnsf-trace-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-trace-openapi.json](openapi/_original/bnsf-trace-openapi.json)
+- **Overlay:** [overlays/bnsf-trace-overlay.yaml](overlays/bnsf-trace-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json)
 
-### BNSF Hub Operations API
+### BNSF Intermodal Hub Operations API
 
-The BNSF Hub Operations API provides access to intermodal facility data including container and trailer delivery details, storage locations, driver pickup and delivery information, dray bookings, gate operations, and unit status for intermodal hubs across the BNSF network.
+The BNSF Intermodal Hub Operations API covers facility operations across the BNSF intermodal hub network: dray bookings and dray plans, driver vehicle inspection reports, authorized flips, hub lot locations, ingate and outgate registration with dedicated validation operations, pre-gate creation and cancellation, J1 gate receipts, pickup numbers, street en-route reporting, unit details, domestic empties and parking updates. Twenty-three operations, twenty-one of them Restricted Services requiring separate BNSF authorisation and available in Production only.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
@@ -121,38 +129,74 @@ The BNSF Hub Operations API provides access to intermodal facility data includin
 - Intermodal
 - Hub
 - Logistics
-- Operations
+- Gate Operations
+- Drayage
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-intermodal-hub-operations-openapi.yml](openapi/bnsf-intermodal-hub-operations-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-intermodal-hub-operations-openapi.json](openapi/_original/bnsf-intermodal-hub-operations-openapi.json)
+- **Overlay:** [overlays/bnsf-intermodal-hub-operations-overlay.yaml](overlays/bnsf-intermodal-hub-operations-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json)
 
-### BNSF Pricing & Rates API
+### BNSF Automotive Hub Operations API
 
-The BNSF Pricing & Rates API provides access to freight shipping prices and rates for both carload and intermodal shipments, enabling customers to obtain BNSF shipping costs programmatically.
+The BNSF Automotive Hub Operations API covers haul-away gate operations at BNSF automotive ramps: gate entry requests submitted before an ingate, gate exit and pre-exit requests, holds placed on and released from a VIN at origin or destination, and gate-pass lookups by AAR ramp code and VIN. Seven operations, keyed on NMFTA SCAC and AAR ramp code, serving truckers, dispatchers and vehicle OEMs.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
+
+#### Tags
+
+- Freight
+- Automotive
+- Hub
+- Gate Operations
+- VIN
+- Logistics
+
+#### Properties
+
+- **OpenAPI:** [openapi/bnsf-automotive-hub-operations-openapi.yml](openapi/bnsf-automotive-hub-operations-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-automotive-hub-operations-openapi.json](openapi/_original/bnsf-automotive-hub-operations-openapi.json)
+- **Overlay:** [overlays/bnsf-automotive-hub-operations-overlay.yaml](overlays/bnsf-automotive-hub-operations-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json)
+
+### BNSF Prices and Rates API
+
+The BNSF Prices and Rates API returns freight shipping prices for carload and intermodal moves within a BNSF Price Authority, open invoices for up to five patron codes per request, and rail mileage for BNSF local and AAR Accounting Rule 11 shipments up to 1,000 at a time. Commodity ranges are expressed as STCC bounds and geography accepts SPLC, OPSL, FIPS county, state, ZIP3 and ZIP5 selectors. Three of the four operations are Restricted Services; the rail-mile inquiry is not.
+
+- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
 - Freight
 - Pricing
 - Rates
+- Invoices
 - Shipping
+- STCC
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-prices-openapi.yml](openapi/bnsf-prices-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-prices-openapi.json](openapi/_original/bnsf-prices-openapi.json)
+- **Overlay:** [overlays/bnsf-prices-overlay.yaml](overlays/bnsf-prices-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json)
 
 ### BNSF Schedules API
 
-The BNSF Schedules API provides intermodal transit schedules enabling customers to view planned departure and arrival times to help schedule freight shipments across the BNSF rail network.
+The BNSF Schedules API returns published intermodal transit schedules for the BNSF network, so a shipper can plan departure and arrival timing before booking freight. A single operation, declared as a Restricted Service requiring separate BNSF authorisation.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
@@ -163,34 +207,44 @@ The BNSF Schedules API provides intermodal transit schedules enabling customers 
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-schedules-openapi.yml](openapi/bnsf-schedules-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-schedules-openapi.json](openapi/_original/bnsf-schedules-openapi.json)
+- **Overlay:** [overlays/bnsf-schedules-overlay.yaml](overlays/bnsf-schedules-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json)
 
 ### BNSF Waybill Management API
 
-The BNSF Waybill Management API enables customers to submit bills of lading with transit details and retrieve submissions for carload shipments. Supports electronic submission and retrieval of waybill documentation for freight management.
+The BNSF Waybill Management API submits a bill of lading with the required transit information to create a waybill, and retrieves the current active waybill for a given piece of equipment. Its request schema carries ninety explicit EDI Mapping annotations binding JSON fields to ANSI X12 data elements, so a shipper already exchanging X12 404 rail shipment information can map field to field. The submission operation is a Restricted Service and has no published void, cancel or amend.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
 - Freight
 - Waybill
-- Documentation
+- Bill of Lading
 - Carload
+- EDI
+- Documentation
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-waybill-openapi.yml](openapi/bnsf-waybill-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-waybill-openapi.json](openapi/_original/bnsf-waybill-openapi.json)
+- **Overlay:** [overlays/bnsf-waybill-overlay.yaml](overlays/bnsf-waybill-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json)
 
 ### BNSF Reference Files API
 
-The BNSF Reference Files API provides access to reference data including city names, commodity descriptions (STCC codes), station data, event codes, and hazardous materials information used in freight operations and waybill processing.
+The BNSF Reference Files API resolves the rail industry code systems the rest of the BNSF surface is written in: event codes describing equipment activity, station details behind the 333 location codes, STCC commodity codes and their hazardous-materials detail, and Umler equipment characteristics covering dimensions, capacities and weights for freight cars, trailers and containers. Five operations, none of them restricted.
 
 - **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
 
 #### Tags
 
@@ -199,23 +253,76 @@ The BNSF Reference Files API provides access to reference data including city na
 - Data
 - STCC
 - Stations
+- Umler
+- Hazardous Materials
 
 #### Properties
 
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Postman Collection](collections/bnsf.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bnsf.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- **OpenAPI:** [openapi/bnsf-reference-files-openapi.yml](openapi/bnsf-reference-files-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-reference-files-openapi.json](openapi/_original/bnsf-reference-files-openapi.json)
+- **Overlay:** [overlays/bnsf-reference-files-overlay.yaml](overlays/bnsf-reference-files-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/reference-files.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/reference-files.json)
+
+### BNSF Diagnostics API
+
+The BNSF Diagnostics API exposes an unauthenticated gateway health check that answers 200 with the body <status>ok</status> on both the production and trial hosts, and a Restricted analytic-event operation for submitting usage telemetry. The health check is the only operation on the whole BNSF Customer API reachable without a registered client certificate.
+
+- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Base URL:** `https://api.bnsf.com:6443`
+
+#### Tags
+
+- Diagnostics
+- Health Check
+- Monitoring
+- Telemetry
+
+#### Properties
+
+- **OpenAPI:** [openapi/bnsf-diagnostics-openapi.yml](openapi/bnsf-diagnostics-openapi.yml)
+- **OpenAPISource:** [openapi/_original/bnsf-diagnostics-openapi.json](openapi/_original/bnsf-diagnostics-openapi.json)
+- **Overlay:** [overlays/bnsf-diagnostics-overlay.yaml](overlays/bnsf-diagnostics-overlay.yaml)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json)
 
 ## Common Properties
 
-- [LinkedIn](https://www.linkedin.com/company/bnsf-railway)
-- [Website](https://www.bnsf.com)
-- [Portal](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- [Developer Console](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- [Support](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/)
+- **OpenAPI:** [openapi/bnsf-trace-openapi.yml](openapi/bnsf-trace-openapi.yml)
+- **Authentication:** [authentication/bnsf-authentication.yml](authentication/bnsf-authentication.yml)
+- **Conventions:** [conventions/bnsf-conventions.yml](conventions/bnsf-conventions.yml)
+- **ErrorCatalog:** [errors/bnsf-problem-types.yml](errors/bnsf-problem-types.yml)
+- **Lifecycle:** [lifecycle/bnsf-lifecycle.yml](lifecycle/bnsf-lifecycle.yml)
+- **Conformance:** [conformance/bnsf-conformance.yml](conformance/bnsf-conformance.yml)
+- **DataModel:** [data-model/bnsf-data-model.yml](data-model/bnsf-data-model.yml)
+- **RateLimits:** [rate-limits/bnsf-rate-limits.yml](rate-limits/bnsf-rate-limits.yml)
+- **Plans:** [plans/bnsf-plans-pricing.yml](plans/bnsf-plans-pricing.yml)
+- **Sandbox:** [sandbox/bnsf-sandbox.yml](sandbox/bnsf-sandbox.yml)
+- **Webhooks:** [asyncapi/bnsf-webhooks.yml](asyncapi/bnsf-webhooks.yml)
+- **AgentSkill:** [skills/_index.yml](skills/_index.yml)
+- **LLMsTxt:** [llms/bnsf-llms.txt](llms/bnsf-llms.txt)
+- **X-MCPServerCandidate:** [mcp/bnsf-mcp.yml](mcp/bnsf-mcp.yml)
+- **Packages:** [packages/bnsf-packages.yml](packages/bnsf-packages.yml)
+- **DomainSecurity:** [security/bnsf-domain-security.yml](security/bnsf-domain-security.yml)
+- **AgenticAccess:** [agentic-access/bnsf-agentic-access.yml](agentic-access/bnsf-agentic-access.yml)
+- **FinOps:** [finops/bnsf-finops.yml](finops/bnsf-finops.yml)
+- **Website:** [https://www.bnsf.com](https://www.bnsf.com)
+- **Portal:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **DeveloperPortal:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
+- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **Console:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- **GettingStarted:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/)
+- **SignUp:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/)
+- **Support:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/)
+- **Login:** [https://customer2.bnsf.com/](https://customer2.bnsf.com/)
+- **Blog:** [https://www.bnsf.com/news-media/railtalk/](https://www.bnsf.com/news-media/railtalk/)
+- **TermsOfService:** [https://www.bnsf.com/site-terms-of-use.html](https://www.bnsf.com/site-terms-of-use.html)
+- **PrivacyPolicy:** [https://www.bnsf.com/privacy-policy.html](https://www.bnsf.com/privacy-policy.html)
+- **LinkedIn:** [https://www.linkedin.com/company/bnsf-railway](https://www.linkedin.com/company/bnsf-railway)
 
 ## Maintainers
 
-**FN:** Kin Lane
-**Email:** kinlane@gmail.com
+- Kin Lane <kinlane@gmail.com>

@@ -1,0 +1,740 @@
+generated: '2026-09-06'
+method: derived
+source: the eight BNSF OpenAPI documents in openapi/, harvested from https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+  on 2026-09-06
+status: candidate
+description: BNSF publishes no MCP server. This is a CANDIDATE tool list derived from the 59 operations BNSF does
+  publish, so that the agent surface a BNSF MCP server would expose can be reasoned about. Nothing here is deployed
+  and no endpoint is asserted.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+server_search:
+  searched:
+  - npm registry (text search "bnsf")
+  - PyPI
+  - RubyGems
+  - GitHub repository search "bnsf railway"
+  - https://api.bnsf.com:6443/mcp (403, mutual-TLS gate)
+  - the seven BNSF API Center pages
+  result: no first-party or third-party MCP server for BNSF found
+blocking_constraint: Any MCP server for this API must terminate a mutual-TLS connection with a BNSF-registered client
+  certificate, and BNSF binds data visibility to the company on that certificate. A hosted multi-tenant MCP server
+  is therefore not possible without per-tenant certificates; a local stdio server holding one customer certificate
+  is the only shape that fits this API.
+tool_count: 59
+restricted_tool_count: 27
+tools:
+- name: postV1PregateAutomotiveHaulawayEntry
+  service: BNSF Automotive Hub Operations API
+  method: POST
+  path: /v1/pregate/automotive/haulaway-entry
+  description: Haul Away Gate Entry Request - Allow truckers and/or dispatchers to submit load details prior to
+    an actual ingate for an automotive haul away move.
+  rest_operationId: postV1PregateAutomotiveHaulawayEntry
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1VehiclesAddhold
+  service: BNSF Automotive Hub Operations API
+  method: POST
+  path: /v1/vehicles/addHold
+  description: ​​AddHold Request - Haulway or OEM will have the capability to add hold on VIN at Origin or Destination
+    ("O"  or "D")
+  rest_operationId: postV1VehiclesAddhold
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1VehiclesReleasehold
+  service: BNSF Automotive Hub Operations API
+  method: POST
+  path: /v1/vehicles/releaseHold
+  description: ​​Release Hold Request - This enables Haulway and OEM to release existing Hold on a VIN.
+  rest_operationId: postV1VehiclesReleasehold
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1GatePassRampByAarRampCodeVehicleByVin
+  service: BNSF Automotive Hub Operations API
+  method: GET
+  path: /v1/gate-pass/ramp/{aarRampCode}/vehicle/{vin}
+  description: Haulway Carries - Retrieves information of a entry request that is already posted.
+  rest_operationId: getV1GatePassRampByAarRampCodeVehicleByVin
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters:
+  - null
+  - null
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1GatePassRampByAarRampCodeGatePassByGatePassCode
+  service: BNSF Automotive Hub Operations API
+  method: GET
+  path: /v1/gate-pass/ramp/{aarRampCode}/gate-pass/{gatePassCode}
+  description: Haulway Carries - Retrieves information of a entry request that is already posted.
+  rest_operationId: getV1GatePassRampByAarRampCodeGatePassByGatePassCode
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters:
+  - null
+  - null
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1ExitRequest
+  service: BNSF Automotive Hub Operations API
+  method: POST
+  path: /v1/exit-request
+  description: Haul Away Gate Exit Request – Allow truckers and/or dispatchers to submit load details AT outgate.
+  rest_operationId: postV1ExitRequest
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1PreOutgate
+  service: BNSF Automotive Hub Operations API
+  method: POST
+  path: /v1/pre-outgate
+  description: Haul‑Away Gate Pre-Exit Request – Allow dispatchers to submit load details BEFORE ARRIVING to outgate
+    the load for the dealer.
+  rest_operationId: postV1PreOutgate
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getHealthcheck
+  service: BNSF Diagnostics API
+  method: GET
+  path: /healthcheck
+  description: Check the status of the BNSF Customer API
+  rest_operationId: getHealthcheck
+  spec: openapi/bnsf-diagnostics-openapi.yml
+  parameters: []
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1AnalyticEvent
+  service: BNSF Diagnostics API
+  method: POST
+  path: /v1/analytic-event
+  description: Submit event data for analytical purposes.
+  rest_operationId: postV1AnalyticEvent
+  spec: openapi/bnsf-diagnostics-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: getV1DrayBookingOpen
+  service: BNSF Intermodal Hub Operations API
+  method: GET
+  path: /v1/dray-booking/open
+  description: Dray open booking details.
+  rest_operationId: getV1DrayBookingOpen
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - drayageBookingNumber
+  has_request_body: false
+  consequence: read
+  restricted_service: true
+- name: postV1DrayPlanListUnits
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/dray-plan/list-units
+  description: Dray Plan List Units- Returns a list of dray plans for a given supplier633 and list of unit id’s.
+  rest_operationId: postV1DrayPlanListUnits
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - supplier633
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: deleteV1DrayPlanInitialByEquipmentInitialNumberByEquipmentNumber
+  service: BNSF Intermodal Hub Operations API
+  method: DELETE
+  path: /v1/dray-plan/initial/{equipmentInitial}/number/{equipmentNumber}
+  description: Dray Plan- Remove dray plans.
+  rest_operationId: deleteV1DrayPlanInitialByEquipmentInitialNumberByEquipmentNumber
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  has_request_body: false
+  consequence: delete
+  restricted_service: true
+- name: getV1DrayPlanUnits
+  service: BNSF Intermodal Hub Operations API
+  method: GET
+  path: /v1/dray-plan/units
+  description: Dray Plan- Capture an intermodal container's dwell profile from dray carriers and steamship lines.
+  rest_operationId: getV1DrayPlanUnits
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - supplier633
+  has_request_body: false
+  consequence: read
+  restricted_service: true
+- name: postV1DrayPlanUnits
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/dray-plan/units
+  description: Dray Plan- Create dray plans.
+  rest_operationId: postV1DrayPlanUnits
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - supplier633
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV2Dvir
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/dvir
+  description: Driver Vehicle Inspection Report - Submit chassis defects (Y/N) within BNSF intermodal hubs.
+  rest_operationId: postV2Dvir
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1Flips
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/flips
+  description: Flips - Returns details on authorized flips for given units.
+  rest_operationId: postV1Flips
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: getV1Hub
+  service: BNSF Intermodal Hub Operations API
+  method: GET
+  path: /v1/hub
+  description: Hub - Returns a list of valid lot locations at a given hub facility.
+  rest_operationId: getV1Hub
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - station333
+  - stationStateCode
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV2Ingate
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/ingate
+  description: Ingate - Returns way-billed units that can be registered prior to arrival at a hub facility.
+  rest_operationId: postV2Ingate
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: getV1IngateManagementCurrent
+  service: BNSF Intermodal Hub Operations API
+  method: GET
+  path: /v1/ingate-management/current
+  description: 'Current Gate Target - Returns all ingate targets related to the authorized list of 633s. **Prerequisites:
+    Access to the “Ingate Planning” web tool is REQUIRED before using this endpoint.'
+  rest_operationId: getV1IngateManagementCurrent
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV2IngateValidate
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/ingate/validate
+  description: Validate Ingate - Returns required/missing information needed for ingate.
+  rest_operationId: postV2IngateValidate
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1J1Receipts
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/j1-receipts
+  description: J1 Receipts - Returns a list of J1 Gate Receipts.
+  rest_operationId: postV1J1Receipts
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV2Outgate
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/outgate
+  description: Outgate - Returns way-billed units that can be registered prior to exiting at a hub facility.
+  rest_operationId: postV2Outgate
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV2OutgateValidate
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/outgate/validate
+  description: Validate Outgate - Returns required/missing information needed for outgate.
+  rest_operationId: postV2OutgateValidate
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1PickupNumber
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/pickup-number
+  description: Pickup Number - Validate and/or retrieve pickup numbers.
+  rest_operationId: postV1PickupNumber
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1PregateIn
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/pregate/in
+  description: Pre-Ingate - Advanced creation of an ingate ahead of arriving at a hub facility.
+  rest_operationId: postV1PregateIn
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: deleteV1PregateIn
+  service: BNSF Intermodal Hub Operations API
+  method: DELETE
+  path: /v1/pregate/in
+  description: Cancel a pre-ingate.
+  rest_operationId: deleteV1PregateIn
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  - truckerDriverLicenseNumber
+  - truckerDriverLicenseStateCode
+  has_request_body: false
+  consequence: delete
+  restricted_service: true
+- name: postV1PregateOut
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/pregate/out
+  description: Pre-Outgate - Advanced creation of an outgate ahead of exiting a hub facility.
+  rest_operationId: postV1PregateOut
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: deleteV1PregateOut
+  service: BNSF Intermodal Hub Operations API
+  method: DELETE
+  path: /v1/pregate/out
+  description: Cancel a pre-outgate.
+  rest_operationId: deleteV1PregateOut
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  - truckerDriverLicenseNumber
+  - truckerDriverLicenseStateCode
+  has_request_body: false
+  consequence: delete
+  restricted_service: true
+- name: postV2StreetEnRoute
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v2/street-en-route
+  description: Street En-route - Report pre-arrival to hub and returns rail waybill ingate completeness check and
+    missing elements (if any).
+  rest_operationId: postV2StreetEnRoute
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV3UnitDetails
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v3/unit-details
+  description: Unit Details - Returns hub information (e.g., Lot Location) for units at a BNSF Facility (Equivalent
+    to DLL on bnsf.com).
+  rest_operationId: postV3UnitDetails
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: getV3UnitDetailsDomesticEmpties
+  service: BNSF Intermodal Hub Operations API
+  method: GET
+  path: /v3/unit-details/domestic-empties
+  description: Domestic Empties - Returns a list of empty units ready for pickup at a BNSF facility.
+  rest_operationId: getV3UnitDetailsDomesticEmpties
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters:
+  - station333
+  - stationStateCode
+  - equipmentInitial
+  has_request_body: false
+  consequence: read
+  restricted_service: true
+- name: postV1UpdateParking
+  service: BNSF Intermodal Hub Operations API
+  method: POST
+  path: /v1/update-parking
+  description: Update Parking - Update a unit's parking information at a Hub facility (i.e. Lot, Row, Spot).
+  rest_operationId: postV1UpdateParking
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1CarloadRates
+  service: BNSF Prices and Rates API
+  method: POST
+  path: /v1/carload-rates
+  description: Carload Rates - Returns a list of prices within a BNSF Carload Price Authority.
+  rest_operationId: postV1CarloadRates
+  spec: openapi/bnsf-prices-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1IntermodalRates
+  service: BNSF Prices and Rates API
+  method: POST
+  path: /v1/intermodal-rates
+  description: Intermodal Rates - Returns a list of prices within a BNSF Intermodal Price Authority.
+  rest_operationId: postV1IntermodalRates
+  spec: openapi/bnsf-prices-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1Invoices
+  service: BNSF Prices and Rates API
+  method: POST
+  path: /v1/invoices
+  description: ​Retrieve Open Invoices - Returns details of customer's open invoices for given Patron code of customer.
+    Up to 5 Patron codes.
+  rest_operationId: postV1Invoices
+  spec: openapi/bnsf-prices-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: postV1RailMiles
+  service: BNSF Prices and Rates API
+  method: POST
+  path: /v1/rail-miles
+  description: Rail Mile Inquiry API – Mileage – Returns mileage for BNSF local and/or rule 11 shipments, up to
+    1000 at a time
+  rest_operationId: postV1RailMiles
+  spec: openapi/bnsf-prices-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1EventCodes
+  service: BNSF Reference Files API
+  method: GET
+  path: /v1/event-codes
+  description: Event Codes - returns a list of event codes and their descriptions, which describe equipment activity.
+  rest_operationId: getV1EventCodes
+  spec: openapi/bnsf-reference-files-openapi.yml
+  parameters: []
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1Stations
+  service: BNSF Reference Files API
+  method: GET
+  path: /v1/stations
+  description: Stations - Returns details of each station matching input criteria.
+  rest_operationId: getV1Stations
+  spec: openapi/bnsf-reference-files-openapi.yml
+  parameters:
+  - scac
+  - stationName
+  - station333
+  - stationState
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1Stcc
+  service: BNSF Reference Files API
+  method: GET
+  path: /v1/stcc
+  description: STCC -  Returns STCC numbers and descriptions matching input criteria.
+  rest_operationId: getV1Stcc
+  spec: openapi/bnsf-reference-files-openapi.yml
+  parameters:
+  - stcc
+  - commodityDescription
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1StccHazardous
+  service: BNSF Reference Files API
+  method: GET
+  path: /v1/stcc/hazardous
+  description: STCC - Hazardous - Returns detailed information on hazardous materials matching input criteria.
+  rest_operationId: getV1StccHazardous
+  spec: openapi/bnsf-reference-files-openapi.yml
+  parameters:
+  - stcc
+  - hazardousCommodityProperShippingName
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1Umler
+  service: BNSF Reference Files API
+  method: POST
+  path: /v1/umler
+  description: Umler - The Umler service returns internal and external dimensions, capacities, weight information,
+    and other specific characteristics of freight cars and intermodal trailers and containers.
+  rest_operationId: postV1Umler
+  spec: openapi/bnsf-reference-files-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1IntermodalSchedules
+  service: BNSF Schedules API
+  method: GET
+  path: /v1/intermodal-schedules
+  description: Intermodal Schedules - Returns all Intermodal Schedules.
+  rest_operationId: getV1IntermodalSchedules
+  spec: openapi/bnsf-schedules-openapi.yml
+  parameters:
+  - shipmentServiceLevelCode
+  - businessTypeCode
+  - equipmentTypeCode
+  has_request_body: false
+  consequence: read
+  restricted_service: true
+- name: getV1TripPlanAutomotive
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/trip-plan-automotive
+  description: Trip Plan - Returns list of significant events planned for a VIN from origin to destination.
+  rest_operationId: getV1TripPlanAutomotive
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - vin
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1Vins
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/vins
+  description: VINS - Returns tracing details for requested VINS, up to 300 at a time.
+  rest_operationId: postV1Vins
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1VinDetails
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/vin-details
+  description: VIN Details - Returns detailed information about your VIN shipments.
+  rest_operationId: getV1VinDetails
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - vinList
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1VinInspections
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/vin-inspections
+  description: VIN Inspections- Returns detailed information about inspections of your VIN shipments.
+  rest_operationId: getV1VinInspections
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - vinList
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1Cars
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/cars
+  description: Cars - Returns tracing details for railcars on the BNSF network, with a default page size of 2,000.
+  rest_operationId: getV1Cars
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - limit
+  - page
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1Cars
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/cars
+  description: Cars - Returns tracing details for requested cars, up to 300 at a time.
+  rest_operationId: postV1Cars
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1CarloadConsist
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/carload-consist
+  description: Carload Consist - Returns tracing details for railcars on U, J, C, E, G and X unit trains.
+  rest_operationId: getV1CarloadConsist
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - train
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1TripPlanCarload
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/trip-plan-carload
+  description: Trip Plan - Returns list of significant events planned for a railcar equipment initial and number
+    from origin to destination.
+  rest_operationId: getV1TripPlanCarload
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1TripPlanIntermodal
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/trip-plan-intermodal
+  description: Trip Plan - Returns list of significant events planned for an intermodal equipment initial and number
+    from origin to destination.
+  rest_operationId: getV1TripPlanIntermodal
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: getV1Units
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/units
+  description: Units - Returns tracing details for units on the BNSF network, with a default page size of 2,000.
+  rest_operationId: getV1Units
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters:
+  - limit
+  - page
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1Units
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/units
+  description: Units - Returns tracing details for requested units, up to 300 at a time.
+  rest_operationId: postV1Units
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: getV1Trains
+  service: BNSF Tracing API
+  method: GET
+  path: /v1/trains
+  description: Trains - Provides current status, with tracing details for all unit train types.
+  rest_operationId: getV1Trains
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: false
+  consequence: read
+  restricted_service: false
+- name: postV1AgTrains
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/ag-trains
+  description: Ag Trains - Provides current status, with tracing details for up to 25 Ag trains.
+  rest_operationId: postV1AgTrains
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1CoalTrains
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/coal-trains
+  description: Coal Trains - Provides current status, with tracing details for up to 25 Coal trains.
+  rest_operationId: postV1CoalTrains
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1IpTrains
+  service: BNSF Tracing API
+  method: POST
+  path: /v1/ip-trains
+  description: IP Trains - Provides current status, with tracing details up to 25 industrial products unit trains.
+  rest_operationId: postV1IpTrains
+  spec: openapi/bnsf-trace-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: false
+- name: postV1Bol
+  service: BNSF Waybill Management API
+  method: POST
+  path: /v1/bol
+  description: Submit Bill of Lading - Submit required transit information in order to create a waybill/bill of
+    lading (BOL).
+  rest_operationId: postV1Bol
+  spec: openapi/bnsf-waybill-openapi.yml
+  parameters: []
+  has_request_body: true
+  consequence: write
+  restricted_service: true
+- name: getV1Waybill
+  service: BNSF Waybill Management API
+  method: GET
+  path: /v1/waybill
+  description: Retrieve Waybill - Retrieve current active waybill/bill of lading information for a given equipment.
+  rest_operationId: getV1Waybill
+  spec: openapi/bnsf-waybill-openapi.yml
+  parameters:
+  - equipmentInitial
+  - equipmentNumber
+  has_request_body: false
+  consequence: read
+  restricted_service: false

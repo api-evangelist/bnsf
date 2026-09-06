@@ -1,34 +1,727 @@
-generated: '2026-07-15'
+generated: '2026-09-06'
 method: generated
-source: openapi/bnsf-openapi.yml
-description: Recommended x-agentic-access execution contracts, classified heuristically from
-  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
-  audience per deployment. See research/curity/agentic-governance/.
+source: the eight BNSF OpenAPI documents in openapi/, harvested 2026-09-06
+description: 'Recommended x-agentic-access execution contracts for the BNSF Customer API, classified from the published
+  contracts. subject: required marks the 27 Restricted Services, which BNSF gates on a separately authorised certificate.
+  human-in-the-loop: required marks the writes with no published reversal and no idempotency key — an agent that
+  fires one of these cannot undo it and cannot safely retry it. A governance starting point; review and bind audience
+  per deployment.'
 summary:
-  operations: 2
+  operations: 59
   by_action_class:
-    connected: 2
+    connected: 59
   by_consequence:
-    read: 2
-  human_in_the_loop_required: 0
+    write: 33
+    read: 23
+    delete: 3
+  human_in_the_loop_required: 8
+  restricted_subject_required: 27
 operations:
-- path: /healthcheck
+- path: /v1/pregate/automotive/haulaway-entry
+  method: post
+  operationId: postV1PregateAutomotiveHaulawayEntry
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/vehicles/addHold
+  method: post
+  operationId: postV1VehiclesAddhold
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: true
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/vehicles/releaseHold
+  method: post
+  operationId: postV1VehiclesReleasehold
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/gate-pass/ramp/{aarRampCode}/vehicle/{vin}
   method: get
-  operationId: healthCheck
+  operationId: getV1GatePassRampByAarRampCodeVehicleByVin
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/gate-pass/ramp/{aarRampCode}/gate-pass/{gatePassCode}
+  method: get
+  operationId: getV1GatePassRampByAarRampCodeGatePassByGatePassCode
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/exit-request
+  method: post
+  operationId: postV1ExitRequest
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pre-outgate
+  method: post
+  operationId: postV1PreOutgate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /healthcheck
+  method: get
+  operationId: getHealthcheck
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/analytic-event
+  method: post
+  operationId: postV1AnalyticEvent
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/dray-booking/open
+  method: get
+  operationId: getV1DrayBookingOpen
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/dray-plan/list-units
+  method: post
+  operationId: postV1DrayPlanListUnits
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/dray-plan/initial/{equipmentInitial}/number/{equipmentNumber}
+  method: delete
+  operationId: deleteV1DrayPlanInitialByEquipmentInitialNumberByEquipmentNumber
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/dray-plan/units
+  method: get
+  operationId: getV1DrayPlanUnits
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/dray-plan/units
+  method: post
+  operationId: postV1DrayPlanUnits
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: true
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v2/dvir
+  method: post
+  operationId: postV2Dvir
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/flips
+  method: post
+  operationId: postV1Flips
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/hub
+  method: get
+  operationId: getV1Hub
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/ingate
+  method: post
+  operationId: postV2Ingate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/ingate-management/current
+  method: get
+  operationId: getV1IngateManagementCurrent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/ingate/validate
+  method: post
+  operationId: postV2IngateValidate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/j1-receipts
+  method: post
+  operationId: postV1J1Receipts
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v2/outgate
+  method: post
+  operationId: postV2Outgate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v2/outgate/validate
+  method: post
+  operationId: postV2OutgateValidate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pickup-number
+  method: post
+  operationId: postV1PickupNumber
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pregate/in
+  method: post
+  operationId: postV1PregateIn
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: true
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pregate/in
+  method: delete
+  operationId: deleteV1PregateIn
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pregate/out
+  method: post
+  operationId: postV1PregateOut
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: true
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/pregate/out
+  method: delete
+  operationId: deleteV1PregateOut
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v2/street-en-route
+  method: post
+  operationId: postV2StreetEnRoute
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v3/unit-details
+  method: post
+  operationId: postV3UnitDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v3/unit-details/domestic-empties
+  method: get
+  operationId: getV3UnitDetailsDomesticEmpties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/update-parking
+  method: post
+  operationId: postV1UpdateParking
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/carload-rates
+  method: post
+  operationId: postV1CarloadRates
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/intermodal-rates
+  method: post
+  operationId: postV1IntermodalRates
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/invoices
+  method: post
+  operationId: postV1Invoices
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/rail-miles
+  method: post
+  operationId: postV1RailMiles
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/event-codes
+  method: get
+  operationId: getV1EventCodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/stations
+  method: get
+  operationId: getV1Stations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/stcc
+  method: get
+  operationId: getV1Stcc
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/stcc/hazardous
+  method: get
+  operationId: getV1StccHazardous
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/umler
+  method: post
+  operationId: postV1Umler
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/intermodal-schedules
+  method: get
+  operationId: getV1IntermodalSchedules
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/trip-plan-automotive
+  method: get
+  operationId: getV1TripPlanAutomotive
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/vins
+  method: post
+  operationId: postV1Vins
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/vin-details
+  method: get
+  operationId: getV1VinDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/vin-inspections
+  method: get
+  operationId: getV1VinInspections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
     token:
       max-ttl: 3600
     audit: none
 - path: /v1/cars
   method: get
-  operationId: getCars
+  operationId: getV1Cars
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/cars
+  method: post
+  operationId: postV1Cars
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/carload-consist
+  method: get
+  operationId: getV1CarloadConsist
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/trip-plan-carload
+  method: get
+  operationId: getV1TripPlanCarload
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/trip-plan-intermodal
+  method: get
+  operationId: getV1TripPlanIntermodal
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/units
+  method: get
+  operationId: getV1Units
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/units
+  method: post
+  operationId: postV1Units
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/trains
+  method: get
+  operationId: getV1Trains
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/ag-trains
+  method: post
+  operationId: postV1AgTrains
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/coal-trains
+  method: post
+  operationId: postV1CoalTrains
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/ip-trains
+  method: post
+  operationId: postV1IpTrains
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/bol
+  method: post
+  operationId: postV1Bol
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    reversible: false
+    human-in-the-loop: required
+    token:
+      max-ttl: 3600
+    audit: full
+- path: /v1/waybill
+  method: get
+  operationId: getV1Waybill
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    reversible: false
+    human-in-the-loop: not-required
     token:
       max-ttl: 3600
     audit: none

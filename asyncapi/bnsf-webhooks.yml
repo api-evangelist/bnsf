@@ -1,0 +1,201 @@
+generated: '2026-09-06'
+method: searched
+source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/push-notifications/
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/push-notifications/
+description: >-
+  BNSF publishes a real, documented push-notification (webhook) surface alongside its request/response
+  API. Six event types are named, each with its full JSON payload printed in the documentation. BNSF
+  ships no AsyncAPI document for them — this file is the catalogue of what the provider actually
+  publishes, transcribed from the Push Notifications page. Nothing here is inferred: every field
+  listed appears in BNSF's own printed example payload.
+asyncapi_document_published: false
+event_count: 6
+transport:
+  protocol: HTTPS
+  direction: BNSF -> consumer
+  method: POST
+  sender_host: api.bnsf.com
+  consumer_requirement: >-
+    A publicly reachable HTTPS endpoint that parses each event object and returns a 200 status code.
+  security: >-
+    BNSF's own guidance is that the consumer "should take care to validate the BNSF certificate when
+    the request is received in order to minimize security risks on your side." There is no signature
+    header, no shared secret and no replay-protection mechanism documented — server-certificate
+    validation on the consumer side is the entire published authentication story for inbound events.
+  delivery_guarantee: not stated
+  retry_policy: not stated
+  ordering: not stated
+  provider_recommendation: >-
+    "To avoid data loss, you can use a queuing mechanism that will capture the event payloads we
+    send. Then, you can process them one at a time." BNSF recommends writing each request to a
+    database as unprocessed and marking it processed after handling — an explicit acknowledgement
+    that the consumer, not BNSF, owns durability.
+subscription:
+  self_service: false
+  steps:
+  - Obtain a BNSF.com User ID.
+  - Read and accept the BNSF Technology Usage Agreement (required).
+  - Select the events wanted and register one or more publicly accessible HTTPS URLs on the
+    Registration form on the Push Notifications page.
+  multiple_endpoints_supported: true
+events:
+- name: Bad Order
+  trigger: >-
+    Sent when BNSF finds a defect with a car and sends it for repair.
+  payload_fields:
+  - carInitial
+  - carNumber
+  - waybillNumber
+  - operatingStation333
+  - operatingStationStateCode
+  - origin333
+  - originStateCode
+  - destination333
+  - destinationStateCode
+  - equipmentLoadEmptyStatusCode
+  - badOrderEventTypeDescription
+  - eventDescription
+  - eventDatetime
+  - badOrderDescription
+  - badOrderEstimatedImpactDescription
+  - shipmentEstimatedAvailabilityDatetime
+  - eventLocation333
+  - eventLocationStateCode
+  - nextEventDescription
+  - nextEventEstimatedDatetime
+  - nextRepairEventEstimatedDatetime
+  - nextEventLocation333
+  - nextEventLocationStateCode
+  - nextTrainId
+  - nextEventTrackNumber
+  - trackNumber
+  - shipper633
+  - shipperFullName
+  - consignee633
+  - consigneeFullName
+  - accountOfParty633
+  - accountOfPartyFullName
+  - careOfParty633
+  - careOfPartyFullName
+  - releaseToParty633
+  - releaseToPartyFullName
+  - beneficialOwner633
+  - beneficialOwnerFullName
+  - notifyParty633
+  - notifyPartyFullName
+  - payerOfFreight633
+  - payerOfFreightFullName
+  timestamp_format: 'YYYY-MM-DD-HH.MM.SS (provider example: 2022-04-12-11.19.10)'
+  related_trace_operation: GET /v1/trip-plan-carload
+- name: Drayage Booking
+  trigger: Sent when drayage has been booked to move an intermodal unit.
+  payload_fields:
+  - drayageBookingNumber
+  - destinationStateCode
+  - destinationStation333
+  - destinationStationLotLocationName
+  - originStateCode
+  - originStation333
+  - originStationLotLocationName
+  - drayageMovementMethodName
+  - drayageShuttleTypeName
+  - drayageShuttleMovementTypeName
+  - truckingScac
+  - units[].equipmentInitial
+  - units[].equipmentNumber
+  related_rest_operation: GET /v1/dray-booking/open
+- name: Geofence
+  trigger: >-
+    Sent when a shipment passes through a pre-defined geofence.
+  envelope: geofenceNotification
+  payload_fields:
+  - geofenceNotification.customerId
+  - geofenceNotification.sfdcId
+  - geofenceNotification.geofenceName
+  - geofenceNotification.geofenceExpirationDate
+  - geofenceNotification.geofenceCustomerMessage
+  - geofenceNotification.eventDate
+  - geofenceNotification.eventTime
+  - geofenceNotification.trainId
+  - geofenceNotification.customer633
+  - geofenceNotification.equipmentCount
+  - geofenceNotification.equipmentList[].equipmentId
+  - geofenceNotification.loadEmpty
+  - geofenceNotification.commodity
+  - geofenceNotification.origin333
+  - geofenceNotification.destination333
+  note: >-
+    The only event with a wrapping envelope object; the other five are flat. Also the only payload
+    carrying a Salesforce record id (sfdcId), which exposes BNSF's own CRM key to the subscriber.
+- name: Overload
+  trigger: Sent when BNSF detects a car is overloaded.
+  payload_fields:
+  - carInitial
+  - carNumber
+  - carOverloadedStatusCode
+  - carOverloadStatusTypeName
+  - equipmentGrossScaleWeightPounds
+  - origin333
+  - originStateCode
+  - scale333
+  - scaleStateCode
+  - shipmentLoadLimitPounds
+  - shipmentNetScaleWeightPounds
+  - shipmentScaleWeightRequiredReductionLb
+  - shippedByCustomer633
+  - shippedByCustomerCity333
+  - shippedByCustomerName
+  - shippedByCustomerStateCode
+  - shipperCity333
+  - shipper633
+  - shipperName
+  - shipperStateCode
+  - waybillDate
+  - waybillNumber
+  - totalLadingWeightPounds
+  - trackNumber
+  note: >-
+    Carries an actionable number a shipper must respond to — shipmentScaleWeightRequiredReductionLb,
+    the pounds that must come off the car.
+- name: Local Service Notification
+  trigger: Sent when BNSF is planning to serve a customer's yard on a given day.
+  payload_fields:
+  - service_indicator
+  - service_date
+  - customer_633
+  - station_333
+  - station_name
+  - station_state
+  - pick_up_car_count
+  - pick_up_car_list.loaded_cars
+  - pick_up_car_list.empty_cars
+  - deliver_car_count
+  - deliver_car_list.loaded_cars
+  - deliver_car_list.empty_cars
+  - train_id
+  note: >-
+    The one event using snake_case field names; the other five use camelCase. Car lists are
+    comma-delimited strings, not arrays.
+- name: Price Update
+  trigger: Sent when a price changes that the subscriber is subscribed to.
+  payload_fields:
+  - priceAuthorityUpdateDate
+  - priceAuthorityList.priceAuthorityNumber
+  - priceAuthorityList.note
+  - priceAuthorityList.priceDocumentURL
+  timestamp_format: 'Java Date toString (provider example: Tue Apr 12 00:00:00 UTC 2022)'
+  related_rest_operations:
+  - POST /v1/carload-rates
+  - POST /v1/intermodal-rates
+  note: >-
+    priceDocumentURL points at a separate BNSF host, ratedownload.rapid.bnsf.com, which is not
+    described by any published OpenAPI document and is not listed in this record's servers.
+observations:
+- The webhook payload vocabulary and the REST response vocabulary are the same rail code systems
+  (633 party codes, 333 station codes, AAR reporting marks, SCAC), so an integration can join push
+  events to pull responses without a translation layer.
+- Three different timestamp formats appear across the six payloads, and two different naming
+  conventions. A consumer needs per-event parsing, not one shared deserializer.
+- No event schema, no event-type header, no delivery id and no signature are published, so a
+  consumer cannot verify, deduplicate or replay events from the documentation alone.

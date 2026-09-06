@@ -1,0 +1,2803 @@
+openapi: 3.0.0
+info:
+  title: BNSF Waybill Management API
+  description: 'Electronic waybill management for carload shipments: submit a bill of lading with the required transit information
+    and retrieve the current active waybill for a given piece of equipment.'
+  termsOfService: http://www.bnsf.com/site-terms-of-use.html
+  contact:
+    name: BNSF Customer API
+    email: CustomerAPI@bnsf.com
+  version: '1.0'
+servers:
+- url: https://api.bnsf.com:6443
+  description: Production
+- url: https://api-trial.bnsf.com:6443
+  description: Trial
+paths:
+  /v1/bol:
+    post:
+      tags:
+      - Waybill Management
+      summary: Submit Bill of Lading - Submit required transit information in order to create a waybill/bill of lading (BOL).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/billOfLading'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+        '201':
+          description: '**Created**
+
+
+            The request successfully created a new resource. '
+        '400':
+          description: '**Bad Request**
+
+
+            The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      example: 2020-08-13T21:26:36.977+0000
+                    internalErrorId:
+                      type: string
+                      example: '20003'
+                    httpStatusCode:
+                      type: string
+                      example: '400'
+                    message:
+                      type: string
+                      example: BOL submission invalid
+                    messageLabel:
+                      type: string
+                      example: Invalid STCC code
+        '403':
+          description: "**Forbidden**\n\nUnauthorized request. Here are the most common causes:\n    \n* You are getting 403\
+            \ Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete,\
+            \ you will receive an email letting you know. If you have not received the email, please wait up to five business\
+            \ days. Let us know via API Support if you still have not received the email after five business days.\n   * You\
+            \ can also get this error if your certificate is not configured properly on your side. Please review the Mutual\
+            \ Authentication in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\":\
+            \ \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can\
+            \ use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you\
+            \ intend to use the API\" field."
+        '404':
+          description: '**Not Found**
+
+
+            The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does
+            not exist. Please consult the documentation.'
+        '405':
+          description: '**Method Not Allowed**
+
+
+            The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For
+            example, you may be using GET when POST is required. Please consult the documentation.'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security\
+            \ and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n\
+            * 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests\
+            \ exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such\
+            \ exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle\
+            \ limits. "
+        '500':
+          description: '**Internal Server Error**
+
+
+            The server encountered an unexpected condition which prevented it from fulfilling the request. This is always
+            a problem on the server side. Our internal support systems will be made aware.'
+        '504':
+          description: '**Gateway Timeout**
+
+
+            The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then
+            try again.'
+      security:
+      - Restricted: []
+      operationId: postV1Bol
+  /v1/waybill:
+    get:
+      tags:
+      - Waybill Management
+      summary: Retrieve Waybill - Retrieve current active waybill/bill of lading information for a given equipment.
+      description: '<b>Changelog</b>
+
+        <ul>
+
+        <li>November 17, 2021: Added customerWaybillReferenceNumbers array.</li>
+
+        </ul>
+
+        '
+      parameters:
+      - name: equipmentInitial
+        in: query
+        description: Equipment initial.
+        required: true
+        schema:
+          type: string
+          example: BNSF
+      - name: equipmentNumber
+        in: query
+        description: Equipment number.
+        required: true
+        schema:
+          type: string
+          example: '12345'
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Waybill_Details'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1Waybill
+components:
+  schemas:
+    billOfLading:
+      type: object
+      properties:
+        billOfLading:
+          type: object
+          properties:
+            billOfLadingEdiQualifierCode:
+              type: string
+              description: 'EDI Shipment Qualifier Code is an EDI-defined qualifier code value specifying the relationship
+                a shipment with respect to other shipments given to the carrier at the same time.
+
+
+                Sample Values Include: 1 (Master Bill for Empty Non-Revenue Equipment), 2 (Sea Waybill), E (Empty Equipment
+                Billing (Non-Revenue)), I (Intermodal)
+
+
+                **EDI Mapping:** DE147/BX07'
+              example: E
+            billOfLadingEdiWeightMethodTypeCode:
+              type: string
+              description: 'EDI Weight Method Type Code is an EDI-defined code value indicating the method by which freight
+                conveyance equipment weights are obtained for a shipment.
+
+
+                Sample Values Include: C (Consignee Scale Weight), E (Estimated Weight), H (Public Scale Weight on Behalf
+                of Shipper), O (Official Weight)
+
+
+                **EDI Mapping:** DE460/BNX01
+
+                '
+              example: C
+            billOfLadingEdiWeightUomCode:
+              type: string
+              description: 'EDI Weight Unit of Measure Code is an EDI-defined code value specifying the weight unit of an
+                associated measurement.
+
+
+                Sample Values Are: E (Metric Ton), G (Grams), K (Kilograms), L (Pounds), M (Measurement Ton), O (Ounces),
+                S (Short Ton), T (Long Ton)
+
+
+                **EDI Mapping:** DE188/BX06
+
+                '
+              example: L
+            billOfLadingEdiMethodOfPaymentCode:
+              type: string
+              description: 'EDI Method of Payment Code is an EDI-defined code value specifying payment terms for transportation
+                charges.
+
+
+                Sample Values Include: 11 (Association of American Railroads Accounting Rule 11 Shipment), CC (Collect), MX
+                (Mixed), NC (Service Freight, No Charge), NR (Non Revenue), PP (Prepaid (by Seller))
+
+
+                **EDI Mapping:** DE146/BX03
+
+                '
+              example: PP
+            billOfLadingEdiTransactionSetPurposeCode:
+              type: string
+              description: 'EDI Transaction Set Purpose Code is an EDI-defined code value specifying the purpose of an associated
+                transaction set.
+
+
+                Sample Values Include: 00 (Original), 04 (Change)
+
+
+                **EDI Mapping:** DE353/BX01
+
+                '
+              example: '00'
+            billOfLadingEdiTransportationTypeCode:
+              type: string
+              description: 'Is an EDI-defined code value specifying the method or type of transportation for a shipment.
+
+
+                **EDI Mapping:** DE91/ZC108/BX02
+
+
+                '
+              example: X
+            billOfLadingEdiSectionSevenCode:
+              type: string
+              description: 'Is an EDI-defined code value indicating the applicability of the section seven option on a shipment.
+
+                '
+              example: F
+            billOfLadingEdiBillingTypeCode:
+              type: string
+              description: Is an EDI-defined code value which indicates a type of bill.
+              example: S
+            equipmentEdiReleaseCode:
+              type: string
+              description: "EDI Equipment Release Code is an EDI-defined code value signifying whether or not the shipment\
+                \ information transaction set includes instructions for pickup and movement of the shipment.\r\r\n"
+              example: R
+            equipmentReleaseDateTime:
+              type: string
+              description: 'Equipment Release DateTime records the date and time which a shipper''s equipment is released
+                to BNSF.
+
+                '
+              example: '2021-03-06T21:17:07.187Z'
+            equipmentReleaseDateTimeOffsetNumber:
+              type: string
+              description: 'Equipment Release DateTime Offset Number is the amount of time subtracted from or added to the
+                Coordinated Universal Time to get the time supplied for the equipment release date-time.
+
+                '
+              example: CT
+            billOfLadingCargoManifests:
+              type: array
+              items:
+                type: object
+                properties:
+                  billOfLadingCargoManifestSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'BOL Cargo Manifest Sequence Number allows for more than one Cargo Manifest per BOL. The
+                      EDI standard allows for a maximum of two. '
+                    example: 1
+                  voyageNumber:
+                    type: string
+                    description: Identifying designator number for the particular ocean movement on which the cargo travels.
+                    example: 537S
+                  oceanPortFunctionalCode:
+                    type: string
+                    description: Code defining function performed at the port with respect to a shipment.
+                    example: L
+                  oceanPortName:
+                    type: string
+                    description: Free-form name for the place at which an offshore carrier/vessel originates or terminates
+                      its actual ocean carriage of property.
+                    example: LONGBEACH
+                  vesselSailDockEdiDate:
+                    type: string
+                    format: date
+                    description: The date the ship will sailed or docked at the port. Present if Ocean Port Functional Code
+                      contains a 'L", 'D' or '1'.
+                    example: '2022-09-01'
+                  vesselBookingNumber:
+                    type: string
+                    description: Number assigned by the carrier for space reservation on a voyage.
+                    example: LGB700188300
+                  currentScac:
+                    type: string
+                    description: Current SCAC (Standard Carrier Alpha Code) provided by EDI
+                    example: BNSF
+                  previousScac:
+                    type: string
+                    description: Previous SCAC (Standard Carrier Alpha Code) provided by EDI
+                    example: BNSF
+                  billOfLadingManifestDate:
+                    type: string
+                    format: date
+                    description: The date the manifest was established by the shipper.
+                    example: '2022-09-01'
+                  vesselName:
+                    type: string
+                    description: Name of the vessel as documented in "Lloyd's Register of Ships".
+                    example: ANL BAREGA
+                  oceanPierNumber:
+                    type: string
+                    description: Identifying number for the pier located within the Ocean Port Name.
+                    example: '1234'
+                  oceanPierName:
+                    type: string
+                    description: Identifying name for the pier located within the Ocean Port Name.
+                    example: SANTIAGO
+                  oceanTerminalName:
+                    type: string
+                    description: Identifying name for the terminal located within the Ocean Port Name.
+                    example: ANL BAREGA
+                  oceanTerminalStateCode:
+                    type: string
+                    description: Identifying state code for the terminal located within the Ocean Port Name.
+                    example: CA
+                  oceanTerminalCountryCode:
+                    type: string
+                    description: Identifying country code for the terminal located within the Ocean Port Name.
+                    example: US
+                  cargoManifestReferenceId:
+                    type: string
+                    description: Cargo Manifest Reference ID is a reference identifier for Vessel Agent Number.
+                    example: CM123456
+            billOfLadingCommodities:
+              type: array
+              description: 'Specifies a shipment''s lading information for each commodity in terms of description, marks,
+                and numbers.
+
+
+
+                **EDI Mapping:** LX,L5
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingCommoditySequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with BOL ID and BOL Commodity Sequence Number,
+                      uniquely identifies a row on the BOL Commodity Detail element.
+
+                      '
+                    example: 1
+                  billOfLadingTransactionSetAssignedNumber:
+                    type: number
+                    format: float
+                    description: 'Is a number assigned for differentiation within a BOL transaction set.
+
+
+                      **EDI Mapping:** DE554/LX01
+
+
+                      '
+                    example: 1
+                  ladingLineItemNumber:
+                    type: number
+                    format: float
+                    description: 'Lading Line Item Number is the sequential line number for a lading item within a shipment.
+
+
+                      **EDI Mapping:** DE213/L501
+
+                      '
+                    example: 1
+                  stcc:
+                    type: string
+                    description: 'STCC (Standard Transportation Commodity Code) assigned to a lading commodity or group of
+                      lading commodities.
+
+
+                      **EDI Mapping:** DE22/L503
+
+
+                      '
+                    example: '4611110'
+                  stccEdiQualifierCode:
+                    type: string
+                    description: 'Is an EDI-defined code value that identifies the commodity coding system used for an associated
+                      Commodity Code.
+
+
+                      Sample Values Include: 0 (National Association of Convenience Stores), 1 (Global Product Classification
+                      Code (GPC)), 2 (Dun s SIC 2+2, Dun and Bradstreet), 3 (Empty Non-hazardous Last Contained (HMRC) Code)
+
+
+                      **EDI Mapping:** DE23/L504/L508
+
+                      '
+                    example: '3'
+                  ladingDescription:
+                    type: string
+                    description: 'Lading Description describes a lading item as required for rating and billing purposes.
+
+
+                      **EDI Mapping:** DE79/L502
+
+
+                      '
+                    example: STANDARD NON-HAZARDOUS FREIGHT ALL KINDS
+                  billOfLadingCommodityDetails:
+                    type: array
+                    description: 'Specifies a shipment''s detailed lading information for each line item, including packaging,
+                      quantity, weight, and volume.
+
+
+                      **EDI Mapping:** L0
+
+
+                      '
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingCommodityDetailSequenceNumber:
+                          type: number
+                          format: float
+                          description: 'Is a sequence number that in combination with BOL ID and BOL Commodity Sequence Number,
+                            uniquely identifies a row on the BOL Commodity Detail element.
+
+                            '
+                          example: 1
+                        ladingQuantityCount:
+                          type: number
+                          format: float
+                          description: 'Number of units (pieces) of the lading commodity.
+
+
+                            **EDI Mapping:** DE80/X110
+
+                            '
+                          example: 1
+                        ladingEdiPackagingFormCode:
+                          type: string
+                          description: 'Is an EDI-defined code value specifying the packaging form of a lading quantity.
+
+
+                            Sample Values Include: BLK (Bulk), CAR (Carrier), CNT (Container), CRT (Crate), PLT (Pallet)
+
+
+                            **EDI Mapping:** DE211/L009/L014
+
+                            '
+                          example: BLK
+                        ladingWeight:
+                          type: number
+                          format: float
+                          description: 'Lading Weight is a measure of the weight of a lading item. This must be qualified
+                            with a code defining the unit of measure to be meaningful.
+
+
+                            **EDI Mapping:** DE81/L004
+
+
+                            '
+                          example: 29118
+                        ladingEdiWeightQualifierCode:
+                          type: string
+                          description: 'Is an EDI-defined code value that identifies the manner in which the weight of a piece
+                            of freight conveyance equipment was calculated.
+
+
+                            Sample Values Include: A (Consolidated Weight), B (Billed Weight), L (Legal Weight), N (Actual
+                            Net Weight)
+
+
+                            **EDI Mapping:** DE187/L005
+
+                            '
+                          example: A
+                        ladingVolume:
+                          type: number
+                          format: float
+                          description: 'Lading Volume is a volumetric measure of a lading item. This must be qualified with
+                            a code defining the unit of measure used to be meaningful.
+
+
+                            **EDI Mapping:** DE183/L006
+
+
+                            '
+                          example: 0
+                        ladingEdiVolumeUnitCode:
+                          type: string
+                          description: 'Is an EDI-defined qualifier code value that provides context to a volume measurement.
+
+
+                            Sample Values Include: C (Cubic Centimeters), E (Cubic Feet), G (Gallons), M (Cubic Decimeters)
+
+
+                            **EDI Mapping:** DE184/L007
+
+                            '
+                          example: C
+                        billOfLadingPrices:
+                          type: array
+                          description: 'Relates a line item in a shipment to the authority document, contract number, quote
+                            number, and tariff number which are used to determine the basis of pricing.
+
+
+
+                            **EDI Mapping:** LX Loop/LX,L0,PI
+
+                            '
+                          items:
+                            type: object
+                            properties:
+                              billOfLadingPriceSequenceNumber:
+                                type: number
+                                format: float
+                                description: 'Is a sequence number that is needed to uniquely identify a price associated
+                                  with a commodity on the BOL.
+
+                                  '
+                                example: 1
+                              billOfLadingLineItemPriceReferenceEdiQualifierCode:
+                                type: string
+                                description: 'Is an EDI-defined qualifier code value that provides context to the value present
+                                  in the EDI Reference ID column.
+
+
+
+                                  **EDI Mapping:** DE128/PI01
+
+                                  '
+                                example: CT
+                              billOfLadingLineItemPriceReferenceId:
+                                type: string
+                                description: 'Is a reference identification number for the BOL Price element.
+
+
+                                  **EDI Mapping:** DE127/PI02
+
+
+                                  '
+                                example: QTTFDXFXF
+                              publicationAuthorityEdiTypeCode:
+                                type: string
+                                title: publicationAuthorityEdiTypeCode
+                                description: 'Is an EDI-defined code value that specifies the type of external price publication
+                                  provided for a line item in a shipment.
+
+
+                                  Sample Values Are: BR (Backward Reference), DR (Division Reference), GR (Group Reference),
+                                  OP (Other Publication), RR (Rate Reference), TP (Tariff Publication)
+
+
+                                  **EDI Mapping:** DE436/PI03
+
+                                  '
+                                example: BR
+                              priceAuthorityAgencyCode:
+                                type: string
+                                description: "Price Authority Agency Code is a code value, as defined by the National Motor\
+                                  \ Freight Traffic Association, specifying the tariff bureau or tariff publishing agent that\
+                                  \ governs the pricing/rates applied to a shipment.\n\nCodes sourced from the Directory of\
+                                  \ Standard Carrier Alpha Codes (SCAC), NMF 101 Series, available from  the National Motor\
+                                  \ Freight Traffic Association, Inc.\n\n**EDI Mapping:** DE168/PI05 \n"
+                                example: BNSF
+                              priceAuthorityIssuingCarrierId:
+                                type: string
+                                description: 'Price Authority Issuing Carrier ID is an identification label used to identify
+                                  the issuing carrier of a price authority specified on a shipment.
+
+
+                                  **EDI Mapping:** DE965/PI06
+
+
+                                  '
+                                example: BNSF
+                  billOfLadingExportLicenses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingExportLicenseSequenceNumber:
+                          type: number
+                          format: float
+                          description: In combination with a BOL ID, uniquely identifies a row in the BOL Export License element.
+                          example: 1
+                        licensingAgencyEdiCode:
+                          type: string
+                          description: Is an EDI-defined code value used to identify a licensing, certification, registration,
+                            or accreditation agency associated with a commodity being shipped.
+                          example: '1'
+                        exportLicenseId:
+                          type: string
+                          description: Export License ID is a government assigned identification number for exporter.
+                          example: License1
+                        exportLicenseEdiStatusCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying whether the shipment completes the terms of
+                            the export license, or the shipment is only a partial delivery relative to the license terms.
+                          example: '1'
+                        exportLicenseExpirationDate:
+                          type: string
+                          format: date
+                          description: Is the day, month, and year when an export license expires (expressed as CCYYMMDD where
+                            CC represents the first two digits of the calendar year).
+                          example: '2022-01-01'
+                        exportLicenseEdiSymbolCode:
+                          type: string
+                          description: Is an EDI-defined code value which specifies the export license symbol marked on a
+                            shipment.
+                          example: A1
+                        exportLicenseEdiControlCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the type of control applicable to an export
+                            license.
+                        exportLicenseCountryCode:
+                          type: string
+                          description: Export License Country Code is an ISO 3166 code value specifying a country, dependency,
+                            or geopolitical area in which an exporter operates.
+                          example: US
+                        commodityScheduleBNumber:
+                          type: string
+                          description: "Schedule B Number is a classification and identification code for commodities for\
+                            \ use by exporters in preparing Shippers Export Declarations.\r\n\r\nThe code is a ten digit numeric\
+                            \ of the form dddd.dd.dddd. \r\n\r\nCodes sourced from the Schedule B Statistical Classification\
+                            \ of Domestic and Foreign Commodities Exported from the United States, 1990 Edition. Maintained\
+                            \ by the U.S. Bureau of the Census."
+                          example: A12
+                        billOfLadingEdiInternationalDomesticCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying whether a shipment is international or domestic.
+                          example: A
+                        ladingQuantityCount:
+                          type: number
+                          format: float
+                          description: Lading Quantity Count is a count of the number of units (pieces) of the lading commodity.
+                          example: 2900
+                        ladingValueAmount:
+                          type: number
+                          format: float
+                          description: Lading Value Amount specifies the monetary value of a shipment for export, expressed
+                            in the standard monetary denomination for the currency specified.
+                          example: 29.1
+                        exportLicenseEdiFilingKeyCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying whether the information contained on an export
+                            license has been filed with Customs via an automatic or manual process.
+                          example: '1'
+                        ediUomCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the units in which a value is being expressed,
+                            or manner in which a measurement has been taken.
+                          example: AB
+                        ladingUnitPrice:
+                          type: number
+                          format: float
+                          description: Lading Unit Price is the price per unit of a commodity.
+                          example: 2.1
+                        usGovernmentLicenseTypeCode:
+                          type: string
+                          description: The type of U.S. government license being used on the export license associated with
+                            a shipment.
+                          example: A
+                        eccn:
+                          type: string
+                          description: Export Control Classification Number is a designation used on the Commerce Control
+                            List (CCL) to identify dual-use items for export control purposes.
+                          example: AN993993
+                        exportDeclarationLocationScheduledCode:
+                          type: string
+                          example: TX90345
+            billOfLadingEquipment:
+              type: array
+              description: 'Provides detail information about the rail conveyance equipment on the BOL.
+
+
+
+                **EDI Mapping:** N7 Loop/L0,N7,T2
+
+                '
+              items:
+                type: object
+                required:
+                - equipmentId
+                - equipmentLoadEmptyStatusCode
+                - equipmentExteriorLengthFeetInches
+                properties:
+                  billOfLadingEquipmentSequenceNumber:
+                    type: number
+                    format: float
+                    description: "Is a sequence number that in combination with BOL Identifer, uniquely identifies a piece\
+                      \ of freight conveyance equipment on a BOL.\r\nThe purpose of the sequence number is to preserve the\
+                      \ order of equipment as supplied on the EDI  404 or other channel. Sequence values should start from\
+                      \ one (1) and increment by one for each piece of equipment on the request."
+                    example: 1
+                  equipmentId:
+                    type: string
+                    description: 'Equipment ID serves as an identifier for a piece of freight conveyance equipment. It consists
+                      of a 4-character equipment initial followed by an up to 15-character equipment unit identifying number.
+
+
+                      **EDI Mapping:** DE206-207/N804/N805
+
+
+                      '
+                    example: FDXU532684
+                  equipmentLoadEmptyStatusCode:
+                    type: string
+                    description: 'Load Empty Status Code is used to convey whether a piece of rail conveyance equipment (i.e.,
+                      a railcar) is being shipped while laden with cargo or while empty, as is the case if it does not pick
+                      up another load at its destination.
+
+
+                      '
+                    example: L
+                  equipmentEdiWeightQualifierCode:
+                    type: string
+                    description: 'EDI Weight Qualifier Code is an EDI-defined code value that identifies the manner in which
+                      the weight of a piece of freight conveyance equipment was calculated.
+
+
+                      Sample Values Include: A (Consolidated Weight), B (Billed Weight), L (Legal Weight), N (Actual Net Weight)
+
+
+                      **EDI Mapping:** DE187/N704/L005/T204
+
+                      '
+                    example: A
+                  equipmentWeight:
+                    type: number
+                    format: float
+                    description: 'BOL Equipment Weight is the numeric value of the weight of a shipment as it appears on a
+                      BOL. This must be qualified with a code defining the type of weight (i.e., Estimated Net Weight, Gross
+                      Weight, Actual Net Weight) used to be meaningful.
+
+
+                      EDI specifies that dunnage weight must be included and is limited to 8 digits for rail transactions.
+                      The numeric value of the residue weight is required for trans-border residue empty moves into the U.S.  The
+                      Equipment Weight Qualifier indicate the type of weight measured.
+
+
+                      **EDI Mapping:** DE81/N703
+
+
+                      '
+                    example: 29118
+                  equipmentEdiTypeCode:
+                    type: string
+                    description: 'EDI Equipment Type Code is an EDI-defined code value specifying the method or type of transportation
+                      used for the shipment.
+
+
+                      Sample Values Include: 20 (20 ft. IL Container (Open Top)), AA (Air Ride Van), AC (Closed Container),
+                      BX (Boxcar)
+
+
+                      **EDI Mapping:** DE40/N711
+
+                      '
+                    example: AA
+                  equipmentTareWeight:
+                    type: number
+                    format: float
+                    description: 'Equipment Tare Weight is the weight of an empty rail shipping container or vehicle. Sometimes
+                      called the unladen weight.
+
+
+                      **EDI Mapping:** DE167/N705
+
+
+                      '
+                    example: 0
+                  equipmentExteriorLengthFeetInches:
+                    type: number
+                    format: float
+                    description: 'Is the length (in feet and inches) of equipment ordered or used to transport shipment. The
+                      format is FFFII where FFF is feet and II is inches. The range for II is 00 through 11.  Outside length
+                      required for intermodal equipment.
+
+
+                      **EDI Mapping:** DE567/N715
+
+                      '
+                    example: 5300
+                  equipmentCheckDigitNumber:
+                    type: string
+                    description: Equipment Check Digit Number designates the check digit applied to a piece of equipment,
+                      which serves as a form of redundancy check used for error detection.
+                  equipmentAllowanceWeight:
+                    type: number
+                    format: float
+                    description: Equipment Allowance Weight is the permitted increase in the weight of a piece of shipping
+                      equipment due to such factors as snow.
+                    example: 10
+                  equipmentDunnageWeight:
+                    type: number
+                    format: float
+                    description: Equipment Dunnage Weight is the combined weight of the materials used to protect the lading
+                      being transported on the freight conveyance equipment (even bracings, false floors, etc.).
+                    example: 120
+                  equipmentOwnerScac:
+                    type: string
+                    description: Equipment Owner SCAC is the standard carrier alpha code for the owner of the associated freight
+                      conveyance equipment.
+                    example: BNSF
+                  equipmentEdiOwnershipCode:
+                    type: string
+                    description: Is an EDI-defined code value specifying the relationship of a piece of equipment to the carrier
+                      it belongs to.
+                    example: T
+                  equipmentPositionNumber:
+                    type: string
+                    description: Equipment Position Number specifies the relative position of a shipment within the associated
+                      freight conveyance equipment (car, trailer, or container).
+                    example: A1
+                  equipmentExteriorHeightInches:
+                    type: number
+                    format: float
+                    description: Is the exterior vertical dimension of a piece of freight conveyance equipment, measured in
+                      inches when the object is in the upright position.
+                    example: 50
+                  equipmentExteriorWidthInches:
+                    type: number
+                    format: float
+                    description: Is the exterior width of a piece of freight conveyance equipment, measured in inches when
+                      the object is in the upright position.
+                    example: 100
+                  equipmentAarCarTypeCode:
+                    type: string
+                    description: Equipment AAR Car Type Code is an AAR-maintained code value used to identify a type of rail
+                      car or intermodal equipment type and its general characteristics.
+                    example: SHR
+                  equipmentIsoContainerTypeCode:
+                    type: string
+                    description: Equipment ISO Container Type Code is an ISO 6346-defined code value used to specify the type
+                      of a shipping container.
+                    example: U223
+                  billOfLadingEquipmentSeals:
+                    type: array
+                    description: 'Records seal numbers used to close openings on a piece of rail conveyance equipment.
+
+
+                      **EDI Mapping:** M7
+
+
+                      '
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingEquipmentSealSequenceNumber:
+                          type: number
+                          format: float
+                          description: "Is a sequence number that in combination with BOL ID and BOL Equipment Sequence Number\
+                            \ uniquely identifies a seal associated with the freight conveyance equipment on a BOL.  \n"
+                          example: 1
+                        equipmentSealNumber:
+                          type: string
+                          description: 'Is a unique number on seal used to close a shipment.
+
+
+                            **EDI Mapping:** DE225/M701
+
+
+                            '
+                          example: '1234'
+                  billOfLadingEquipmentReferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingEquipmentReferenceSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that in combination with BOL ID and BOL Equipment Sequence Number,
+                            uniquely identifies a piece equipment reference information on a Shipment.
+                          example: 1
+                        equipmentReferenceEdiQualifierCode:
+                          type: string
+                          description: Is an EDI-defined qualifier code value that provides context to the value present in
+                            the 'EDI Reference ID' column.
+                          example: COB
+                        equipmentReferenceId:
+                          type: string
+                          description: Equipment Reference ID is a reference identification number for the 'BOL Equipment
+                            Reference' table.
+                          example: FREE FORM TEXT
+                        equipmentReferenceDescription:
+                          type: string
+                          description: Equipment Reference Description is a free-form description explaining the significance
+                            of the reference information attached to the freight conveyance equipment.
+                          example: FREE FORM TEXT
+                  billOfLadingCustomsInBondDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingCustomsInBondSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that in combination with BOL ID and BOL Equipment Sequence Number,
+                            uniquely identifies a row in the BOL Customs In Bond element.
+                          example: 1
+                        customsEntryTypeCode:
+                          type: string
+                          description: Customs Entry Type Code is an EDI-defined code value specifying the type of entry assigned
+                            by U.S. Customs and Border Protection (CBP).
+                          example: '6'
+                        customsEntryNumber:
+                          type: string
+                          description: Customs Entry Number is the Automated Commercial System Code furnished by U.S. Customs
+                            Service.
+                          example: AN123456
+                        oceanPortLocationCode:
+                          type: string
+                          description: Is a location identifier for a port where shipments are exported or received.
+                          example: AN3901
+                        foreignOceanPortLocationCode:
+                          type: string
+                          description: Contains a five-digit numeric census Schedule K code which identifies a foreign port
+                            of destination.
+                          example: AN7878
+                        inBondShipmentValueAmount:
+                          type: string
+                          description: In-bond Shipment Value Amount is the value of the in bond shipment in whole dollars,
+                            as required by US Customs.
+                          example: AN5656
+                        inBondShipmentControlNumber:
+                          type: string
+                          description: Is assigned to an import or export shipment that hasn't been cleared by US Customs
+                            and serves as a means of telling shipments apart while simultaneously identifying the carrier
+                            transporting the shipment.
+                          example: V7210163606
+                        inBondShipmentReferenceEdiQualifierCode:
+                          type: string
+                          description: Is an EDI-defined qualifier code value that provides context to the value present in
+                            the 'In-bond Shipment Reference Identification Number' column.
+                          example: XC
+                        inBondShipmentReferenceIdentificationNumber:
+                          type: string
+                          description: For any value held in this column is contextualized and given meaning by the code value
+                            of the associated "In-bond Shipment Reference EDI Qualifier Code".
+                          example: BI
+                        inBondShipmentEdiTransportationTypeCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the method or type of transportation for a
+                            shipment.
+                          example: S
+                        vesselName:
+                          type: string
+                          description: Name of the vessel as documented in "Lloyd's Register of Ships".
+                          example: VESSEL NAME
+            billOfLadingEquipmentQuantityAndDescription:
+              type: array
+              description: 'Count of the number of packages, of a specific commodity, Description of the commodity to be shipped
+                on a railcar as defined on the BOL (Bill of Lading).
+
+
+                **EDI Mapping:** N10 Loop/N7,REF,N10
+
+                '
+              items:
+                type: object
+                required:
+                - billOfLadingEquipmentQuantity
+                - billOfLadingEquipmentQuantityDescription
+                - billOfLadingEquipmentDestinationCountryCode
+                properties:
+                  billOfLadingEquipmentQuantityAndDescriptionSequenceNumber:
+                    type: number
+                    format: float
+                    description: "Is a sequence number that in combination with BOL Identifer, uniquely identifies a piece\
+                      \ of freight conveyance equipment on a BOL.\r\nThe purpose of the sequence number is to preserve the\
+                      \ order of equipment as supplied on the EDI  404 or other channel. Sequence values should start from\
+                      \ one (1) and increment by one for each piece of equipment on the request."
+                    example: 1
+                  billOfLadingEquipmentQuantity:
+                    type: string
+                    description: 'Count of the number of packages, of a specific commodity, to be shipped on a railcar as
+                      defined on the BOL (Bill of Lading).
+
+
+                      **EDI Mapping:** N10/01
+
+                      '
+                    example: '1'
+                  billOfLadingEquipmentQuantityDescription:
+                    type: string
+                    description: 'Description of the commodity to be shipped on a railcar as defined on the BOL (Bill of Lading).
+
+
+                      **EDI Mapping:** N10/02'
+                    example: SCRAP PAPER
+                  billOfLadingEquipmentWeightUnitCode:
+                    type: string
+                    description: 'Code that defines the standard UOM (Unit of Measure) to be applied to the BOL (Bill of Lading)
+                      Commodity Item Weight value.
+
+
+                      **EDI Mapping:** N10/07
+
+                      '
+                    example: L
+                  billOfLadingEquipmentWeight:
+                    type: number
+                    format: float
+                    description: 'The weight of the specific commodity within a given railcar as defined on the BOL (Bill
+                      of Lading). See also "BOL Commodity Item Weight UOM Code."
+
+
+                      **EDI Mapping:** N10/08
+
+
+                      '
+                    example: 100
+                  billOfLadingEquipmentManifestCode:
+                    type: string
+                    description: 'Code specifying the smallest type of package a commodity can be bundled into for shipping
+                      on a railcar as defined on the BOL (Bill of Lading.)
+
+
+                      **EDI Mapping:** N10/10
+
+                      '
+                    example: CAR
+                  billOfLadingEquipmentOriginCountryCode:
+                    type: string
+                    description: 'Code that defines the origin country of a commodity as defined on the BOL (Bill of Lading.).
+
+
+                      **EDI Mapping:** N10/11
+
+
+                      '
+                    example: MEX
+                  billOfLadingEquipmentDestinationCountryCode:
+                    type: string
+                    description: 'Code that defines the destination country of a commodity as defined on the BOL (Bill of
+                      Lading.).
+
+
+                      **EDI Mapping:** N10/12
+
+                      '
+                    example: US
+            billOfLadingSpecialHandlingInstructions:
+              type: array
+              description: 'Records the codes provided by the shipper that specify how a commodity or piece of equipment is
+                processed/handled on the BOL.
+
+
+                **EDI Mapping:** H3
+
+                '
+              items:
+                type: object
+                properties:
+                  specialHandlingInstructionsSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Special Handling Instruction Sequence Number is a sequence number that in combination with
+                      BOL ID, uniquely identifies an occurrence in the BOL Special Handling Instruction group.
+
+                      '
+                    example: 1
+                  specialCarHandlingCode:
+                    type: string
+                    description: 'Is an EDI-defined code value specifying special transportation handling instructions that
+                      must be applied to a shipment.
+
+
+                      Sample Values Include: AJ (Do Not Stack), AH (Humidity Sensitive Shipment), FR (Fragile - Handle with
+                      Care), DNF (Do Not Freeze)
+
+
+                      **EDI Mapping:** DE152/H301
+
+                      '
+                    example: AJ
+            billOfLadingRouteSequences:
+              type: array
+              description: "Describes the carrier and routing (interchange) sequence for rail transportation of a shipment\
+                \ from origin to destination.  \n\n**EDI Mapping:** R2\n\n"
+              items:
+                type: object
+                properties:
+                  billOfLadingRouteSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with BOL ID, uniquely identifies a row in the BOL
+                      Route Sequence element.
+
+                      '
+                    example: 1
+                  billOfLadingRoute:
+                    type: object
+                    description: "Describes the carrier and routing (interchange) sequence for rail transportation of a shipment\
+                      \ from origin to destination.  \n"
+                    required:
+                    - carrierEdiShipmentRoutingSequenceCode
+                    - scac
+                    properties:
+                      carrierEdiShipmentRoutingSequenceCode:
+                        type: string
+                        description: 'Carrier EDI Shipment Routing Sequence Code describes the relationship of a carrier to
+                          a specific shipment movement.
+
+
+                          Sample Values Include: 1 (1st Carrier after Origin Carrier), 9 (9th Carrier after Origin Carrier),
+                          D (Delivery Switch Carrier), I (Origin Switch Carrier), R (Origin Carrier, Rule 11 Shipment)
+
+
+                          **EDI Mapping:** DE133/R202/E502
+
+                          '
+                        example: S
+                      scac:
+                        type: string
+                        description: 'SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation
+                          used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight
+                          Traffic Association).
+
+
+                          **EDI Mapping:** DE140/CM06
+
+                          '
+                        example: BNSF
+                      r260JunctionName:
+                        type: string
+                        description: 'Route Junction Name is the junction name (as specified by AAR Accounting Rule 260) of
+                          the interchange for a segment of the route. This information represents the beginning of service
+                          for intermediate and interline received rail shipments.
+
+                          The city name of the rail location/interchange for this segment of the route on the BOL.
+
+
+                          **EDI Mapping:** DE19/E503/R203
+
+                          '
+                        example: LAREDO
+                  intermodalServiceCode:
+                    type: string
+                    description: 'Intermodal Service Code identifies the Intermodal Service Plan. Required on intermodal shipments.
+                      Required on intermodal shipments (BX02 = ''X'') when N711 contains ''CC'', ''CH'', ''CM'', ''CN'', ''CX'',
+                      ''CZ'', ''GS'', ''LS'', ''OT'', ''PL'', ''PT'', ''RT'' or ''TL''
+
+
+                      **EDI Mapping:** DE177/R205
+
+                      '
+                    example: '65'
+            billOfLadingDestinationLocation:
+              type: object
+              description: 'Specifies the rail locations related to the BOL such as origin (station) and destination (station).
+
+
+                **EDI Mapping:** F9,D9
+
+                '
+              required:
+              - stationCityName
+              - stationStateCode
+              properties:
+                fsac:
+                  type: string
+                  description: 'FSAC (Freight Station Accounting Code) is a number assigned to a station that uniquely identifies
+                    the station within the context of each reporting railroad (i.e., Different railroads might share identical
+                    FSAC numbers).
+
+
+                    **EDI Mapping:** DE573/PS06
+
+                    '
+                  example: '9090'
+                stationCityName:
+                  type: string
+                  description: 'Is a fully qualified name of a city for a given station.
+
+
+                    **EDI Mapping:** DE19/G401
+
+                    '
+                  example: CHICAGO
+                stationStateCode:
+                  type: string
+                  description: 'Is a code value, as defined by the appropriate government agency of the United States, Canada,
+                    or Mexico, specifying a state or province.
+
+
+                    Codes sourced from the U.S. Postal Service, Canada Post, or Bureau of Transportation Statistics.
+
+
+                    **EDI Mapping:** DE156/PS08
+
+
+                    '
+                  example: IL
+            billOfLadingOriginLocation:
+              type: object
+              description: 'Specifies the rail locations related to the BOL such as origin (station) and destination (station).
+
+
+                **EDI Mapping:** F9,D9
+
+                '
+              required:
+              - stationCityName
+              - stationStateCode
+              properties:
+                fsac:
+                  type: string
+                  description: 'FSAC (Freight Station Accounting Code) is a number assigned to a station that uniquely identifies
+                    the station within the context of each reporting railroad (i.e., Different railroads might share identical
+                    FSAC numbers).
+
+
+                    **EDI Mapping:** DE573/PS06
+
+                    '
+                  example: '9090'
+                stationCityName:
+                  type: string
+                  description: 'Is a fully qualified name of a city for a given station.
+
+
+                    **EDI Mapping:** DE19/G401
+
+                    '
+                  example: SAN BERNARDINO
+                stationStateCode:
+                  type: string
+                  description: 'Is a code value, as defined by the appropriate government agency of the United States, Canada,
+                    or Mexico, specifying a state or province.
+
+
+                    Codes sourced from the U.S. Postal Service, Canada Post, or Bureau of Transportation Statistics.
+
+
+                    **EDI Mapping:** DE156/PS08
+
+
+                    '
+                  example: CA
+            billOfLadingParties:
+              type: array
+              description: 'Specifies role and location (address) information for parties associated with a BOL.
+
+
+                **EDI Mapping:** N1 Loop/N1, N2, N3, PER
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingPartySequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with BOL ID, uniquely identifies a party role and
+                      location on a BOL.
+
+                      '
+                    example: 1
+                  billOfLadingParty:
+                    type: object
+                    description: 'BOL Party specifies role and location (address) information for parties associated with
+                      a BOL.
+
+                      '
+                    properties:
+                      partyRoleCode:
+                        type: string
+                        description: 'Shipping Party Role Code is an EDI-defined code value specifying the role of an organizational
+                          entity, a physical location, or an individual participating with a BOL.
+
+
+                          Sample Values Include: PU (Party at Pickup Location), SH (Shipper), CN (Consignee), PF (Party to
+                          Receive Freight Bill)
+
+
+                          **EDI Mapping:** DE98/N101
+
+                          '
+                        example: SH
+                      partyName:
+                        type: string
+                        description: 'Party Name is the fully qualified name of of a party. This must be qualified with a
+                          code defining the role that the party plays in the freight movement process to be meaningful.
+
+
+                          **EDI Mapping:** DE93/N102
+
+                          '
+                        example: ABC FREIGHT INC
+                      partyId:
+                        type: string
+                        description: 'Party ID serves as a unique identifier of the person, organization, or organizational
+                          component that is of interest to BNSF that can act in a legal capacity. This must be qualified with
+                          a code defining the type of party identifier used to be meaningful.
+
+
+                          **EDI Mapping:** DE67/N104
+
+                          '
+                        example: FREE FORM TEXT
+                      partyFirstLineAddress:
+                        type: string
+                        description: 'Is free-form text specifying the line 1 address information for a location in which
+                          a party operates.
+
+
+                          **EDI Mapping:** DE166/N301/N302
+
+                          '
+                        example: 1234 W 4TH STREET
+                      partySecondLineAddress:
+                        type: string
+                        description: 'Is free-form text specifying the line 2 address information for a location in which
+                          a party operates.
+
+
+                          **EDI Mapping:** DE166/N301/N302
+
+                          '
+                        example: APT 1234
+                      partyAddressCityName:
+                        type: string
+                        description: 'Party Address City Name is the fully qualified name of a city in which a party operates.
+
+
+                          **EDI Mapping:** DE19/N401
+
+
+                          '
+                        example: SAN BERNARDINO
+                      partyAddressStateCode:
+                        type: string
+                        description: 'Party Address State Code is a code value, as defined by the appropriate government agency
+                          of the United States, Canada, or Mexico, specifying the state or province in which a party operates.
+
+
+                          Codes sourced from the U.S. Postal Service, Canada Post, or Bureau of Transportation Statistics.
+
+
+                          **EDI Mapping:** DE156/N402
+
+                          '
+                        example: CA
+                      partyAddressPostalCode:
+                        type: string
+                        description: 'Party Address Postal Code is the international postal zone code (excluding punctuation
+                          and blanks) identifying the geographical area in which a party operates.
+
+
+                          **EDI Mapping:** DE116/N403
+
+                          '
+                        example: '92411'
+                      partyAddressCountryCode:
+                        type: string
+                        description: 'Party Address Country Code is an ISO 3166 code value specifying a country, dependency,
+                          or geopolitical area in which a party operates.
+
+
+                          **EDI Mapping:** DE26/N404
+
+
+                          '
+                        example: US
+                      partyEdiIdentificationQualifierCode:
+                        type: string
+                        description: 'EDI Party Identification Qualifier Code is an EDI-defined code value designating the
+                          system/method of code structure of an associated ID used to uniquely identify a party. For example,
+                          it may be used to convey that the associated ID is a telephone number, a Customer Identification
+                          File ID, or a Federal Taxpayer''s ID.
+
+
+                          Sample Values Include: C5 (Customer Identification File), 12 (Telephone Number), FI (Federal Taxpayer''s
+                          Identification Number)
+
+
+                          **EDI Mapping:** DE66/N103
+
+                          '
+                        example: C5
+                  billOfLadingPartyContacts:
+                    type: array
+                    description: 'Records the information of a specific contact acting as a representative of a larger party
+                      taking part in the BOL process.
+
+
+                      **EDI Mapping:** N1 Loop/PER
+
+                      '
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingPartyContactSequenceNumber:
+                          type: number
+                          format: float
+                          description: 'Is a sequence number that in combination with BOL ID and BOL Party Sequence Number,
+                            uniquely identifies a row in the BOL Party Contact element.
+
+                            '
+                          example: 1
+                        partyContactEdiFunctionCode:
+                          type: string
+                          description: 'EDI Contact Function Code is an EDI-defined code value that identifies the major duty
+                            or responsibility of an associated person or group.
+
+
+                            Sample Values Include: 1A (Review/Repricing Contact), 1B (Preferred Provider Organization (PPO)
+                            Contact), 1C (Health Maintenance Organization (HMO) Contact)
+
+
+                            **EDI Mapping:** DE366/PER01
+
+                            '
+                          example: NT
+                        partyContactName:
+                          type: string
+                          description: 'Party Contact Name is the fully qualified name of a person or office who represents
+                            a party to whom communications should be directed.
+
+
+                            **EDI Mapping:** DE93/PER02
+
+
+                            '
+                          example: ABC FREIGHT INC
+                        communicationNumberEdiQualifierCode:
+                          type: string
+                          description: 'Is an EDI qualifier code that provides context to a communication number.
+
+
+                            Typically contains the contact method such as telephone, e-mail or fax.
+
+
+                            **EDI Mapping:** DE365/PER03/PER05/PER07
+
+                            '
+                          example: AB
+                        partyCommunicationNumber:
+                          type: string
+                          description: 'Party Communication Number is the complete communications number for a party including
+                            country and/or area code when applicable. This must be qualified with a code defining the type
+                            of communication number used to be meaningful.
+
+
+                            **EDI Mapping:** DE364/PER04/PER06/PER08
+
+                            '
+                          example: '1234567890'
+                  billOfLadingBillings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingBillingSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that in combination with BOL ID and BOL Party Sequence Number,
+                            uniquely identifies a row on the BOL Billing element.
+                          example: 1
+                        carrierEdiRebillReasonCode:
+                          type: string
+                          description: EDI Rebill Reason Code is an EDI-defined code value specifying the reason for rebill.
+                          example: RC
+                        originFsac:
+                          type: string
+                          description: Origin FSAC is the FSAC (Freight Station Accounting Code) for the origin point of the
+                            rate for a portion of a movement.
+                          example: '30857'
+                        originSplc:
+                          type: string
+                          description: Origin SPLC is the SPLC (Standard Point Location Code) for the origin point of the
+                            rate for a portion of a movement.
+                          example: A1234
+                        billingRateOriginCityName:
+                          type: string
+                          description: Begin Rate City Name is the fully qualified name of a city used for the billing rate
+                            for the beginning portion of a movement.
+                          example: CHICAGO
+                        billingRateOriginStateCode:
+                          type: string
+                          description: Begin Rate State Code is a code value, as defined by the appropriate government agency
+                            of the United States, Canada, or Mexico, specifying the state or province used for the billing
+                            rate for the beginning portion of a movement.
+                          example: IL
+                        billingRateOriginCountryCode:
+                          type: string
+                          description: Begin Rate Country Code is an ISO 3166 code value specifying a country, dependency,
+                            or geopolitical area used for the billing rate for the beginning portion of a movement.
+                          example: US
+                        destinationFsac:
+                          type: string
+                          description: Destination FSAC is th FSAC (Freight Station Accounting Code) for the destination point
+                            of the rate for a portion of a movement.
+                          example: '30888'
+                        destinationSplc:
+                          type: string
+                          description: Destination SPLC is the SPLC (Standard Point Location Code) for the destination point
+                            of the rate for a portion of a movement.
+                          example: A1234
+                        billingRateDestinationCityName:
+                          type: string
+                          description: End Rate City Name is the fully qualified city name of a city used for the billing
+                            rate for the ending portion of a movement.
+                          example: DENVER
+                        billingRateDestinationStateCode:
+                          type: string
+                          description: End Rate State Code is a code value, as defined by the appropriate government agency
+                            of the United States, Canada, or Mexico, specifying the state or province used for the billing
+                            rate for the ending portion of a movement.
+                          example: CO
+                        billingRateDestinationCountryCode:
+                          type: string
+                          description: End Rate Country Code is an ISO 3166 code value specifying a country, dependency, or
+                            geopolitical area used for the billing rate for the ending portion of a movement.
+                          example: US
+                        billOfLadingBillingCarriers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              billOfLadingBillingCarrierSequenceNumber:
+                                type: number
+                                format: float
+                                description: Conveys the order of a carrier participating in the rate for a rail transportation
+                                  movement.
+                                example: 1
+                              scac:
+                                type: string
+                                description: SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha
+                                  abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National
+                                  Motor Freight Traffic Association).
+                                example: BNSF
+            billOfLadingReferences:
+              type: array
+              description: 'Provides additional reference information for the shipment such as Bill of Lading number, Bill
+                of Lading Date, Purchase Order number etc.
+
+
+                **EDI Mapping:** N9
+
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingReferenceSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with BOL Identifier, uniquely identifies a piece
+                      of reference information on a Bill of Lading.
+
+                      '
+                    example: 1
+                  billOfLadingReferenceEdiQualifierCode:
+                    type: string
+                    description: 'Is an EDI-defined qualifier code value that provides context to the value present in the
+                      ''EDI Reference ID'' column.
+
+
+                      **EDI Mapping:** DE128/N901
+
+
+                      '
+                    example: BM
+                  billOfLadingReferenceId:
+                    type: string
+                    description: 'BOL Reference ID is a reference identification number for the ''BOL Reference'' table. Any
+                      value held in this column is contextualized and given meaning by the code value of the associated ''EDI
+                      Reference Identification Qualifier Code'' column.
+
+
+                      **EDI Mapping:** DE127/N902
+
+                      '
+                    example: '4307664'
+                  billOfLadingReferenceDescription:
+                    type: string
+                    description: 'Is a free-form description meant to clarify the related BOL extended reference information.
+
+
+                      **EDI Mapping:** DE369/N903
+
+
+                      '
+                    example: FREE FORM TEXT
+                  billOfLadingReferenceDateTime:
+                    type: string
+                    format: date-time
+                    description: 'Reference DateTime is the party supplied date and/or time value for a specific BOL reference
+                      document.
+
+
+                      Date-Time values received may be in context from customer/party locale.  The date-time value is stored
+                      in UTC time with the offset number added or subtracted to get the actual time supplied by the customer/party.
+
+
+                      **EDI Mapping:** DE373-DE337/N904/N905
+
+                      '
+                    example: '2021-03-28T21:17:07'
+                  billOfLadingReferenceDateTimeUtcOffset:
+                    type: string
+                    description: 'Reference DateTime Offset Number specifies the amount of time subtracted from or added to
+                      the Coordinated Universal Time to get the time supplied for the BOL reference information.
+
+
+                      Date-Time values received may be in context from customer/party locale.  In the EDI standard, the Time
+                      Code (N906) reflects a two character US time zone.  The supplied date, time and timezone values are
+                      converted to UTC time with the offset number added or subtracted to get the actual time supplied by
+                      the party.
+
+
+                      **EDI Mapping:** DE623/N906
+
+                      '
+                    example: CT
+            billOfLadingActivityDateTimes:
+              type: array
+              description: 'Records pertinent dates and times for activities on a BOL.
+
+
+                **EDI Mapping:** DTM
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingActivityDateSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with BOL ID, uniquely identifies a row in the BOL
+                      Activity date element.
+
+                      '
+                    example: 1
+                  billOfLadingActivityEdiDateTimeQualifierCode:
+                    type: string
+                    description: 'Is an EDI-defined code value which qualifies the type of action that occurred at an associated
+                      date and/or time.
+
+
+                      **EDI Mapping:** DE374/DTM01
+
+                      '
+                  billOfLadingActivityDateTime:
+                    type: string
+                    format: date-time
+                    description: 'Specifies the day, month, and year of an activity associated with a BOL. This must be qualified
+                      with a code defining the type of BOL activity performed to be meaningful.
+
+
+                      **EDI Mapping:** DE373/DTM02/DE337/DTM03
+
+                      '
+                    example: '2021-03-10T21:17:07'
+                  billOfLadingActivityEdiTimeZoneCode:
+                    type: string
+                    description: 'Is an EDI-defined code value used to identify the time zone for an associated activity.
+
+
+                      **EDI Mapping:** DE623/DTM04
+
+                      '
+                    example: CT
+            billOfLadingHazmatIdentifications:
+              type: array
+              description: 'Records commodity identification reference numbers and codes, as well as quantity and location
+                (within a compartmentalized car) information, for the hazardous material being shipped.
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingHazmatIdentificationSequenceNumber:
+                    type: number
+                    format: float
+                    description: 'Is a sequence number that in combination with the BOL ID, uniquely identifies a row on the
+                      BOL Hazmat Identification Element.
+
+                      '
+                    example: 1
+                  hazmatEdiPackageTypeCode:
+                    type: string
+                    description: 'Is an EDI-defined code value specifying the type of package being shipped for an associated
+                      hazardous commodity movement.
+
+
+
+                      **EDI Mapping:** DE355/LH101'
+                    example: PC
+                  hazmatLadingPackageQuantityCount:
+                    type: integer
+                    format: int32
+                    description: 'Hazmat Lading Package Quantity Count denotes the number of packages of the hazardous material
+                      lading commodity being moved for the associated shipment.
+
+
+                      **EDI Mapping:** DE80/LH102
+
+                      '
+                    example: 7
+                  hazmatUnNaIdentificationCode:
+                    type: string
+                    description: 'Is used to identify hazardous materials and articles in the framework of international transport,
+                      as required by Title 49 of the code of Federal Regulations.
+
+
+                      **EDI Mapping:** DE277/LH103
+
+                      '
+                    example: UN0336
+                  hazmatCommodityCode:
+                    type: string
+                    description: 'Hazmat Commodity Code describes a hazmat commodity or group of hazmat commodities. Codes
+                      sourced from the Standard Transportation Commodity Code (STCC) corporate reference file.
+
+
+
+                      **EDI Mapping:** DE22/LH105
+
+                      '
+                    example: '4903520'
+                  hazmatLadingEdiUomCode:
+                    type: string
+                    description: 'Is an EDI-defined code value specifying the units in which, or manner in which, the measurement
+                      of the associated hazardous material lading commodity has been taken.
+
+
+                      **EDI Mapping:** DE355/LH106'
+                    example: LB
+                  hazmatLadingMeasure:
+                    type: integer
+                    format: int32
+                    description: 'Hazmat Lading Measure is a number specifying the measurement of a hazardous material lading
+                      commodity.
+
+
+                      **EDI Mapping:** DE380/LH107
+
+                      '
+                    example: 145
+                  hazmatPackingGroupCode:
+                    type: string
+                    description: Hazmat Packing Group Code is a code value defined by the Canadian government which indicates
+                      degree of danger of the hazardous material, expressed as Roman numeral I, II, or III.
+                    example: AAA
+                  hazmatUnHazmatPageNumber:
+                    type: string
+                    description: Defines the page number of the publication where a specific hazardous commodity is described,
+                      as required for the international transport of hazardous materials.
+                    example: '123'
+                  hazmatEdiTankCarCompartmentCode:
+                    type: string
+                    description: Is an EDI-defined code value used to identify the a specific compartment of a compartmentalized
+                      tank car.
+                    example: A
+                  hazmatPackagingEdiContainerResidueCode:
+                    type: string
+                    description: Is an EDI-defined code value used to convey that residue from the associated material remains
+                      in the packaging (including a tank car) after it has been unloaded.
+                    example: Y
+                  billOfLadingHazmatClassifications:
+                    type: array
+                    description: 'Records the classification, notation, and endorsement information for the hazardous material
+                      being shipped.
+
+
+                      **EDI Mapping:** LH1 Loop/LH2'
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatClassificationSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that is needed to uniquely identify a row on the "BOL Hazmat Classification"
+                            table.
+                          example: 1
+                        hazmatClassificationCode:
+                          type: string
+                          description: Hazmat Classification Code is a code value defined by the Department of Transportation
+                            specifying the hazardous classification corresponding to the shipping name of a hazardous commodity.
+                          example: '2.1'
+                        hazmatEdiClassQualifierCode:
+                          type: string
+                          description: Is an EDI-defined code value qualifying an associated hazardous material class as either
+                            primary or secondary.
+                          example: P
+                        hazmatPlacardNotationCode:
+                          type: string
+                          description: Hazmat Placard Notation Code is a code value defined by the Department of Transportation
+                            which specifies the placard notation corresponding to the hazard class of a hazardous commodity.
+                          example: P
+                        hazmatEndorsementCode:
+                          type: string
+                          description: Hazmat Endorsement Code is a code value defined by the Department of Transportation
+                            which specifies the placard endorsement that is to be shown on the shipping papers for a hazardous
+                            commodity.
+                          example: NONE
+                        hazmatEdiReportableQuantityIndicator:
+                          type: string
+                          description: Is an EDI code value identifying presence of hazardous substance.
+                          example: '2.1'
+                        hazmatFlashPointTemperatureEdiUomCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the units in which a flash point temperature
+                            is being expressed.
+                          example: P
+                        hazmatFlashPointTemperature:
+                          type: number
+                          format: float
+                          description: Hazmat Flash Point Temperature is the lowest temperature at which the vapor given off
+                            by a hazardous material will ignite on application of a flame.
+                          example: 10
+                        hazmatExplosiveContentEdiWeightUomCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the weight unit of an associated measurement.
+                          example: P
+                        hazmatExplosiveContentNetWeight:
+                          type: number
+                          format: float
+                          description: Is the net weight of the explosive quantity of a hazardous commodity.
+                          example: 0
+                  billOfLadingHazmatShippingNames:
+                    type: array
+                    description: 'Hazardous Material Shipping Name Information
+
+                      '
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatShippingNameSequenceNumber:
+                          type: number
+                          format: float
+                          example: 1
+                        hazmatShippingNameList:
+                          type: string
+                          description: 'Hazmat Shipping Name List records all the proper shipping names of a hazardous commodity.
+
+                            '
+                          example: ABC
+                        hazmatEdiShippingNameQualifierCode:
+                          type: string
+                          description: 'Is an EDI-defined code value indicating the regulatory source of a hazardous commodity
+                            proper shipping name.
+
+                            '
+                          example: N
+                  billOfLadingHazmatCommodityEmergencyContacts:
+                    type: array
+                    description: 'Administrative Communications Contact
+
+                      '
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatCommodityEmergencyContactSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is needed to uniquely identify a row on the "BOL Hazmat Commodity Emergency Contact"
+                            element.
+                          example: 1
+                        partyContactEdiFunctionCode:
+                          type: string
+                          description: 'Is an EDI-defined code value that identifies the major duty or responsibility of an
+                            associated person or group.
+
+                            '
+                          example: HM
+                        partyContactName:
+                          type: string
+                          description: 'Party Contact Name is the fully qualified name of a person or office who represents
+                            a party to whom communications should be directed.
+
+                            '
+                          example: ABC
+                        communicationNumberEdiQualifierCode:
+                          type: string
+                          description: 'Is an EDI qualifier code that provides context to a communication number.
+
+                            '
+                          example: TE
+                        partyContactCommunicationNumber:
+                          type: string
+                          description: 'Is the complete communications number for a party including country and/or area code
+                            when applicable.
+
+                            '
+                          example: '1234567890'
+                  billOfLadingHazmatGovernmentRegulations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatGovernmentRegulationSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that is needed to uniquely identify a row on the "BOL Hazmat Government
+                            Regulation" element.
+                          example: 1
+                        hazmatEdiShipmentInformationQualifierCode:
+                          type: string
+                          description: Is an EDI-defined code value indicating the type of hazmat shipment information being
+                            passed so that a receiver may format a description of hazardous commodity movements that meets
+                            regulatory requirements.
+                          example: MPI
+                        hazmatShipmentInformationText:
+                          type: string
+                          description: Hazmat Line 1 Shipment Information Text is the line 1 information required by law for
+                            hazardous material shipments.
+                          example: MARINE POLLUTANT
+                        hazmatEdiInhalationToxicityHazardZoneCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the Department of Transportation assigned Inhalation
+                            Toxicity Hazard Zone for an associated hazardous commodity.
+                          example: A
+                        hazmatEdiRadioactivityUomCode:
+                          type: string
+                          description: Is an EDI-defined code value specifying the units in which a measurement of radioactivity
+                            is being expressed.
+                          example: AA
+                        hazmatRadioactivityMeasure:
+                          type: number
+                          format: float
+                          description: Hazmat Radioactivity Measure is a numerical measurement of the radioactivity (radioactive
+                            decay) of a hazardous commodity.
+                          example: 12.11
+                        hazmatTransportIndexNumber:
+                          type: number
+                          format: float
+                          description: Hazmat Transport Index Number is the transport index number for a hazardous commodity.
+                            This is a dimensionless number placed on the package label to designate the degree of control
+                            to be exercised by the carrier during transportation.
+                          example: 12345
+                  billOfLadingHazmatUsepaWasteRegulations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatUsepaWasteRegulationSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that is needed to uniquely identify a row on the BOL Hazmat USEPA
+                            Waste Regulation table.
+                          example: 1
+                        usepaHazardousWasteStreamCode:
+                          type: string
+                          description: Specifies the waste stream number applicable to the movement of hazardous waste as
+                            determined by government regulations and required by the the EPA.
+                          example: AAAA
+                  billOfLadingHazmatReferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatReferenceSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that in combination with the BOL ID and BOL Hazmat Identification
+                            Sequence Number, uniquely identifies a row on the "BOL Hazmat Reference" element.
+                          example: 1
+                        hazmatReferenceEdiQualifierCode:
+                          type: string
+                          description: Is an EDI-defined qualifier code value that provides context to the value present in
+                            the 'EDI Reference ID' column.
+                          example: AAA
+                        hazmatReferenceIdentificationNumber:
+                          type: string
+                          description: Is a reference identification number for the 'BOL Hazmat Reference' table.
+                          example: 12AAAA
+                        hazmatCanadianTransportationPermitExpirationDate:
+                          type: string
+                          format: date
+                          description: Is the expiration date of a Transport Canada Equivalence Certificate.
+                          example: '2021-12-31'
+                  billOfLadingHazmatParties:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatPartySequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that in combination with BOL ID and BOL Hazmat Identification
+                            Sequence Number, uniquely identifies a row in the BOL Hazmat Party table.
+                          example: 1
+                        hazmatParty:
+                          type: object
+                          properties:
+                            partyRoleCode:
+                              type: string
+                              description: Party Role Code is an EDI-defined code value specifying the role of an organizational
+                                entity, a physical location, or an individual participating with a BOL.
+                              example: SH
+                            partyName:
+                              type: string
+                              description: Party Name is the fully qualified name of a party.
+                              example: ABC FREIGHT INC
+                            partyId:
+                              type: string
+                              description: Party ID serves as a unique identifier of the person, organization, or organizational
+                                component that is of interest to BNSF that can act in a legal capacity.
+                              example: 'FREE FORM TEXT '
+                            partyFirstLineAddress:
+                              type: string
+                              description: Is free-form text specifying the line 1 address information for a location in which
+                                a party operates.
+                              example: 1234 W 4TH STREET
+                            partySecondLineAddress:
+                              type: string
+                              description: Is free-form text specifying the line 2 address information for a location in which
+                                a party operates.
+                              example: APT 1234
+                            partyAddressCityName:
+                              type: string
+                              description: Party Address City Name is the fully qualified name of a city in which a party
+                                operates.
+                              example: SAN BERNARDINO
+                            partyAddressStateCode:
+                              type: string
+                              description: Is a code value, as defined by the appropriate government agency of the United
+                                States, Canada, or Mexico, specifying the state or province in which a party operates.
+                              example: CA
+                            partyAddressPostalCode:
+                              type: string
+                              description: Party Address Postal Code is the international postal zone code (excluding punctuation
+                                and blanks) identifying the geographical area in which a party operates.
+                              example: '92411'
+                            partyAddressCountryCode:
+                              type: string
+                              description: Party Address Country Code is an ISO 3166 code value specifying a country, dependency,
+                                or geopolitical area in which a party operates.
+                              example: US
+                            partyEdiIdentificationQualifierCode:
+                              type: string
+                              description: Is an EDI-defined code value designating the system/method of code structure of
+                                an associated ID used to uniquely identify a party.
+                              example: C5
+                        billOfLadingHazmatWastePartyContacts:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              billOfLadingHazmatWastePartyContactSequenceNumber:
+                                type: number
+                                format: float
+                                description: Is a sequence number that is needed to uniquely identify an element in the BOL
+                                  Hazmat Waste Party Contact complex element.
+                                example: 1
+                              partyContactEdiFunctionCode:
+                                type: string
+                                description: Is an EDI-defined code value that identifies the major duty or responsibility
+                                  of an associated person or group.
+                                example: NT
+                              partyContactName:
+                                type: string
+                                description: Party Contact Name is the fully qualified name of a person or office who represents
+                                  a party to whom communications should be directed.
+                                example: ABC FREIGHT INC
+                              communicationNumberEdiQualifierCode:
+                                type: string
+                                description: Is an EDI qualifier code that provides context to a communication number.
+                                example: AB
+                              partyCommunicationNumber:
+                                type: string
+                                description: Party Communication Number is the complete communications number for a party
+                                  including country and/or area code when applicable.
+                                example: '1234567890'
+                  billOfLadingHazmatCanadianGovernmentRegulations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        billOfLadingHazmatCanadianGovernmentRegulationSequenceNumber:
+                          type: number
+                          format: float
+                          description: Is a sequence number that is needed to uniquely identify a row on the "BOL Hazmat Canadian
+                            Government Regulation" element.
+                          example: 1
+                        hazmatEmergencyResponsePlanId:
+                          type: string
+                          description: Is the identity number of a specific hazardous emergency response plan that is assigned
+                            by the Director General of Canada.
+                          example: ER3434
+                        hazmatEmergencyResponsePlanPhoneNumber:
+                          type: string
+                          description: Is the complete phone number including country or area code that has been provided
+                            as part of the associated Canadian emergency response plan.
+                          example: 817-999-9999
+            billOfLadingHazmatCertifications:
+              type: array
+              description: 'Hazardous Certification
+
+                '
+              items:
+                type: object
+                properties:
+                  billOfLadingHazmatCertificationSequenceNumber:
+                    type: number
+                    format: float
+                    description: Is a sequence number that in combination with the BOL ID, uniquely identifies a row on the
+                      BOL Hazmat Certification element.
+                    example: 1
+                  hazmatShipmentCertifierName:
+                    type: string
+                    description: Is name of the person certifying that a hazardous material shipment complies with regulations.
+                    example: CHEMTREAT
+            billOfLadingHazmatShipmentEmergencyContacts:
+              type: array
+              items:
+                type: object
+                properties:
+                  billOfLadingHazmatShipmentEmergencyContactSequenceNumber:
+                    type: number
+                    format: float
+                    description: Is a sequence number that in combination with the BOL ID, uniquely identifies a row on the
+                      BOL Hazmat Shipment Emergency Contact element.
+                    example: 1
+                  partyContactEdiFunctionCode:
+                    type: string
+                    description: Is an EDI-defined code value that identifies the major duty or responsibility of an associated
+                      person or group.
+                    example: N
+                  partyContactName:
+                    type: string
+                    description: Party Contact Name is the fully qualified name of a person or office who represents a party
+                      to whom communications should be directed.
+                    example: ABC FREIGHT INC
+                  communicationNumberEdiQualifierCode:
+                    type: string
+                    description: Is an EDI qualifier code that provides context to a communication number.
+                    example: AB
+                  partyContactCommunicationNumber:
+                    type: string
+                    description: Is the complete communications number for a party including country and/or area code when
+                      applicable.
+                    example: '1234567890'
+            billOfLadingProtectiveServiceInstructions:
+              type: array
+              items:
+                type: object
+                properties:
+                  billOfLadingProtectiveServiceInstructionSequenceNumber:
+                    type: number
+                    format: float
+                    description: Is a sequence number that plays a part in uniquely identifying an instance of mechanical
+                      protective service and ventilation instructions that applies to a shipment.
+                    example: 1
+                  protectiveServiceRuleCode:
+                    type: string
+                    description: Protective Service Rule Code is an AAR-defined code value which specifies a protective service
+                      (heating or cooling) that applies to a shipment.
+                    example: '705'
+                  protectiveServiceEdiCode:
+                    type: string
+                    description: Is an EDI-defined code value specifying a perishable protective service that applies to a
+                      shipment.
+                    example: M
+                  optimumShipmentTemperatureEdiUomCode:
+                    type: string
+                    description: Is an EDI-defined code value specifying the units in which a value is being expressed, or
+                      manner in which a measurement has been taken.
+                    example: CE
+                  optimumShipmentTemperature:
+                    type: number
+                    format: float
+                    description: Optimum Shipment Temperature is the optimum allowable temperature condition for a shipment.
+                    example: 10
+                  scac:
+                    type: string
+                    description: SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation
+                      used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic
+                      Association).
+                    example: BNSF
+                  fsac:
+                    type: string
+                    description: FSAC (Freight Station Accounting Code) is a number assigned to a station that uniquely identifies
+                      the station within the context of each reporting railroad (i.e., Different railroads might share identical
+                      FSAC numbers).
+                    example: BNSF
+                  stationCityName:
+                    type: string
+                    description: Is the fully qualified name of a city where a station that contains a scale is located.
+                    example: DENVER
+                  stationStateCode:
+                    type: string
+                    description: Station State Code is a code value, as defined by the appropriate government agency of the
+                      United States, Canada, or Mexico, specifying the state or province of a station.
+                    example: CO
+                  shipmentPrecoolIndicator:
+                    type: string
+                    description: Indicates whether or not the shipment was precooled per Association of American Railroads
+                      (AAR) Protective Service Rule 710.
+                    example: A
+                  equipmentEdiHeaterLocationCode:
+                    type: string
+                    description: Is an EDI-defined code value to specify the heater location for freight conveyance equipment
+                      requiring protective service.
+                    example: Y
+                  foodCommodityShipmentEdiIndicatorCode:
+                    type: string
+                    description: Is an EDI-defined code value to identify whether or not an associated commodity is a food
+                      product.
+                    example: Y
+                  equipmentEdiDoorwaySpaceWidthCode:
+                    type: string
+                    description: Is an 'EDI' defined code value which specifies the amount of doorway space for the full width
+                      of a car.
+                    example: N
+                  protectiveServiceShipmentOriginTemperature:
+                    type: number
+                    format: float
+                    description: Specifies the temperature of a shipment requiring a protective service at the origin location.
+                    example: 10
+            billOfLadingIntermodalChassisEquipment:
+              type: object
+              properties:
+                chassisId:
+                  type: string
+                  description: Serves as an identifier for a piece of freight conveyance equipment. It consists of a 4-character
+                    equipment initial followed by an up to 15-character equipment unit identifying number.
+                  example: BNSF123456
+                chassisOwnerScac:
+                  type: string
+                  description: Chassis Owner SCAC is the standard carrier alpha code for the owner of the associated freight
+                    conveyance equipment.
+                  example: BNSF
+                chassisLesseeScac:
+                  type: string
+                  description: Chassis Lessee SCAC is the standard carrier alpha code for the lessee of the associated freight
+                    conveyance equipment.
+                  example: BNSF
+                chassisTareWeight:
+                  type: number
+                  format: float
+                  description: Chassis Tare Weight is the weight of an empty rail shipping container or vehicle. Sometimes
+                    called the unladen weight.
+                  example: 2300
+                chassisTareQualifierCode:
+                  type: string
+                  description: Is the code identifying the type of tare weight of an empty rail shipping container or vehicle.
+                    Sometimes called the unladen weight.
+                  example: A
+                chassisExteriorLengthFeetInches:
+                  type: string
+                  description: Chassis Exterior Length Feet Inches is the length (in feet and inches) of equipment ordered
+                    or used to transport shipment.
+                  example: '5300'
+                billOfLadingChassisTypeCode:
+                  type: string
+                  description: BOL Chassis Type Code is a BNSF-defined code value which specifies the type of rail conveyance
+                    equipment (Intermodal or Railcar) applicable to a particular operating partner agreement.
+                  example: 8P
+                chassisCheckDigitNumber:
+                  type: string
+                  description: Chassis Check Digit Number designates the check digit applied to a piece of equipment, which
+                    serves as a form of redundancy check used for error detection.
+                  example: '1'
+            billOfLadingCanadaCustomsExport:
+              type: object
+              properties:
+                shipmentSpecialChargeEdiCurrencyCode:
+                  type: string
+                  description: Shipment Special Charge EDI Currency Code is an EDI-defined code value specifying the Standard
+                    ISO code for country in whose currency the charges are specified.
+                  example: USD
+                transactionEdiRelatedCompanyIndicator:
+                  type: string
+                  description: Transaction EDI Related Company Indicator specifies whether the two parties in a transaction
+                    are related.
+                shipmentSpecialChargeEdiQualifierCode:
+                  type: string
+                  description: Shipment Special Charge EDI Qualifier Code is an EDI-defined code value specifying the type
+                    of special charge or allowance associated with a shipment. ('595' = Proforma Invoice, 'FCB' = Freight
+                    Changes to Border, 'FCD' = Freight Changes to Destination)
+                  example: '595'
+                shipmentSpecialChargeAmount:
+                  type: number
+                  format: float
+                  description: Shipment Special Charge Amount is the total monetary amount of a special charge included on
+                    the total invoice for a shipment, in the standard monetary denomination for the currency specified.
+                  example: 123
+                portEdiBlockTwentyQualifierCode:
+                  type: string
+                  description: Port EDI Block Twenty Qualifier Code is an EDI-defined code value used to define Block 20 characteristics.
+                  example: '1'
+                commodityChemicalAnalysisPercentage:
+                  type: number
+                  format: float
+                  description: Chemical Analysis Percentage is a percentage of a specific chemical component that makes up
+                    a complete product, which is required to be reported by U.S. and Canada Customs.
+                  example: 2.1
+                ladingUnitPrice:
+                  type: number
+                  format: float
+                  description: Lading Unit Price is the price per unit of a commodity.
+                  example: 22.2
+            billOfLadingCustomsInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  billOfLadingCustomsInformationSequenceNumber:
+                    type: number
+                    format: float
+                    description: Is a sequence number that in combination with BOL ID, uniquely identifies a row in the BOL
+                      Customs Information element.
+                    example: 1
+                  billOfLadingCustomsInformationFirstLineText:
+                    type: string
+                    example: FREE FORM TEXT
+                  billOfLadingCustomsInformationSecondLineText:
+                    type: string
+                    example: FREE FORM TEXT
+    Waybill_Details:
+      type: object
+      properties:
+        customerWaybillDetails:
+          type: object
+          required:
+          - equipmentInitial
+          - equipmentNumber
+          properties:
+            equipmentInitial:
+              type: string
+              description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+              example: AOKX
+            equipmentNumber:
+              type: string
+              description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+              example: '79005'
+            loadEmptyCode:
+              type: string
+              description: 'Code which indicates the load status of a piece of equipment.
+
+                Valid values are: L = Loaded, E = Empty, B = Both'
+              example: E
+            equipmentGrossScaleWeightPounds:
+              type: string
+              description: The gross scale weight of a piece of equipment as measured in pounds.
+              example: '270648'
+            equipmentTareWeightPounds:
+              type: string
+              description: The weight of an empty vehicle or container, as measured in pounds, without cargo. Sometimes referred
+                to as Unladen Weight.
+              example: '10000'
+            shipmentNetScaleWeightPounds:
+              type: string
+              description: The net scale weight of a shipment, as measured in pounds.
+              example: '202348'
+            carKindCode:
+              type: string
+              description: Code that identifies the physical characteristics for equipment as defined by BNSF Railway itself.
+                Value is used when car characteristics are required for business decision making.
+              example: C5G
+            billOfLadingId:
+              type: string
+              description: Is a unique identifier for an instance of an internal or external customer request for the Bill
+                of Lading via rail.
+              example: 017415FD
+            waybillNumber:
+              type: string
+              description: Waybill Number is the carrier accounting number of a waybill.
+              example: '836486'
+            waybillVersionNumber:
+              type: string
+              description: Number added to a specific Waybill to allow for versioning of the Waybill over time.
+              example: '4'
+            shippingManifestId:
+              type: string
+              description: Identifier of a Shipping Manifest which is a list of all goods loaded onto a transport vessel.
+                A manifest usually documents the items, quantity, weight, and the destination information for where the cargo
+                is to go.
+              example: '205481286'
+            waybillDate:
+              type: string
+              description: Waybill Date is the day, month, and year specified on a waybill, expressed as CCYYMMDD where CC
+                represents the first two digits of the calendar year. Can not be in the future.
+              example: 11-12-2000
+            waybillEdiCode:
+              type: string
+              description: Code which defines if the Waybill has an EDI code.
+              example: TBL
+            waybillStatusCode:
+              type: string
+              description: 'BNSF defined code values to track the operational lifecycle state of a Waybill''s execution from
+                initialization to close. Valid Values Include: A=ACTIVATED, C=CLOSED CYCLE, O=OFFLINE, S=SUSPENDED, V=VOIDED'
+              example: C
+            waybillParties:
+              type: array
+              description: Information on interested or responsible parties associated with a Waybill.
+              items:
+                type: object
+                properties:
+                  waybillPartyRoleName:
+                    type: string
+                    description: Description of the Waybill Party Role Code value which provides the full name associated
+                      with the role.
+                    example: Consignee
+                  waybillPartyFullName:
+                    type: string
+                    description: Full name of a Party (business or individual) that plays a part within a Waybill.
+                    example: Company ABC
+            waybillDetails:
+              type: object
+              description: Details relating to a Waybill.
+              properties:
+                originStationName:
+                  type: string
+                  description: The fully spelled out name of an origin station.
+                  example: VANCOUVER
+                originStateCode:
+                  type: string
+                  description: The code, as assigned by a national body such as the US Postal Service, for a state, province,
+                    or territory for a given origin.
+                  example: WA
+                destinationStationName:
+                  type: string
+                  description: The fully spelled out name of an destination station.
+                  example: CHICAGO
+                destinationStateCode:
+                  type: string
+                  description: The code, as assigned by a national body such as the US Postal Service, for a state, province,
+                    or territory for a given destination.
+                  example: IL
+                stcc:
+                  type: string
+                  description: STCC (Standard Transportation Commodity Code) number identifying a Commodity.
+                  example: '9999'
+                commodityDescription:
+                  type: string
+                  description: Text value which describes a Commodity.
+                  example: CORN
+                contractFreightRateQuoteNumber:
+                  type: string
+                  description: Number assigned to identify a quote generated for a Contract Freight Rate.
+                  example: '9999'
+                aarRule11Indicator:
+                  type: string
+                  description: Indicates if AAR (Association of American Railroads) Rule 11 applies to the shipment.  This
+                    rule identifies the proper billing procedure that must be followed by each party in scenarios in which
+                    through waybilling of shipments require more than one carrier to collect.
+                  example: Y
+                shipmentUnitCount:
+                  type: string
+                  description: Number of pieces of equipment that are being moved in a shipment.
+                  example: '11'
+              nullable: false
+            waybillRoutes:
+              type: array
+              items:
+                type: object
+                properties:
+                  waybillRouteScac:
+                    type: string
+                  aarRule260JunctionAbbreviation:
+                    type: string
+                    description: The AAR Rule 260 junction abbreviation associated with a segment of the route for a Waybill
+                      where two rail carriers will exchange shipments.
+                  waybillRouteSequenceNumber:
+                    type: string
+                    description: A value that defines the sequence within a full Waybill route the associated portion of a
+                      route pertains.
+                    example: '5'
+            waybillDiversions:
+              type: array
+              description: 'Diversions allow a customer to update a waybill to divert a shipment to a different destination
+                or to update the consignee. '
+              items:
+                type: object
+                properties:
+                  consigneeFullName:
+                    type: string
+                    description: The full name of a customer that is filling the role of Consignee. A Consignee, also referred
+                      to as the "Receiver", is the company or individual receiving a shipment at a destination.
+                    example: Consignee ABC
+                  waybillDiversionAuthorizedByName:
+                    type: string
+                    description: The full name of the person who authorized the Waybill Diversion.
+                    example: John Doe
+                  waybillDiversionRequesterPhoneNumber:
+                    type: string
+                    description: Phone number of the person who requested the Waybill Diversion.
+                    example: 999-999-9999
+                  waybillDiversionDate:
+                    type: string
+                    description: Full calendar date when the Waybill Diversion occurred.
+                    example: 11-30-2020
+                  waybillDiversionTime:
+                    type: string
+                    description: Time when the Waybill Diversion occurred. Formatted as HHMMSS.
+                    example: 08:33:52
+                  waybillDiversionComments:
+                    type: array
+                    description: Any comments related to the diversion(s) made to the original Waybill.
+                    items:
+                      type: object
+                      properties:
+                        waybillDiversionComment:
+                          type: string
+                          description: 'Comments entered related to any diversions made to a Waybill. Diversions allow a customer
+                            to update a waybill to divert a shipment to a different destination or to update the consignee. '
+                          example: ABC
+            waybillHazardousCommodities:
+              type: array
+              description: Details about any hazardous commodities/materials being hauled under the associated Waybill.
+              items:
+                type: object
+                properties:
+                  unNorthAmericanHazardousCommodityNumber:
+                    type: string
+                    description: UN (United Nations) or North American Hazardous Commodity Number (BOE 6000).
+                    example: UN3257
+                  hazardousCommodityTechnicalName:
+                    type: string
+                    description: The technical name for a Hazardous Commodity.
+                    example: ASPHALT
+                  hazardousCommodityProperShippingName:
+                    type: string
+                    description: The full name of a Proper Shipping name assigned to a Hazardous Commodities as required by
+                      US, Canadian, and International Regulations.
+                    example: ELEVATED TEMPERATURE LIQUID
+                  hazardousSubstanceChemicalComponent:
+                    type: string
+                    description: The chemical component(s) identified for a given Hazardous Commodity.
+                    example: ACETIC ACID
+                  hazardousCommodityClassificationCode:
+                    type: string
+                    description: Code indicating the classification applied to a hazardous commodity. May include Canadian,
+                      United States, and international codes depending on the data storage file and the type of shipments.
+                    example: '9'
+                  canadianHazardousCommoditySubsidiaryClassification1:
+                    type: string
+                    description: The first, primary, Canadian Hazardous Commodity Subsidiary Classification associated with
+                      a given material being shipped.
+                    example: '6.1'
+                  canadianHazardousCommoditySubsidiaryClassification2:
+                    type: string
+                    description: The second, secondary, Canadian Hazardous Commodity Subsidiary Classification associated
+                      with a given material being shipped.
+                    example: '6.4'
+                  packagingGroupCode:
+                    type: string
+                    description: Code which designates the Canadian or International Packaging Group assigned to a shipment.
+                    example: ABC
+                  stcc:
+                    type: string
+                    description: STCC (Standard Transportation Commodity Code) number identifying a Commodity.
+                    example: '9999'
+                  commodityAdditionalDescriptiveInformation:
+                    type: string
+                    description: Additional descriptive information recorded for a Commodity, tariff, or other relevant data.
+                    example: CONTAINS NOT LESS THAN 48% WATER BY WEIGHT
+                  hazardousMaterialShipmentWeightPounds:
+                    type: string
+                    description: The weight, as measured in pounds, of a Hazardous Material shipment.
+                    example: '172954'
+                  reportableHazardousMaterialQuantityIndicator:
+                    type: string
+                    description: Indicates if the quantity of a hazardous commodity must be reported to the US or State DOT
+                      (Department of Transportation) agency.
+                    example: N
+                  customerNotificationPhoneNumber:
+                    type: string
+                    description: Telephone number to be used to notify a Customer of any important information.
+                    example: 999-999-9999
+                  waybillHazardousMaterialComment:
+                    type: string
+                    description: A comment entered about hazardous materials found on a Waybill.
+                    example: ABC
+            waybillVessels:
+              type: array
+              description: Information on any sailing vessel(s) associated with freight movement under the associated Waybill.
+              items:
+                type: object
+                properties:
+                  sailingDate:
+                    type: string
+                    description: The date a sailing vessel is to depart (formatted as  YYYY-MM-DD).
+                    example: '2021-01-31'
+                  sailingTime:
+                    type: string
+                    description: The time a sailing vessel is to depart (formatted as HH:MM).
+                    example: '20:00'
+                  vesselInboundOutboundCode:
+                    type: string
+                    description: Code which defines the high level movement of a vessel, inbound or outbound.
+                    example: O
+                  vesselName:
+                    type: string
+                    description: 'Name of a sailing vessel as documented in "Lloyd''s Register of Ships". '
+                    example: ABC XYZ
+                  vesselVoyageNumber:
+                    type: string
+                    description: Number associated with a vessel's voyage that identifies the voyage cargo is shipped under.
+                    example: 038W
+                  vesselTerminalName:
+                    type: string
+                    description: Name of a terminal, within a given port, a sailing vessel may begin or end a voyage from.
+                    example: ABC123
+                  vesselPortName:
+                    type: string
+                    description: Name of a port, a maritime facility, from which a sailing vessel may begin or end a voyage
+                      from.
+                    example: LONG BEACH
+                  pierName:
+                    type: string
+                    description: Name of a pier a sailing vessel may begin or end a voyage from
+                    example: ABC123
+                  vesselBookingNumber:
+                    type: string
+                    description: The number, assigned by a carrier, for the reservation of space aboard a shipping vessel.
+                    example: '6286500640'
+                  vesselBookingDate:
+                    type: string
+                    description: The date a sailing vessel has been booked, space has been reserved, by a Carrier (formatted
+                      as  YYYY-MM-DD).
+                    example: '2021-01-25'
+                  scheduledUnitAvailabilityDate:
+                    type: string
+                    description: Date a given unit is scheduled to be available (formatted as YYYY-MM-DD).
+                    example: '2021-01-25'
+                  scheduledUnitAvailabilityTime:
+                    type: string
+                    description: Time a given unit is scheduled to be available (formatted as HH:SS).
+                    example: 08:30
+            integratedServiceDetails:
+              type: object
+              properties:
+                requestedUnitAvailabilityDate:
+                  type: string
+                  description: Date a given unit is requested to be made available to the Customer (formatted as YYYY-MM-DD).
+                  example: '2021-01-25'
+                requestedUnitAvailabilityTime:
+                  type: string
+                  description: Time a given unit is requested to be made available to the Customer (formatted as HH:MM).
+                  example: '18:15'
+                plannedUnitAvailabilityDate:
+                  type: string
+                  description: Date a given unit is planned to be made available to the Customer (formatted as YYYY-MM-DD).
+                  example: '2021-01-25'
+                plannedUnitAvailabilityTime:
+                  type: string
+                  description: Time a given unit is planned to be made available to the Customer (formatted as HH:MM).
+                  example: '20:20'
+              nullable: false
+            waybillErrors:
+              type: array
+              items:
+                type: object
+                properties:
+                  waybillErrorDescription:
+                    type: string
+                    description: Full description of an error generated when Waybill information was entered.
+                    example: ORIGIN ROAD (BNSF) DOES NOT SERVE ORIGIN (TOLUCA EM).
+            waybillSpecialInstructions:
+              type: array
+              items:
+                type: object
+                properties:
+                  waybillSpecialInstructions:
+                    type: string
+                    description: Any special instructions to be communicated or followed during the execution of a Waybill.
+                    example: 'RULE 705: OPTIM TEMP 0 OR LESS DO NOT HEAT IN CANADA'
+            waybillSpecialConditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  waybillSpecialConditionCode:
+                    type: string
+                    description: Code that defines a special condition to be considered during the execution of a Waybill.
+                    example: ZZ
+                  waybillSpecialConditionName:
+                    type: string
+                    description: Descriptive name, assigned to a special condition code, that defines a special condition
+                      to be considered during the execution of a Waybill.
+                    example: Abcde
+            waybillAdditionalUnits:
+              type: array
+              items:
+                type: object
+                properties:
+                  equipmentInitial:
+                    type: string
+                    description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                  equipmentNumber:
+                    type: string
+                    description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                  totalLadingWeightPounds:
+                    type: string
+                    description: Total chargeable weight (lading weight) for a specific Railcar as measured in pounds.
+                    example: '197404'
+            customerWaybillReferenceNumbers:
+              type: array
+              items:
+                type: object
+                properties:
+                  waybillReferenceNumberTypeCode:
+                    type: string
+                    description: A code defining the type of reference number or identifier associated with a Waybill.
+                    example: BM
+                  waybillReferenceNumberTypeName:
+                    type: string
+                    description: A short, free-form description of a code defining the type of reference number or identifier
+                      associated with a Waybill.
+                    example: Bill of Lading
+                  waybillReferenceNumber:
+                    type: string
+                    description: A reference number or identifier associated with a Waybill.
+                    example: A1B2C3
+  responses:
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+    '401':
+      description: '**Unauthorized**
+
+
+        Indicates that the request requires user authentication information. The client MAY repeat the request with a suitable
+        Authorization.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n\
+        \   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an\
+        \ email letting you know. If you have not received the email, please wait up to five business days. Let us know via\
+        \ API Support if you still have not received the email after five business days.\n   * You can also get this error\
+        \ if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting\
+        \ Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing\
+        \ a restricted service for which you do not have permission. You can use our Registration form to request access.\
+        \ Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not
+        exist. Please consult the documentation.'
+    '405':
+      description: '**Method Not Allowed**
+
+
+        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example,
+        you may be using GET when POST is required. Please consult the documentation.'
+    '429':
+      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and\
+        \ performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15\
+        \ API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed\
+        \ these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions,\
+        \ you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+    '500':
+      description: '**Internal Server Error**
+
+
+        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem
+        on the server side. Our internal support systems will be made aware.'
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try
+        again.'
+  requestBodies: {}
+  securitySchemes:
+    MutualTLS:
+      type: mutualTLS
+      description: 'BNSF requires certificate-based mutual TLS (two-way authentication). Client certificates must be x509
+        PEM, issued by a recognised public Certificate Authority (Domain Validation, Organization Validation, Extended Validation
+        or S/MIME), effective no longer than 36 months, with Extended Key Usage including Client Authentication (OID 1.3.6.1.5.5.7.3.2).
+        Self-signed, private, Let''s Encrypt, webCARES and Cloudflare-issued certificates are not accepted. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/'
+    Restricted:
+      type: mutualTLS
+      description: 'Restricted Service. The same client certificate applies, but the certificate must additionally be authorised
+        for this service by BNSF API Support. Unauthorised callers receive 403 "Insufficient privileges". Restricted Services
+        are only available in the Production environment. Source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/'
+tags:
+- name: Waybill Management
+security:
+- MutualTLS: []
+x-generated-from: openapi/_original/bnsf-waybill-openapi.json

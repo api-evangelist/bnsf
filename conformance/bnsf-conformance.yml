@@ -1,0 +1,203 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  BNSF's eight published OpenAPI documents under
+  https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/ and the developer pages on the
+  same host. Every entry below cites the exact place the evidence sits.
+description: >-
+  Standards posture for the BNSF Customer API. The cross-cutting web-API standards are mostly absent
+  — no OAuth, no OpenID Connect, no RFC 9457 problem details, no idempotency. What BNSF does carry,
+  and carries deeply, is the rail freight domain vocabulary: its waybill contract maps field by field
+  onto ANSI X12 EDI data elements, and its identifiers are the AAR and NMFTA code systems the whole
+  North American rail network already speaks.
+
+conformance:
+
+- id: mtls
+  name: Mutual TLS client authentication (RFC 8705 style, certificate-bound)
+  conforms: true
+  evidence: >-
+    https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/ — "BNSF uses
+    certificate-based Mutual Authentication (also known as mTLS, or two-way authentication)".
+    Certificate requirements include Extended Key Usage Client Authentication (OID 1.3.6.1.5.5.7.3.2).
+
+- id: openapi
+  name: OpenAPI 3.0.0
+  conforms: true
+  evidence: >-
+    Eight documents, all declaring "openapi": "3.0.0", published by BNSF at
+    /ship-with-bnsf/support-services/customer-api/{trace,waybill,prices,schedules,reference-files,
+    automotive-hub-operations,intermodal-hub-operations,diagnostics}.json and rendered by BNSF's own
+    Swagger UI at /ship-with-bnsf/support-services/customer-api/developers-console/.
+
+- id: pagination
+  name: Page-number pagination
+  conforms: true
+  evidence: >-
+    `page` and `limit` query parameters on GET /v1/cars and GET /v1/units in trace.json, with the
+    provider's own description "a query string of \"?page=1\" is equivalent to \"?page=1&limit=2000\"".
+  note: Partial — only the trace list endpoints paginate; the other seven services expose no paging.
+
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    No application/problem+json media type appears in any of the eight documents. The 4xx/5xx
+    responses in components/responses carry a prose description and no content schema at all.
+
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    No securitySchemes block of type oauth2 in any document; no token, authorize or scope reference
+    on any of the seven API Center pages. /.well-known/oauth-authorization-server returns 404 on
+    www.bnsf.com and 403 on both API hosts (probed 2026-09-06).
+
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: >-
+    /.well-known/openid-configuration returns 404 on www.bnsf.com and bnsf.com and 403 on
+    api.bnsf.com and api-trial.bnsf.com (probed 2026-09-06).
+
+- id: idempotency
+  name: Idempotency keys on mutating operations
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or equivalent on any of the 30 mutating operations in the eight
+    documents. See conventions/bnsf-conventions.yml idempotency.coverage: none.
+
+- id: rfc8594
+  name: RFC 8594 Sunset header / deprecation signalling
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation header documented; every operation carries deprecated:false or omits it.
+    See lifecycle/bnsf-lifecycle.yml.
+
+- id: webhooks
+  name: HTTPS push notification (webhook) delivery
+  conforms: true
+  evidence: >-
+    https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/push-notifications/ — six named
+    event types with full published JSON payloads, delivered by POST from api.bnsf.com to a
+    consumer-supplied HTTPS endpoint that must return 200. Catalogued in
+    asyncapi/bnsf-webhooks.yml.
+
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: >-
+    BNSF documents its webhook events in prose and JSON examples on the Push Notifications page but
+    publishes no AsyncAPI document. No /asyncapi.yaml or /asyncapi.json is served on any host.
+
+domain_standards:
+
+- id: ansi-x12-edi-404
+  name: ANSI ASC X12 EDI — Rail Carrier Shipment Information (404) data elements
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    waybill.json carries 90 explicit "**EDI Mapping:**" declarations binding its JSON fields to X12
+    data elements and segments — for example billOfLadingEdiTransactionSetPurposeCode maps to
+    DE353/BX01, billOfLadingPaymentMethodCode to DE146/BX03, transactionSetAssignedNumber to
+    DE554/LX01, and the origin-carrier Rule 11 indicator to DE133/R202/E502. Field descriptions
+    quote X12 code lists verbatim ("00 (Original), 04 (Change)"). Fetched from
+    https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json on 2026-09-06.
+  why_it_matters: >-
+    A shipper already exchanging X12 404/417 with any Class I railroad can map onto this JSON
+    contract element by element without a bespoke connector, because BNSF published the crosswalk
+    inside the contract itself rather than in a separate integration guide.
+
+- id: aar-reporting-marks
+  name: AAR reporting marks (equipment initial + number)
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    trace.json schema carload.carInitial — "Initials, also known as reporting marks, assigned to a
+    piece of railroad equipment by the equipment's owner. Value is used with Car Number". The
+    equipmentInitial/equipmentNumber pair is a path parameter on
+    DELETE /v1/dray-plan/initial/{equipmentInitial}/number/{equipmentNumber} in
+    intermodal-hub-operations.json.
+
+- id: aar-rule-11
+  name: AAR Accounting Rule 11
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    prices.json — "Rail Mile Inquiry API – Mileage – Returns mileage for BNSF local and/or rule 11
+    shipments". waybill.json — "Indicates if AAR (Association of American Railroads) Rule 11 applies
+    to the shipment", with the freight-charge code list including "11 (Association of American
+    Railroads Accounting Rule 11 Shipment)".
+
+- id: stcc
+  name: Standard Transportation Commodity Code (STCC)
+  conforms: true
+  strength: first-class-resource
+  evidence: >-
+    reference-files.json exposes GET /v1/stcc ("Returns STCC numbers and descriptions matching input
+    criteria") and GET /v1/stcc/hazardous. prices.json defines servicePackageCommodityLowStcc and
+    servicePackageCommodityHighStcc as "STCC (Standard Transportation Commodity Code) code number".
+
+- id: umler
+  name: Umler equipment registry (AAR / Railinc)
+  conforms: true
+  strength: first-class-resource
+  evidence: >-
+    reference-files.json POST /v1/umler — "The Umler service returns internal and external
+    dimensions, capacities, weight information, and other specific characteristics of freight cars
+    and intermodal trailers and containers", with a dedicated UMLER response schema.
+
+- id: scac
+  name: Standard Carrier Alpha Code (SCAC), assigned by NMFTA
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    automotive-hub-operations.json — "SCAC (Standard Carrier Alpha Code) consists of a two to four
+    character alpha abbreviation used to designate a transportation company. SCACs are assigned by
+    NMFTA (National Motor Freight Traffic Association)." Required field on the haul-away gate entry
+    request; also carried on the drayage-booking webhook payload as truckingScac.
+
+- id: splc
+  name: Standard Point Location Code (SPLC) and OPSL geography codes
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    prices.json geography-type code list — "'S2' = two digit SPLC, 'S4' = four digit SPLC, 'S6' =
+    six digit SPLC ... 'OL' = OPSL number ranges", alongside FIPS-style county, state/province and
+    ZIP3/ZIP5 selectors.
+
+- id: aar-ramp-code
+  name: AAR ramp code
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    automotive-hub-operations.json — aarRampCode is a required request field and a path parameter on
+    GET /v1/gate-pass/ramp/{aarRampCode}/vehicle/{vin} and
+    GET /v1/gate-pass/ramp/{aarRampCode}/gate-pass/{gatePassCode}.
+
+- id: rail-party-codes-333-633
+  name: Rail industry party and station code systems (633 customer codes, 333 station codes)
+  conforms: true
+  strength: declared-in-contract
+  evidence: >-
+    intermodal-hub-operations.json requires a supplier633 query parameter on the dray-plan
+    operations; station333 is a query parameter on the hub lot-location lookup; the Bad Order and
+    Local Service Notification webhook payloads carry shipper633, consignee633, station_333 and
+    operatingStation333. Published at
+    https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/push-notifications/.
+
+- id: iso-8601
+  name: ISO 8601 timestamps
+  conforms: partial
+  evidence: >-
+    intermodal-hub-operations.json uses ISO 8601 examples such as "2021-04-19T14:47:37.068Z", but the
+    trace surface uses "10/31/2019" for bnsfTransitGoalDate and the Bad Order webhook payload uses
+    "2022-04-12-11.19.10". Three date formats coexist across the surface.
+  note: Recorded as partial rather than true because a consumer must handle all three.
+
+compliance_programs:
+  published: false
+  note: >-
+    No SOC 2, ISO 27001, PCI DSS, HIPAA or FedRAMP claim appears anywhere on the BNSF API Center
+    pages, and BNSF publishes no trust centre. See security/bnsf-trust-center.yml. No Compliance
+    pointer is emitted from this file.

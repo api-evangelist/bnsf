@@ -1,0 +1,71 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  BNSF's published OpenAPI documents and the developer pages under
+  https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+description: >-
+  Lifecycle posture for the BNSF Customer API, measured from the provider's own surface on
+  2026-09-06.
+versioning:
+  scheme: path segment
+  granularity: per operation
+  observed_versions:
+  - v1
+  - v2
+  - v3
+  spec_version_declared: '1.0'
+  note: >-
+    info.version is "1.0" in all eight published documents while the paths inside them span v1, v2
+    and v3 — the document version does not track the interface. v2 and v3 operations coexist with
+    their v1 predecessors in the same document (POST /v2/ingate alongside POST /v1/pregate/in;
+    POST /v3/unit-details alongside the v1 hub operations), and no v1 operation is marked deprecated.
+  policy_published: false
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  evidence: >-
+    Every one of the 59 operations across the eight documents carries `deprecated: false` or omits
+    the field. No page on the developer surface states a deprecation, sunset or version-retirement
+    policy, and no Sunset or Deprecation response header is documented anywhere. Older versions are
+    superseded silently by adding a higher-numbered path.
+status_page:
+  published: false
+  evidence:
+  - url: https://status.bnsf.com
+    status: 000
+    note: does not resolve
+  in_api_health_check:
+    url: https://api.bnsf.com:6443/healthcheck
+    status: 200
+    anonymous: true
+    note: >-
+      BNSF ships an anonymous health-check endpoint, which is a real availability signal, but it is
+      not a status page: it reports the gateway is up, carries no incident history, no component
+      breakdown and no subscription.
+changelog:
+  published: false
+  evidence:
+  - url: https://www.bnsf.com/news-media/customer-notifications/
+    status: 404
+  note: >-
+    BNSF publishes customer notification feeds (Service Advisories, Marketing News, Pricing Updates,
+    bnsf.com Updates) from its top navigation, but no dated changelog for the Customer API and no
+    release notes on any of the seven API Center pages.
+sla:
+  published: false
+  support_hours: Monday to Friday, 8am to 5pm Central Time
+  support_channel: >-
+    Customer Portal "Message Us" box — Business Segment, Web Support, Reason "Application Programming
+    Interface (API)"
+  out_of_hours: >-
+    BNSF states that contacts made outside support hours are answered the next business day.
+  provisioning_commitment: >-
+    Up to five business days from registration to a working certificate, confirmed by email. This is
+    the only time commitment BNSF publishes anywhere on the API surface.
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/

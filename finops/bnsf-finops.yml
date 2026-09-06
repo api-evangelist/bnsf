@@ -11,72 +11,69 @@ providerId: bnsf
 publisherName: BNSF
 serviceCategory: API
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
 method: generated
-modified: '2026-05-04'
+modified: '2026-09-06'
 tags:
-  - Freight
-  - Railroad
-  - Shipping
-  - Trains
-  - Intermodal
-  - Logistics
-  - FinOps
-  - Cost Management
-  - FOCUS
+- Freight
+- Railroad
+- Shipping
+- Trains
+- Intermodal
+- Logistics
+- FinOps
+- Cost Management
+- FOCUS
 description: FinOps framework definition for the BNSF API surface. Provides a FOCUS-aligned mapping for
   cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 principles:
-  - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
-  - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
-  - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
-  - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
+- name: Visibility
+  description: Make API consumption costs visible to engineering, product, and finance teams in near real-time.
+- name: Allocation
+  description: Tag every chargeable API call with the consuming team, environment, application, and feature
+    so cost can be allocated.
+- name: Optimization
+  description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
+    cost per useful unit of work.
+- name: Accountability
+  description: Establish budget owners and chargeback or showback flows for each consuming team.
 domains:
-  - name: Understand Usage and Cost
-    capabilities:
-      - Data Ingestion
-      - Allocation
-      - Reporting and Analytics
-      - Anomaly Management
-  - name: Quantify Business Value
-    capabilities:
-      - Planning and Estimating
-      - Forecasting
-      - Budgeting
-      - Benchmarking
-      - Unit Economics
-  - name: Optimize Usage and Cost
-    capabilities:
-      - Architecting for Cloud
-      - Rate Optimization
-      - Workload Optimization
-      - Cloud Sustainability
-      - Licensing and SaaS
-  - name: Manage the FinOps Practice
-    capabilities:
-      - FinOps Practice Operations
-      - FinOps Education and Enablement
-      - Invoicing and Chargeback
-      - Onboarding Workloads
-      - Intersecting Disciplines
+- name: Understand Usage and Cost
+  capabilities:
+  - Data Ingestion
+  - Allocation
+  - Reporting and Analytics
+  - Anomaly Management
+- name: Quantify Business Value
+  capabilities:
+  - Planning and Estimating
+  - Forecasting
+  - Budgeting
+  - Benchmarking
+  - Unit Economics
+- name: Optimize Usage and Cost
+  capabilities:
+  - Architecting for Cloud
+  - Rate Optimization
+  - Workload Optimization
+  - Cloud Sustainability
+  - Licensing and SaaS
+- name: Manage the FinOps Practice
+  capabilities:
+  - FinOps Practice Operations
+  - FinOps Education and Enablement
+  - Invoicing and Chargeback
+  - Onboarding Workloads
+  - Intersecting Disciplines
 billingModel:
-  pricingCategory: Usage-Based
+  pricingCategory: Not published
   billingFrequency: Monthly
   billingCurrency: USD
   chargeCategories:
-    - Usage
-    - Purchase
-    - Tax
-    - Credit
-    - Adjustment
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
   chargeFrequency: Recurring
 focusColumns:
   ServiceName: BNSF
@@ -89,97 +86,129 @@ focusColumns:
   BillingCurrency: USD
   ChargeCategory: Usage
 meters:
-  - name: api_requests
-    description: Count of billable API requests
-    unit: request
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
-      - region
-      - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
-    unit: GB
-    aggregation: sum
-    dimensions:
-      - api
-      - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
+- name: api_requests
+  description: Count of billable API requests
+  unit: request
+  aggregation: sum
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+- name: data_egress
+  description: Bytes returned over the network in API responses
+  unit: GB
+  aggregation: sum
+  dimensions:
+  - api
+  - region
+  - consumer
+- name: compute_seconds
+  description: Server-side compute consumed by the request, where applicable
+  unit: second
+  aggregation: sum
+  dimensions:
+  - api
+  - endpoint
+  - tier
 apis:
-  - name: BNSF Tracing API
-    baseURL: ''
-    tags:
-      - Freight
-      - Railroad
-      - Tracking
-      - Tracing
-      - Shipping
-    serviceName: BNSF Tracing API
-    serviceCategory: API
-  - name: BNSF Hub Operations API
-    baseURL: ''
-    tags:
-      - Freight
-      - Intermodal
-      - Hub
-      - Logistics
-      - Operations
-    serviceName: BNSF Hub Operations API
-    serviceCategory: API
-  - name: BNSF Pricing & Rates API
-    baseURL: ''
-    tags:
-      - Freight
-      - Pricing
-      - Rates
-      - Shipping
-    serviceName: BNSF Pricing & Rates API
-    serviceCategory: API
-  - name: BNSF Schedules API
-    baseURL: ''
-    tags:
-      - Freight
-      - Schedules
-      - Transit
-      - Intermodal
-    serviceName: BNSF Schedules API
-    serviceCategory: API
-  - name: BNSF Waybill Management API
-    baseURL: ''
-    tags:
-      - Freight
-      - Waybill
-      - Documentation
-      - Carload
-    serviceName: BNSF Waybill Management API
-    serviceCategory: API
-  - name: BNSF Reference Files API
-    baseURL: ''
-    tags:
-      - Freight
-      - Reference
-      - Data
-      - STCC
-      - Stations
-    serviceName: BNSF Reference Files API
-    serviceCategory: API
+- name: BNSF Tracing API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Railroad
+  - Tracking
+  - Tracing
+  - Shipping
+  - Intermodal
+  serviceName: BNSF Tracing API
+  serviceCategory: API
+- name: BNSF Intermodal Hub Operations API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Intermodal
+  - Hub
+  - Logistics
+  - Gate Operations
+  - Drayage
+  serviceName: BNSF Intermodal Hub Operations API
+  serviceCategory: API
+- name: BNSF Automotive Hub Operations API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Automotive
+  - Hub
+  - Gate Operations
+  - VIN
+  - Logistics
+  serviceName: BNSF Automotive Hub Operations API
+  serviceCategory: API
+- name: BNSF Prices and Rates API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Pricing
+  - Rates
+  - Invoices
+  - Shipping
+  - STCC
+  serviceName: BNSF Prices and Rates API
+  serviceCategory: API
+- name: BNSF Schedules API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Schedules
+  - Transit
+  - Intermodal
+  serviceName: BNSF Schedules API
+  serviceCategory: API
+- name: BNSF Waybill Management API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Waybill
+  - Bill of Lading
+  - Carload
+  - EDI
+  - Documentation
+  serviceName: BNSF Waybill Management API
+  serviceCategory: API
+- name: BNSF Reference Files API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Freight
+  - Reference
+  - Data
+  - STCC
+  - Stations
+  - Umler
+  - Hazardous Materials
+  serviceName: BNSF Reference Files API
+  serviceCategory: API
+- name: BNSF Diagnostics API
+  baseURL: https://api.bnsf.com:6443
+  tags:
+  - Diagnostics
+  - Health Check
+  - Monitoring
+  - Telemetry
+  serviceName: BNSF Diagnostics API
+  serviceCategory: API
 unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
-    target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
-    target: TBD
+- name: Cost per 1K Requests
+  metric: billed_cost / (api_requests / 1000)
+  target: TBD
+- name: Cost per Active Consumer
+  metric: billed_cost / active_consumers
+  target: TBD
 maintainers:
-  - FN: Kin Lane
-    email: kinlane@gmail.com
+- FN: Kin Lane
+  email: kinlane@gmail.com
+note: 'BNSF publishes no prices, no plans and no usage billing for the Customer API — see plans/bnsf-plans-pricing.yml
+  (plan_count: 0). This file remains a FOCUS-aligned framework scaffold for a consumer allocating its
+  own internal cost of integration; the meters and unit economics below are API Evangelist framework defaults,
+  not BNSF-published rates.'

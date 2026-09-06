@@ -1,0 +1,129 @@
+generated: '2026-09-06'
+method: derived
+source: components/responses and per-operation responses across the eight BNSF OpenAPI documents in openapi/,
+  enriched with the API Support FAQ at https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/
+format: none
+format_note: Not RFC 9457. No application/problem+json anywhere; no error response in any of the eight
+  documents declares a content schema. The status code and BNSF's prose description are the entire error
+  contract.
+error_body_schema_published: false
+only_documented_body_shape: '{"message": "Insufficient privileges"} — quoted inside the shared 403 description;
+  the only error body BNSF prints anywhere.'
+declared_codes: 9
+problem_types:
+- status: 400
+  title: Bad Request
+  operations_declaring_it: 59
+  provider_description: '**Bad Request**
+
+
+    The request could not be understood by the server due to incorrect syntax. Do not repeat the request
+    without modifications.'
+  remediation: Correct the request syntax or body before resending. BNSF states the request must not be
+    repeated without modification.
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 401
+  title: Unauthorized
+  operations_declaring_it: 0
+  provider_description: '**Unauthorized**
+
+
+    Indicates that the request requires user authentication information. The client MAY repeat the request
+    with a suitable Authorization.'
+  remediation: Present a valid client certificate. In practice the BNSF gateway answers an anonymous caller
+    with 403, not 401 — a 401 is declared in the specs but was not observed.
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 403
+  title: Forbidden
+  operations_declaring_it: 59
+  provider_description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting\
+    \ 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When\
+    \ set up is complete, you will receive an email letting you know. If you have not received the email,\
+    \ please wait up to five business days. Let us know via API Support if you still have not received\
+    \ the email after five business days.\n   * You can also get this error if your certificate is not\
+    \ configured properly on your side. Please review the Mutual Authentication in the Getting Started\
+    \ section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\"\
+    \ when accessing a restricted service for which you do not have permission. You can use our Registration\
+    \ form to request access. Be sure to explain the situation in the \"Please explain how you intend\
+    \ to use the API\" field."
+  remediation: 'Two distinct causes share this code. If registration is still being configured, wait up
+    to five business days for the confirmation email. If the certificate is misconfigured, re-check it
+    against the Getting Started certificate requirements. If the body says "Insufficient privileges",
+    the operation is a Restricted Service and access must be requested through the Customer Portal Message
+    Us box (Reason: API, Sub Reason: Restricted Services).'
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 404
+  title: Not Found
+  operations_declaring_it: 59
+  provider_description: '**Not Found**
+
+
+    The server cannot find the requested resource (URI). That is, the address of the endpoint in your
+    request does not exist. Please consult the documentation.'
+  remediation: The endpoint path does not exist. Check the path and its version segment against the Developer's
+    Console.
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 405
+  title: Method Not Allowed
+  operations_declaring_it: 59
+  provider_description: '**Method Not Allowed**
+
+
+    The request HTTP method is known by the server but has been disabled and cannot be used for that resource.
+    For example, you may be using GET when POST is required. Please consult the documentation.'
+  remediation: The HTTP method is disabled for this resource — several BNSF resources expose only POST
+    where a GET would be expected (POST /v1/umler, POST /v1/invoices, POST /v1/carload-rates).
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 413
+  title: Payload Too Large
+  operations_declaring_it: 4
+  provider_description: Declared on individual operations only; no shared components/responses entry.
+  remediation: Reduce the size of the request payload. Declared on the bulk-submission operations.
+  retryable: false
+  safe_to_retry_blindly: null
+- status: 429
+  title: Too Many Requests
+  operations_declaring_it: 59
+  provider_description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain\
+    \ application security and performance.  Current rate limits are set as follows:\n* 1 API Request\
+    \ Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n*\
+    \ 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will\
+    \ return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit\
+    \ failed requests in a rate-limited manner, complying with the API Gateway throttle limits."
+  remediation: 'Back off and resubmit within the published gateway throttles: 1 request/second and 15
+    requests/minute per partner per service, 100 requests/minute per service. No Retry-After header is
+    returned, so the client picks the interval.'
+  retryable: true
+  safe_to_retry_blindly: false
+- status: 500
+  title: Internal Server Error
+  operations_declaring_it: 59
+  provider_description: '**Internal Server Error**
+
+
+    The server encountered an unexpected condition which prevented it from fulfilling the request. This
+    is always a problem on the server side. Our internal support systems will be made aware.'
+  remediation: A BNSF-side fault. BNSF states its internal support systems are notified automatically.
+  retryable: true
+  safe_to_retry_blindly: false
+- status: 504
+  title: Gateway Timeout
+  operations_declaring_it: 59
+  provider_description: '**Gateway Timeout**
+
+
+    The server is acting as a gateway and cannot get a response in time for a request. Wait about one
+    minute then try again.'
+  remediation: Wait about one minute, then retry. Note that BNSF publishes no idempotency mechanism, so
+    retrying a mutating operation after a 504 risks a duplicate.
+  retryable: true
+  safe_to_retry_blindly: false
+note: Every status here is declared by BNSF itself. 400/403/404/405/429/500/504 appear on all 59 operations;
+  413 appears on 4 bulk-submission operations; 401 is defined in components/responses but referenced by
+  no operation. safe_to_retry_blindly is false even for the retryable codes because no operation on this
+  surface has an idempotency key.

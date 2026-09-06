@@ -1,0 +1,1120 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "description": "",
+    "termsOfService": "http://www.bnsf.com/site-terms-of-use.html",
+    "contact": {
+      "name": "BNSF Customer API",
+      "email": "CustomerAPI@bnsf.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bnsf.com:6443"
+    }
+  ],
+  "paths": {
+    "/v1/event-codes": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Event Codes - returns a list of event codes and their descriptions, which describe equipment activity.",
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tripPlan"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/stations": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Stations - Returns details of each station matching input criteria.",
+        "description": "One of these parameters is required.",
+        "parameters": [
+          {
+            "name": "scac",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "BNSF"
+            },
+            "example": "BNSF"
+          },
+          {
+            "name": "stationName",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "HOUSTON"
+            },
+            "example": "Parkwater"
+          },
+          {
+            "name": "station333",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "HOUSTON"
+            },
+            "example": "PARKWTR"
+          },
+          {
+            "name": "stationState",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "TX"
+            },
+            "example": "WA"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/station"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/stcc": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "STCC -  Returns STCC numbers and descriptions matching input criteria.",
+        "parameters": [
+          {
+            "name": "stcc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "BNSF"
+            },
+            "example": "01"
+          },
+          {
+            "name": "commodityDescription",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "HOUSTON"
+            },
+            "example": "wheat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/stcc"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/stcc/hazardous": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "STCC - Hazardous - Returns detailed information on hazardous materials matching input criteria.",
+        "parameters": [
+          {
+            "name": "stcc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "BNSF"
+            },
+            "example": "48"
+          },
+          {
+            "name": "hazardousCommodityProperShippingName",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "HOUSTON"
+            },
+            "example": "WASTE ETHYLENE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/hazardousCommodities"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/umler": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Umler - The Umler service returns internal and external dimensions, capacities, weight information, and other specific characteristics of freight cars and intermodal trailers and containers.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/requestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/umler"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request**\n\nThe request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications."
+          },
+          "403": {
+            "description": "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+          },
+          "404": {
+            "description": "**Not Found**\n\nThe server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation."
+          },
+          "405": {
+            "description": "**Method Not Allowed**\n\nThe request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation."
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "description": "**Internal Server Error**\n\nThe server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware."
+          },
+          "504": {
+            "description": "**Gateway Timeout**\n\nThe server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "station": {
+        "type": "array",
+        "title": "Station",
+        "items": {
+          "type": "object",
+          "required": [
+            "scac",
+            "fsac",
+            "splc",
+            "railincRegisteredStationIndicator",
+            "stationName",
+            "station333",
+            "stationStateCode",
+            "railincStation333",
+            "r260JunctionCode",
+            "stationSixCharacterAbbreviation",
+            "stationThreeCharacterAbbreviation",
+            "stationTwoCharacterAbbreviation",
+            "stationTimeZoneCode",
+            "crewTimeReportingTimeZoneCode",
+            "stationTssTimeZoneCode",
+            "stationObservesDaylightSavingTimeIndicator",
+            "opslStationNumber",
+            "opslStationSubNumber",
+            "opslStationName",
+            "stationLatitude",
+            "stationLongitude",
+            "systemBlockNumber",
+            "stationCarhireReloadAbbreviation",
+            "stationCustomsInspectionRequiredIndicator",
+            "grainInspectionRequiredIndicator",
+            "stationAutomotiveRampTypeCode",
+            "stationTssRampTypeCode",
+            "stationMaximumGrossWeightPounds",
+            "stationOperatingPlateCode",
+            "stationLocomotiveFuelingTypeCode",
+            "stationImportExportTypeCode",
+            "stationTrainClassificationServiceLevelCode",
+            "fipsCountyCode",
+            "usbeaRegionCode",
+            "usbeaCountyName",
+            "stationReportingScac",
+            "payrollTripTicketPrefixCode",
+            "updateDatetime",
+            "componentEconomicAreaCode",
+            "stationScacInternationalCarrierIndicator",
+            "stationOnsiteScaleIndicator",
+            "stationOnsiteCleaningFacilitiesIndicator",
+            "stationTrafficTypeCode",
+            "stationMechanicalRegionCode",
+            "stationMechanicalZoneName",
+            "stationEmbargoIndicator"
+          ],
+          "properties": {
+            "scac": {
+              "type": "string",
+              "title": "SCAC",
+              "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+              "example": "BNSF"
+            },
+            "fsac": {
+              "type": "string",
+              "title": "FSAC",
+              "description": "FSAC (Freight Station Accounting Code) is a number assigned to a station that uniquely identifies the station within the context of each reporting railroad (i.e., Different railroads might share identical FSAC numbers).",
+              "example": "1234"
+            },
+            "splc": {
+              "type": "string",
+              "title": "SPLC",
+              "description": "SPLC (Standard Point Location Code) is a six-to-nine digit geographic code used by North American transportation industries, which serves as the official code assigned to a city or point (for rate making purposes) within a city.",
+              "example": "1234"
+            },
+            "railincRegisteredStationIndicator": {
+              "type": "string",
+              "title": "Railinc Registered Station Indicator",
+              "description": "Indicates is the associated Station is registered with Railinc.",
+              "example": "Y"
+            },
+            "stationName": {
+              "type": "string",
+              "title": "Station Name",
+              "description": "Name of a station. This may or may not be the fully spelled name of the station but it is NOT the standard 333 abbreviated name.",
+              "example": "PARKWATER"
+            },
+            "station333": {
+              "type": "string",
+              "title": "Station 333",
+              "description": "Name of a City, where a Station is located, which has been abbreviated from the City's Full Name through the use of a standardized programmatic algorithm.",
+              "example": "PRKWTR"
+            },
+            "stationStateCode": {
+              "type": "string",
+              "title": "Station State Code",
+              "description": "Station State Code is a code value, as defined by the appropriate government agency of the United States, Canada, or Mexico, specifying the state or province of a station.",
+              "example": "WA"
+            },
+            "railincStation333": {
+              "type": "string",
+              "title": "Railinc Station 333",
+              "description": "333 Abbreviated name for the city where a station is located as defined by Railinc and not by BNSF.  See also Station 333.",
+              "example": "PARKWTR"
+            },
+            "r260JunctionCode": {
+              "type": "string",
+              "title": "R260 Junction Code",
+              "description": "R260 Junction Code is a code value (as specified by AAR Accounting Rule 260) which specifies a junction where two rail carriers interchange shipments.",
+              "example": "PRKWT"
+            },
+            "stationSixCharacterAbbreviation": {
+              "type": "string",
+              "title": "Station Six Character Abbreviation",
+              "description": "Six character abbreviation for a BNSF, MRL (Montana Rail Line), or LAJ (Los Angeles Junction Railway) Station.  Internal value assigned at BNSF.",
+              "example": "PRKWAT"
+            },
+            "stationThreeCharacterAbbreviation": {
+              "type": "string",
+              "title": "Station Three Character Abbreviation",
+              "description": "Three character abbreviation for a BNSF, MRL (Montana Rail Line), or LAJ (Los Angeles Junction Railway) Station.  Internal value assigned at BNSF.",
+              "example": "PAT"
+            },
+            "stationTwoCharacterAbbreviation": {
+              "type": "string",
+              "title": "Station Two Character Abbreviation",
+              "description": "Two character abbreviation for a BNSF, MRL (Montana Rail Line), or LAJ (Los Angeles Junction Railway) Station.  Internal value assigned at BNSF.",
+              "example": "PA"
+            },
+            "stationTimeZoneCode": {
+              "type": "string",
+              "title": "Station Time Zone Code",
+              "description": "Code that defines the time zone where a station is physically located.",
+              "example": "C"
+            },
+            "crewTimeReportingTimeZoneCode": {
+              "type": "string",
+              "title": "Crew Time Reporting Time Zone Code",
+              "description": "Code that defines the time zone where the crew reports time when working at a given station. This value may or may not be the same as the time zone of the station itself.",
+              "example": "C"
+            },
+            "stationTssTimeZoneCode": {
+              "type": "string",
+              "title": "Station TSS Time Zone Code",
+              "description": "Code that defines the time zone for a station as recorded within BNSF's TSS (Transportation Support System) application.",
+              "example": "C"
+            },
+            "stationObservesDaylightSavingTimeIndicator": {
+              "type": "string",
+              "title": "Station Observes Daylight Saving Time Indicator",
+              "description": "Indicates whether or not the station observed Daylight Savings Time.",
+              "example": "Y"
+            },
+            "opslStationNumber": {
+              "type": "string",
+              "title": "OPSL Station Number",
+              "description": "The OPSL (Open and Prepay Station List) number assigned to a Railroad Station. Value is generated and maintained by the Business Services Division of Railinc.",
+              "example": "3165"
+            },
+            "opslStationSubNumber": {
+              "type": "string",
+              "title": "OPSL Station Sub Number",
+              "description": "Sub-number assigned to further define the Station as recorded within the OPSL (Open and Prepay Station List). This list is maintained at the Industry level for all Registered Stations.",
+              "example": "00"
+            },
+            "opslStationName": {
+              "type": "string",
+              "title": "OPSL Station Name",
+              "description": "Name of the Station as recorded on the OPSL (Open and Prepay Station List) from which the Station information was recorded.",
+              "example": "PARKWATER"
+            },
+            "stationLatitude": {
+              "type": "number",
+              "format": "float",
+              "title": "Station Latitude",
+              "description": "The latitude, distance north or south of the equator as measured in degrees, where the Station is physically located.",
+              "example": "39.762026"
+            },
+            "stationLongitude": {
+              "type": "number",
+              "format": "float",
+              "title": "Station Longitude",
+              "description": "The latitude, distance east or west of the prime meridian as measured in degrees, where the Station is physically located.",
+              "example": "-104.995627"
+            },
+            "systemBlockNumber": {
+              "type": "string",
+              "title": "System Block Number",
+              "description": "System block identifying the general geographic area of the railroad assigned by the systems operations center. System block is defined as a group of stations.",
+              "example": "14210"
+            },
+            "stationCarhireReloadAbbreviation": {
+              "type": "string",
+              "title": "Station Carhire Reload Abbreviation",
+              "description": "Abbreviation referring to 'Carhire Reload Station' as defined by Railinc. This abbreviation is a 5 positions alpha value.",
+              "example": "IRVIN"
+            },
+            "stationCustomsInspectionRequiredIndicator": {
+              "type": "string",
+              "title": "Station Customs Inspection Required Indicator",
+              "description": "Indicates whether or not U.S. Customs is required to  perform an inspection of cars and intermodal equipment for customs clearance at the associated station. ",
+              "example": "N"
+            },
+            "grainInspectionRequiredIndicator": {
+              "type": "string",
+              "title": "Grain Inspection Required Indicator",
+              "description": "Indicates whether or not a recognized grain inspection authority is required to perform an inspection of grain.",
+              "example": "N"
+            },
+            "stationAutomotiveRampTypeCode": {
+              "type": "string",
+              "title": "Station Automotive Ramp Type Code",
+              "description": "Code that defines the type of Automotive Ramp located at the associated Station.",
+              "example": "F"
+            },
+            "stationTssRampTypeCode": {
+              "type": "string",
+              "title": "Station TSS Ramp Type Code",
+              "description": "Code that defines the type of Ramp, as recorded within TSS (Transportation Support System), located at the associated Station.",
+              "example": "C"
+            },
+            "stationMaximumGrossWeightPounds": {
+              "type": "number",
+              "format": "float",
+              "title": "Station Maximum Gross Weight Pounds",
+              "description": "The maximum gross weight, measured in pounds, that can be handled on rail at this station location.",
+              "example": "263000"
+            },
+            "stationOperatingPlateCode": {
+              "type": "string",
+              "title": "Station Operating Plate Code",
+              "description": "The maximum Plate Size (car dimensions) that can be handled at this location.  ",
+              "example": "C"
+            },
+            "stationLocomotiveFuelingTypeCode": {
+              "type": "string",
+              "title": "Station Locomotive Fueling Type Code",
+              "description": "Code that defines the types of fueling available at this station for a locomotive.",
+              "example": "F"
+            },
+            "stationImportExportTypeCode": {
+              "type": "string",
+              "title": "Station Import Export Type Code",
+              "description": "Code that defines the type of imports and/or exports that are handled at the associated station.",
+              "example": "E"
+            },
+            "stationTrainClassificationServiceLevelCode": {
+              "type": "string",
+              "title": "Station Train Classification Service Level Code",
+              "description": "Code indicating the station's class/service level for train service.",
+              "example": "3"
+            },
+            "fipsCountyCode": {
+              "type": "string",
+              "title": "FIPS County Code",
+              "description": "Federal Information Processing Standard (FIPS) code for the County of the location as determined by the Bureau of Economic Analysis of the U.S. Department of Commerce.",
+              "example": "53063"
+            },
+            "usbeaRegionCode": {
+              "type": "string",
+              "title": "USBEA Region Code",
+              "description": "Bureau of Economic Analysis assigned code defining geographic regional economic areas.",
+              "example": "B"
+            },
+            "usbeaCountyName": {
+              "type": "string",
+              "title": "USBEA County Name",
+              "description": "Bureau of Economic Analysis Name value which corresponds to the FIPS County code.",
+              "example": "SPOKANE, WA"
+            },
+            "legacyStationId": {
+              "type": "string",
+              "title": "Legacy Station ID",
+              "description": "Internal Station Randomly Generated Key field used in the Legacy Mainframe.  Not needed in the new Station Hub.",
+              "example": "302227791"
+            },
+            "stationReportingScac": {
+              "type": "string",
+              "title": "Station Reporting SCAC",
+              "description": "The SCAC (Standard Carrier Alpha Code) of the carrier that reported/registered this Station at Railinc.",
+              "example": "BNSF"
+            },
+            "payrollTripTicketPrefixCode": {
+              "type": "string",
+              "title": "Payroll Trip Ticket Prefix Code",
+              "description": "Code indicating the prefix for a payroll trip ticket. A payroll trip ticket is when the trip ticket has been approved for payment.",
+              "example": "KS"
+            },
+            "updateDatetime": {
+              "type": "string",
+              "title": "Update DateTime",
+              "description": "The UTC* Date and Time** when a business process persists (saves) modification of business data.",
+              "example": "2/1/2020  11:56:45 AM"
+            },
+            "componentEconomicAreaCode": {
+              "type": "string",
+              "title": "Component Economic Area Code",
+              "description": "Component Economic Area Code in which the county specified in the FIPS County Code belongs.",
+              "example": "7840"
+            },
+            "stationScacInternationalCarrierIndicator": {
+              "type": "string",
+              "title": "Station SCAC International Carrier Indicator",
+              "description": "Indicates whether or not the Station's SCAC is an international carrier.",
+              "example": "N"
+            },
+            "stationOnsiteScaleIndicator": {
+              "type": "string",
+              "title": "Station Onsite Scale Indicator",
+              "description": "Indicates whether or not this station has a scale onsite.",
+              "example": "Y"
+            },
+            "stationOnsiteCleaningFacilitiesIndicator": {
+              "type": "string",
+              "title": "Station Onsite Cleaning Facilities Indicator",
+              "description": "Indicates whether or not this station has cleaning facilities onsite.",
+              "example": "N"
+            },
+            "stationTrafficTypeCode": {
+              "type": "string",
+              "title": "Station Traffic Type Code",
+              "description": "Code that defines the type of traffic that can be handled at this Station.",
+              "example": "P"
+            },
+            "stationMechanicalRegionCode": {
+              "type": "string",
+              "title": "Station Mechanical Region Code",
+              "description": "The mechanical region, within the BNSF network, where the associated station is located. Note: These may differ than the Business/Marketing Regions.",
+              "example": "2"
+            },
+            "stationMechanicalZoneName": {
+              "type": "string",
+              "title": "Station Mechanical Region Code",
+              "description": "The mechanical zone, with a mechanical region, where the associated station is located.",
+              "example": "2"
+            },
+            "stationComment": {
+              "type": "string",
+              "title": "Station Comment",
+              "description": "Any comment found related to a Station.",
+              "example": "Sending to Railinc as a new Add"
+            },
+            "stationEmbargoIndicator": {
+              "type": "string",
+              "title": "Station Embargo Indicator",
+              "description": "Indicates whether or not this station has any Embargos applied to it.",
+              "example": "N"
+            }
+          },
+          "nullable": false
+        },
+        "nullable": false
+      },
+      "stcc": {
+        "type": "array",
+        "title": "stcc",
+        "items": {
+          "type": "object",
+          "required": [
+            "stcc",
+            "commodityDescription",
+            "commodityDescriptionAbbreviation"
+          ],
+          "properties": {
+            "stcc": {
+              "type": "string",
+              "title": "stcc",
+              "description": "STCC (Standard Transportation Commodity Code) number identifying a Commodity.",
+              "example": "0113710"
+            },
+            "commodityDescription": {
+              "type": "string",
+              "title": "commodityDescription",
+              "description": "The description of the commodity.",
+              "example": "WHEAT"
+            },
+            "commodityDescriptionAbbreviation": {
+              "type": "string",
+              "title": "commodityDescriptionAbbreviation",
+              "description": "A short description of the commodity.",
+              "example": "WHEAT"
+            }
+          },
+          "nullable": false
+        },
+        "nullable": false
+      },
+      "hazardousCommodities": {
+        "type": "array",
+        "title": "Hazardous Commodities",
+        "items": {
+          "type": "object",
+          "title": "Hazardous Commodity",
+          "required": [
+            "stcc",
+            "commodityRegulatoryAuthorityCode",
+            "hazardousCommodityProperShippingNameSequenceNumber"
+          ],
+          "properties": {
+            "stcc": {
+              "type": "string",
+              "title": "STCC",
+              "description": "STCC (Standard Transportation Commodity Code) number identifying a Commodity.",
+              "example": "4809195"
+            },
+            "commodityRegulatoryAuthorityCode": {
+              "type": "string",
+              "title": "Commodity Regulatory Authority Code",
+              "description": "Code that defines the authority body(s) defining the regulatory  requirements for a commodity.",
+              "example": "N"
+            },
+            "hazardousCommodityProperShippingNameSequenceNumber": {
+              "type": "string",
+              "title": "Hazardous Commodity Proper Shipping Name Sequence Number",
+              "description": "The order to be applied to the Proper Shipping Name(s) for a hazardous commodity.",
+              "example": "1"
+            },
+            "unnaNumber": {
+              "type": "string",
+              "title": "UNNA Number",
+              "description": "A number assigned to identify or classify a hazardous commodity/material as assigned by the UN (United Nations) or NA (North American/US DOT), required in commerce and transportation.",
+              "example": "UN1952"
+            },
+            "hazardousCommodityClassificationCode": {
+              "type": "string",
+              "title": "Hazardous Commodity Classification Code",
+              "description": "Code indicating the classification applied to a hazardous commodity. May include Canadian, United States, and international codes depending on the data storage file and the type of shipments.",
+              "example": "2.2"
+            },
+            "hazardousCommoditySecondaryClassificationCode": {
+              "type": "string",
+              "title": "Hazardous Commodity Secondary Classification Code",
+              "description": "Code indicating the secondary classification applied to a hazardous commodity. May include Canadian, United States, and international codes depending on the data storage file and the type of shipments.",
+              "example": "7"
+            },
+            "canadianHazardousCommoditySubsidiaryClassification1": {
+              "type": "string",
+              "title": "Canadian Hazardous Commodity Subsidiary Classification 1",
+              "description": "The first, primary, Canadian Hazardous Commodity Subsidiary Classification associated with a given material being shipped.",
+              "example": "5.1"
+            },
+            "canadianHazardousCommoditySubsidiaryClassification2": {
+              "type": "string",
+              "title": "Canadian Hazardous Commodity Subsidiary Classification 2",
+              "description": "The second, secondary, Canadian Hazardous Commodity Subsidiary Classification associated with a given material being shipped.",
+              "example": "8"
+            },
+            "canadianHazardousCommoditySubsidiaryClassification3": {
+              "type": "string",
+              "title": "Canadian Hazardous Commodity Subsidiary Classification 3",
+              "description": "The third possible Canadian Hazardous Commodity Subsidiary Classification associated with a given material being shipped.",
+              "example": "8"
+            },
+            "commodityPackagingGroupCode1": {
+              "type": "string",
+              "title": "Commodity Packaging Group Code 1",
+              "description": "Code which designates the first of up to three, Canadian or International, Packaging Groups assigned to a commodity.",
+              "example": "A"
+            },
+            "commodityPackagingGroupCode2": {
+              "type": "string",
+              "title": "Commodity Packaging Group Code 2",
+              "description": "Code which designates the second of up to three, Canadian or International, Packaging Groups assigned to a commodity.",
+              "example": "1"
+            },
+            "commodityPackagingGroupCode3": {
+              "type": "string",
+              "title": "Commodity Packaging Group Code 3",
+              "description": "Code which designates the third of up to three, Canadian or International, Packaging Groups assigned to a commodity.",
+              "example": "2"
+            },
+            "hazardousCommodityProperShippingName": {
+              "type": "string",
+              "title": "Hazardous Commodity Proper Shipping Name",
+              "description": "The full Proper Shipping Name assigned to a Hazardous Commodities as required by US, Canadian, and International Regulations.",
+              "example": "WASTE ETHYLENE OXIDE AND CARBON DIOXIDE MIXTURES"
+            },
+            "hazardousCommodityProperShippingAugmentationRequiredIndicator": {
+              "type": "string",
+              "title": "Hazardous Commodity Proper Shipping Augmentation Required Indicator",
+              "description": "Indicates if Hazardous Commodity Proper Shipping Name(s) should be augmented with a Technical Name.",
+              "example": "Y"
+            },
+            "hazardousSubstanceComponentDescription": {
+              "type": "string",
+              "title": "Hazardous Substance Component Description",
+              "description": "Description of an element, or compound, associated with a hazardous substance.",
+              "example": "NICKLE POWDER"
+            },
+            "hazardousCommodityToxicityTypeCode": {
+              "type": "string",
+              "title": "Hazardous Commodity Toxicity Type Code",
+              "description": "Code that defines the specific toxicity related statement required to be attached to the shipping papers when transporting a hazardous commodity.",
+              "example": "P"
+            },
+            "primaryHazardousPlacardCode": {
+              "type": "string",
+              "title": "Primary Hazardous Placard Code",
+              "description": "The primary code, as defined by the US DOT or Canada, to be assigned to the hazardous placard when transporting/shipping hazardous materials.",
+              "example": "FL"
+            },
+            "secondaryHazardousPlacardCode": {
+              "type": "string",
+              "title": "Secondary Hazardous Placard Code",
+              "description": "The secondary code, as defined by the US DOT or Canada, to be assigned to the hazardous placard when transporting/shipping hazardous materials.",
+              "example": "CP"
+            },
+            "canadianSpecialCommodityStatementCode": {
+              "type": "string",
+              "title": "Canadian Special Commodity Statement Code",
+              "description": "Code that defines, per Canadian Regulations, what statement related to a special commodity are required to be included on the shipping papers.",
+              "example": "A"
+            },
+            "canadianEmergencyResponsePlanRequiredCode": {
+              "type": "string",
+              "title": "Canadian Emergency Response Plan Required Code",
+              "description": "Code that defines what, if any, Emergency Response Assistance Plan (ERAP) reference number and telephone number are required to appear on the shipping paper.",
+              "example": "E"
+            },
+            "hazardousCommodityUsdotInhalationHazardZoneCode": {
+              "type": "string",
+              "title": "Hazardous Commodity USDOT Inhalation Hazard Zone Code",
+              "description": "Code, assigned by the US DOT, that specifies any hazardous zone information that is required to be part of the shipping papers when transporting hazardous commodities that are considered to be poisonous by inhalation.",
+              "example": "B"
+            },
+            "combustibleHazardousCommodityIndicator": {
+              "type": "string",
+              "title": "Combustible Hazardous Commodity Indicator",
+              "description": "Code that defines if the associated commodity is considered to be combustible (Class 3 Commodities include items that are made of natural fibers including paper products or products made of wood).",
+              "example": "C"
+            },
+            "marinePollutantComponentDescription": {
+              "type": "string",
+              "title": "Marine Pollutant Component Description",
+              "description": "Description of the component in a hazardous material shipment that makes it a marine pollutant.",
+              "example": "TETRAETHYL LEAD CARBON TETRACHLORIDE"
+            }
+          },
+          "nullable": false
+        },
+        "nullable": false
+      },
+      "umler": {
+        "type": "array",
+        "title": "UMLER",
+        "items": {
+          "type": "object",
+          "required": [
+            "equipmentInitial",
+            "equipmentNumber"
+          ],
+          "properties": {
+            "equipmentInitial": {
+              "type": "string",
+              "title": "Equipment Initial",
+              "description": "Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.",
+              "example": "BNSF"
+            },
+            "equipmentNumber": {
+              "type": "string",
+              "title": "Equipment Number",
+              "description": "Equipment Number is the sequencing or serial part of an equipment units identifying number.",
+              "example": "12345"
+            },
+            "equipmentGroupCode": {
+              "type": "string",
+              "title": "Equipment Group Code",
+              "description": "Code that defines the logical grouping of equipment into major car types.",
+              "example": "CHSS (Chassis)"
+            },
+            "equipmentDraftGearTypeCode": {
+              "type": "string",
+              "title": "Equipment Draft Gear Type Code",
+              "description": "A code that defines the type of equipment that connects the couplings to the rolling stock, known as the draft gear or draw gear.\nRailinc Element ID B073. Umler Element EQMVCPDS",
+              "example": "C"
+            },
+            "grossRailWeightPounds": {
+              "type": "number",
+              "format": "float",
+              "title": "Gross Rail Weight Pounds",
+              "description": "The maximum permissible weight on rail of the equipment and the load, reported in pounds.",
+              "example": 287400
+            },
+            "shipmentLoadLimitPounds": {
+              "type": "number",
+              "format": "float",
+              "title": "Shipment Load Limit Pounds",
+              "description": "The number of pounds a shipment is allowed to weigh, the load limit, in order to allow it to be safely moved over rail.",
+              "example": "144900"
+            },
+            "equipmentTareWeightPounds": {
+              "type": "number",
+              "format": "float",
+              "title": "Equipment Tare Weight Pounds",
+              "description": "Equipment Tare Weight is the weight of an empty rail shipping container or vehicle measured in pounds. Sometimes called the unladen weight.",
+              "example": 142500
+            },
+            "equipmentExternalLengthInches": {
+              "type": "number",
+              "format": "float",
+              "title": "Equipment External Length Inches",
+              "description": "The external length, measured in inches, of a piece of equipment.",
+              "example": 1020
+            },
+            "equipmentTruckSideBearingTypeCode": {
+              "type": "string",
+              "title": "Equipment Truck Side Bearing Type Code",
+              "description": "Code that defines the type of constant contact bearing located on the equipment's truck side. These bearings are used to stabilize equipment on curves and in high-speed service. \nRailinc Element ID A146",
+              "example": "LC (Long Travel Constant Contact)"
+            },
+            "equipmentSpeedRestrictionLoadEmptyStatusCode": {
+              "type": "string",
+              "title": "Equipment Speed Restriction Load Empty Status Code",
+              "description": "Code that defines that a speed restriction related to the loaded or empty status applies to a piece of BNSF equipment.",
+              "example": "L (Loaded)"
+            },
+            "equipmentSpeedRestrictionCode": {
+              "type": "string",
+              "title": "Equipment Speed Restriction Code",
+              "description": "Code that defines a speed restriction, in MPH (miles per hour), that applies to rail or rail equipment.",
+              "example": "15 (15 MPH)"
+            },
+            "specialConditionHandlingInstructionsCodeOne": {
+              "type": "string",
+              "title": "Special Condition Handling Instructions Code One",
+              "example": "RE"
+            },
+            "specialConditionHandlingInstructionsCodeTwo": {
+              "type": "string",
+              "title": "Special Condition Handling Instructions Code Two",
+              "description": "The second set of instructions, conditions, or handling requirements for a shipment that help ensure that trains are built properly, safe movement occurs, shipments are held (e.g., clearance, customs, etc.), and awareness can be brought to any special handling needs.",
+              "example": "DK"
+            },
+            "specialConditionHandlingInstructionsCodeThree": {
+              "type": "string",
+              "title": "Special Condition Handling Instructions Code Three",
+              "description": "The third set of instructions, conditions, or handling requirements for a shipment that help ensure that trains are built properly, safe movement occurs, shipments are held (e.g., clearance, customs, etc.), and awareness can be brought to any special handling needs.",
+              "example": "HV"
+            },
+            "specialConditionHandlingInstructionsCodeFour": {
+              "type": "string",
+              "title": "Special Condition Handling Instructions Code Four",
+              "description": "The fourth set of instructions, conditions, or handling requirements for a shipment that help ensure that trains are built properly, safe movement occurs, shipments are held (e.g., clearance, customs, etc.), and awareness can be brought to any special handling needs.",
+              "example": "DH"
+            },
+            "bnsfCarKindName": {
+              "type": "string",
+              "title": "BNSF Car Kind Name",
+              "description": "Name given to physical characteristics for equipment as defined by BNSF Railway itself. Value is used when car characteristics are required for business decision making.",
+              "example": "UU2"
+            },
+            "bnsfPoolId": {
+              "type": "string",
+              "title": "BNSF Pool ID",
+              "description": "A four-digit code used by BNSF for a pool of cars assigned to a specific loading location.",
+              "example": "0000"
+            },
+            "bnsfPoolAlphabeticCode": {
+              "type": "string",
+              "title": "BNSF Pool Alphabetic Code",
+              "description": "An alphabetic code assigned to categorize a Pool of cars as assigned by BNSF.",
+              "example": "PSGR"
+            },
+            "equipmentAxleCount": {
+              "type": "number",
+              "format": "float",
+              "title": "Equipment Axle Count",
+              "description": "The total number of axles attached to a piece of equipment.",
+              "example": 4
+            },
+            "articulatedUnitAirBrakeControlValveCount": {
+              "type": "number",
+              "format": "float",
+              "title": "Articulated Unit Air Brake Control Valve Count",
+              "description": "The total number of operating air brake valves, excluding hand breaks, found on an articulated unit.\nRailinc Element ID A182.",
+              "example": 1
+            }
+          },
+          "nullable": false
+        },
+        "nullable": false
+      },
+      "tripPlan": {
+        "type": "object",
+        "title": "Event Code",
+        "properties": {
+          "jobStatus": {
+            "type": "integer",
+            "format": "int32",
+            "title": "jobStatus",
+            "minimum": 1,
+            "maximum": 4,
+            "example": "4"
+          },
+          "jobStatusDescription": {
+            "type": "string",
+            "title": "jobStatusDescription",
+            "description": "* 1: Job in queue\n* 2: Job is running\n* 3: The job has data available\n* 4: The job is complete",
+            "example": "Job is complete"
+          },
+          "resultSet": {
+            "type": "array",
+            "title": "resultSet",
+            "items": {
+              "type": "object",
+              "required": [
+                "equipmentLoadEmptyStatusCode",
+                "eventCode",
+                "eventDescription",
+                "eventStatusCode"
+              ],
+              "properties": {
+                "equipmentLoadEmptyStatusCode": {
+                  "type": "string",
+                  "title": "Equipment Status Code",
+                  "description": "L or E, this code describes whether the equipment is loaded or empty.",
+                  "example": "L"
+                },
+                "eventCode": {
+                  "type": "string",
+                  "title": "Event Code",
+                  "description": " Event Code indicates the event/activity abbreviation.",
+                  "example": "AD"
+                },
+                "eventDescription": {
+                  "type": "string",
+                  "title": "Event Description",
+                  "description": "Description for an Event Code used to define an event or activity occurring on the rail network.",
+                  "example": "Add Car"
+                },
+                "eventStatusCode": {
+                  "type": "string",
+                  "title": "Event Location Name",
+                  "description": "Event Status Code used with event code representing equipment activity. ",
+                  "example": "AD"
+                }
+              },
+              "nullable": false
+            },
+            "nullable": false
+          },
+          "rowCount": {
+            "type": "integer",
+            "format": "int32",
+            "title": "rowCount",
+            "example": "1"
+          }
+        },
+        "nullable": false
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "**Bad Request**\n\nThe request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications."
+      },
+      "401": {
+        "description": "**Unauthorized**\n\nIndicates that the request requires user authentication information. The client MAY repeat the request with a suitable Authorization."
+      },
+      "403": {
+        "description": "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+      },
+      "404": {
+        "description": "**Not Found**\n\nThe server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation."
+      },
+      "405": {
+        "description": "**Method Not Allowed**\n\nThe request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation."
+      },
+      "429": {
+        "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+      },
+      "500": {
+        "description": "**Internal Server Error**\n\nThe server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware."
+      },
+      "504": {
+        "description": "**Gateway Timeout**\n\nThe server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again."
+      }
+    },
+    "requestBodies": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "equipmentList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "equipmentId": {
+                        "type": "string",
+                        "example": "AEAX2011"
+                      },
+                      "equipmentSpeedRestrictionLoadEmptyStatusCode": {
+                        "type": "string",
+                        "example": "L"
+                      },
+                      "equipmentSpeedRestrictionCode": {
+                        "type": "string",
+                        "example": "E"
+                      }
+                    },
+                    "nullable": false
+                  },
+                  "nullable": false
+                }
+              },
+              "nullable": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

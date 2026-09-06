@@ -1,0 +1,65 @@
+generated: '2026-09-06'
+method: searched
+source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+description: >-
+  BNSF runs a named Trial environment on a separate host, reachable with the same client certificate
+  as Production. It is a real, provider-published test surface — not a mock — and it is where BNSF
+  tells new callers to make their first request.
+environments:
+- name: Trial
+  host: api-trial.bnsf.com
+  port: 6443
+  base_url: https://api-trial.bnsf.com:6443
+  default_for_new_callers: true
+  note: >-
+    Restricted Services are NOT available here. BNSF requires at least one unrestricted service to be
+    working in Trial before it will move a caller to Production.
+- name: Production
+  host: api.bnsf.com
+  port: 6443
+  base_url: https://api.bnsf.com:6443
+  default_for_new_callers: false
+credentials:
+  separate_test_keys: false
+  note: >-
+    There is no test-mode key and no key prefix scheme. The same registered client certificate
+    authenticates against both hosts; the environment is chosen by hostname alone. That means a
+    caller cannot tell Trial from Production by looking at its credential — only by the URL.
+first_request:
+  documented_by_provider: true
+  tool: Postman
+  steps:
+  - Configure a client certificate in Postman for host api-trial.bnsf.com, port 6443, supplying the
+    CRT and KEY files in PEM format, unencrypted. A passphrase is optional.
+  - Create a GET request to https://api-trial.bnsf.com:6443/v1/cars
+  - Add the header Content-Type: application/json
+  - Send.
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/
+health_check:
+  url: https://api-trial.bnsf.com:6443/healthcheck
+  expected_body: <status>OK</status>
+  observed_body: <status>ok</status>
+  observed_status: 200
+  observed_on: '2026-09-06'
+  anonymous: true
+  note: >-
+    The health check answered 200 anonymously on both api.bnsf.com and api-trial.bnsf.com when probed
+    on 2026-09-06 — it is the one operation on the surface reachable without a client certificate.
+    The provider documents the body as uppercase OK; the live body is lowercase ok.
+troubleshooting_published_by_provider:
+- Use port 6443 when connecting or downloading the certificate.
+- Certificates must be PEM format and unencrypted in Postman.
+- Run the health check and expect <status>OK</status>.
+- 'Verify the firewall path with: powershell Test-Netconnection -ComputerName "api-trial.bnsf.com" -Port 6443'
+test_data:
+  fixtures: none published
+  test_values: none published
+  time_simulation: none published
+  note: >-
+    BNSF publishes no test railcars, test VINs, test waybills or seeded fixtures. A Trial caller sees
+    the data its own certificate is entitled to — meaning a company not named on a waybill gets an
+    empty result in Trial exactly as it would in Production. There is nothing to rehearse a write
+    against, which is why the ingate/outgate validate operations in
+    conventions/bnsf-conventions.yml are the only rehearsal available.

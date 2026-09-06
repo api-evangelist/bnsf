@@ -1,0 +1,1574 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "description": "",
+    "termsOfService": "http://www.bnsf.com/site-terms-of-use.html",
+    "contact": {
+      "name": "BNSF Customer API",
+      "email": "CustomerAPI@bnsf.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bnsf.com:6443"
+    }
+  ],
+  "paths": {
+    "/v1/carload-rates": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Carload Rates - Returns a list of prices within a BNSF Carload Price Authority.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Post_Rates"
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/prices_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        },
+        "security": [
+          {
+            "Restricted": []
+          }
+        ]
+      }
+    },
+    "/v1/intermodal-rates": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Intermodal Rates - Returns a list of prices within a BNSF Intermodal Price Authority.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Post_Rates"
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/prices_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        },
+        "security": [
+          {
+            "Restricted": []
+          }
+        ]
+      }
+    },
+    "/v1/invoices": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "​Retrieve Open Invoices - Returns details of customer's open invoices for given Patron code of customer. Up to 5 Patron codes.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Post_Invoice"
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.\n\n**Note:** The response data is paginated, with 20 invoices displayed per page. You can find pagination details at the bottom of the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customerInvoice"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        },
+        "security": [
+          {
+            "Restricted": []
+          }
+        ]
+      }
+    },
+    "/v1/rail-miles": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Rail Mile Inquiry API – Mileage – Returns mileage for BNSF local and/or rule 11 shipments, up to 1000 at a time",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Post_oD_Pairs"
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.\n\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OD_Pairs_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Price_Authority": {
+        "type": "object",
+        "properties": {
+          "priceAuthority": {
+            "type": "object",
+            "required": [
+              "priceAuthorityGroups"
+            ],
+            "properties": {
+              "priceAuthorityOwnerIssuedName": {
+                "type": "string",
+                "description": "A name must be assigned by the Owner of a Price Authority which is combined with the Owner's ID, an Owner Issued Number, and an optional Owner Issued Item Number to help uniquely identify an official document (Authority) containing price(s) for shipment(s).  It may consist of any alpha numeric character string excluding special characters, which may be a minimum of one character and a maximum of ten characters in length; examples include:  BNSF, BNSFQ, QTYELLOW, C, CIRC, NSPQ, MA42MW, etc.\n",
+                "example": "BNSFQ (Carload) --OR-- QTTSSLC (Intermodal)"
+              },
+              "priceAuthorityNumber": {
+                "type": "number",
+                "format": "float",
+                "description": "A number can be assigned by the Owner of a Price Authority such that it can be combined with the Owner's ID, an Owner Issued Name, and an optional Owner Issued Item Number to help uniquely identify an official document (Authority) containing price(s) for shipment(s).  If the Owner does not wish to create a specific number, then the Owner must identify this number as 9999999999 (ten 9's) to indicate there is no specific Price Authority Owner Issued Number.  The only characters allowed in the number are zero (0) through nine (9) and one decimal point (if needed).  The number must not exceed ten (10) characters in length; a decimal point counts as a character.  The number of positions to the right of the decimal point must not exceed four (4) characters.\n",
+                "example": 105355
+              },
+              "priceAuthorityItemNumber": {
+                "type": "number",
+                "format": "float",
+                "description": "A number that Identifies an Owner Issued Item (or Implementing Agreement) which is used to identify a more granular reference to a given price when combined with the Owner ID, Owner Issued Name, and Owner Issued Number.  Marketing sometimes divides a given Price Authority into what might be referred to as sub-authorities which are identified by a given Owner Issued Item Number.  The only characters allowed in the number are zero (0) through nine (9) and one decimal point (if needed).  The number must not exceed ten (10) characters in length; a decimal point counts as a character.  The number of positions to the right of the decimal point must not exceed four (4) characters:  eg, '00123.4567' would be valid.  If a Price Authority does not actually have a item number, then the item number will be set to ' ' (Blank).\n",
+                "example": 100
+              },
+              "priceAuthorityRevisionNumber": {
+                "type": "string",
+                "description": "Identifies the Revision of a given Price Authority as it changes over time.  When a Pricing Authority is created, Marketing starts the revision numbering for it at 0 (zero), which indicates that the Pricing Authority is brand new (the first initial creation of it).  After the initial creation of the authority, the revision number is incremented by one each time Marketing decides and makes a revision to the Pricing Authority which is for external publication. This differs from a Pricing Authority internal only change where the Version Number is incremented alone and the Revision Number remains the same.  For example a PA currently set at Version Number #10 and the Revision Number still set as #5 indicates there have been more internal changes than external changes.  Revision Numbers begin the series at #0 (zero).\n",
+                "example": "29"
+              },
+              "priceAuthorityOwnerId": {
+                "type": "string",
+                "description": "A two to four character alpha abbreviation which identifies the Owner of a Price Authority.   An Owner ID is usually a SCAC (Standard Carrier Alpha Code) used to designate a transportation company. SCACs are assigned by the National Motor Freight Traffic Association (NMFTA).  Examples of a railroad SCAC include:  BNSF, NS, UP.  Sometimes, however, the Owner ID might be an abbreviation for a Tarrif Bureau.  Examples of a Tariff Bureau include:  WRTA = \"Western Railroad Traffic Association\", RPS = \"Railroad Publishing Services\".\n",
+                "example": "BNSF"
+              },
+              "priceAuthorityVersionNumber": {
+                "type": "number",
+                "format": "float",
+                "description": "Every time a Price Authority is to be changed by Marketing for Pricing, the Pricing Authority Version Number is incremented by one, no matter whether it is an internal or external (reported to a customer) change.  This differs from a Pricing Authority external change where the Version Number is incremented as well as the Revision Number.  For example a PA can be set at Version Number 10 and the Revision Number may not have changed from 5, because there have been more internal changes than external changes.  Version Numbers begin the series with a value of 1 (one).\n",
+                "example": 37
+              },
+              "priceAuthorityVersionId": {
+                "type": "number",
+                "format": "float",
+                "description": "The identifier of the Price Authority Version table. \n",
+                "example": 1411524
+              },
+              "priceAuthorityFileId": {
+                "type": "string",
+                "description": "An identification of the internal identifier (alpha numeric) assigned to a Price Authority generated from either the Legacy Rate Price Management System (RPMS) or from RAPID /Price Translator.  This internal identifier is a business term (Price Authority File ID) that is used and referenced by the Marketing Department as well as other business areas.\n",
+                "example": "0212242279"
+              },
+              "priceAuthorityGeneralRuleSet": {
+                "type": "string",
+                "description": "Identifies the General Rules that apply to the Prices within the given Price Authority. ",
+                "example": "Freight charges must be prepaid. Price applies in U.S. Funds. Price does not apply on shipments accorded transit, inspection, sampling, reconsignment, diversion, or stopping in transit for loading or unloading."
+              },
+              "prices": {
+                "type": "array",
+                "description": "Identifies an array of one or more rates within a given Price Authority.",
+                "items": {
+                  "type": "object",
+                  "description": "Identifies the price data elements that are common (are core) to most Price Authorities.",
+                  "properties": {
+                    "priceAuthorityPriceEffectiveDate": {
+                      "type": "string",
+                      "format": "date",
+                      "description": "Effective Date.  (yyyy-mm-dd format)\n",
+                      "example": "2019-09-01"
+                    },
+                    "priceAuthorityPriceExpirationDate": {
+                      "type": "string",
+                      "format": "date",
+                      "description": "Expiration Date.  (yyyy-mm-dd format)\n",
+                      "example": "2020-08-31"
+                    },
+                    "priceAuthorityPriceAmount": {
+                      "type": "string",
+                      "description": "Identifies the rate amount of a given Price Package qualified by the Rate Unit Calculation Code (RT_UNT_CALCTN_CD) and Currency Type Code (CURR_TYP_CD) within that Price Package.\n",
+                      "example": "913.0000"
+                    },
+                    "unitOfMeasure": {
+                      "type": "string",
+                      "description": "indicate the unit of measure that the price can be applied. For example: PC - per car, PT - Per net ton, etc...",
+                      "example": "PC"
+                    },
+                    "priceAuthorityPriceUnitCalculationCode": {
+                      "type": "string",
+                      "description": "Identifies the rate unit calculation code for a Rate Amount (RT_AMT) within a given Price Package qualified by the Currency Type Code (CURR_TYP_CD) within that Price Package.\n",
+                      "example": "IM"
+                    },
+                    "priceAuthorityPriceCurrencyTypeCode": {
+                      "type": "string",
+                      "description": "Identifies the currency type that is to be used.  Valid values are: 'U' United States; 'C' = Canada, 'M' = Mexico.\n",
+                      "example": "USD"
+                    },
+                    "minimumWeightQuantity": {
+                      "type": "string",
+                      "description": "The Quantity of Weight (if present and not zero) that will be used as the Minimum Weight to rate a weight-based shipment if the actual lading weight is less than this minimum weight.\n\nFor example, if the Minimum Weight Quantity is 50,000 (pounds) and the actual lading weight of the shipment is 20,000 (pounds), the shipment will be rated at the minimum 50,000.\n\nThis is used to protect that a customer does not load up a car with only 100 pounds of lading for a shipment from California to Illinois where the rate is $10.00 per hundred pounds.\n\nA minimum weight quantity of 50,000 pounds means that the customer must pay at least $5,000 for such a shipment. \n",
+                      "example": "5000"
+                    },
+                    "minimumWeightQuantityUomCode": {
+                      "type": "string",
+                      "description": "Identifies what unit of measure that the Minimum Weight is expressed in, e.g., pounds (\"LB\"), net tons (\"PT\"), etc.  Example: if the Minimum Weight Quantity is 500, then this can be 500 pounds, 500 net tons, etc.",
+                      "example": "LB"
+                    },
+                    "originGeographicTypeCode": {
+                      "type": "string",
+                      "description": "Identifies the type of geography (eg.  city, state, zip code, etc.).  Examples include: 'AC' = OPSL Station Name (City),  'CO'= County, 'SP' = States/Provinces, 'PQ' = ZIP 3, 'PS' = ZIP 5, 'FS' = FREIGHT STATIONS, 'S2' = two digit SPLC, 'S4' = four digit SPLC, 'S6' = six digit SPLC.  Canadian Postal Region Codes may be added in the future as 'PU'.  'OL' = OPSL number ranges may be added in the future.\n",
+                      "example": "AC"
+                    },
+                    "originStationName": {
+                      "type": "string",
+                      "description": "OPEN AND PREPAID STATION LIST NAME. OPEN AND PREPAID STATION LIST (OPSL) IS AN OFFICIAL LIST OF ALL STATIONS IN THE UNITED STATES THAT ARE LEGAL AND OFFICIAL RAILROAD STATIONS THAT A SHIPMENT MAY BE BILLED TO OR FROM. THIS LIST ALSO HAS SPECIAL INSTRUCTIONS THAT APPLY TO EACH STATION\n",
+                      "example": "CHICAGO"
+                    },
+                    "originStateCode": {
+                      "type": "string",
+                      "description": "The identifier of the State / Province.  ",
+                      "example": "IL"
+                    },
+                    "originSwitchingLimitsUsedIndicator": {
+                      "type": "string",
+                      "description": "Indicates \"T\" (True) or \"F\" (False) whether the price is valid also for all revenue stations within the Switching Limits of the Origin.  This is based on the origin rail carrier in the revenue route and how that carrier defines what other stations (if any) are included within the switching limits of that origin station.\n\nFor example, BNSF says CICERO, IL (and some other Illinois stations) are within the Switching Limits of CHICAGO, IL, but CSXT says that CICERO, IL and HAMMOND, IN (different state) are within SWL of CHICAGO. \n",
+                      "minLength": 1,
+                      "maxLength": 1,
+                      "example": "T"
+                    },
+                    "originGeographicGroupName": {
+                      "type": "string",
+                      "description": "Identifies a given short name for a specific geographic group within a given business group.  The members of geographic groups may be different between different business groups even though the group name may be the same.\n",
+                      "example": "CHICAGO & LPC"
+                    },
+                    "originGeographicGroupNumber": {
+                      "type": "string",
+                      "description": "A unique key that identifies a given geographic group that being used as origin in a service price package. \n   \nThe members of geographic groups may be different between different business groups even though the group name may be the same\n",
+                      "example": "375200646"
+                    },
+                    "destinationGeographicTypeCode": {
+                      "type": "string",
+                      "description": "Identifies the type of geography (eg.  city, state, zip code, etc.).  Examples include: 'AC' = OPSL Station Name (City),  'CO'= County, 'SP' = States/Provinces, 'PQ' = ZIP 3, 'PS' = ZIP 5, 'FS' = FREIGHT STATIONS, 'S2' = two digit SPLC, 'S4' = four digit SPLC, 'S6' = six digit SPLC.  Canadian Postal Region Codes may be added in the future as 'PU'.  'OL' = OPSL number ranges may be added in the future.\n",
+                      "example": "AC"
+                    },
+                    "destinationStationName": {
+                      "type": "string",
+                      "description": "OPEN AND PREPAID STATION LIST NAME. OPEN AND PREPAID STATION LIST (OPSL) IS AN OFFICIAL LIST OF ALL STATIONS IN THE UNITED STATES THAT ARE LEGAL AND OFFICIAL RAILROAD STATIONS THAT A SHIPMENT MAY BE BILLED TO OR FROM. THIS LIST ALSO HAS SPECIAL INSTRUCTIONS THAT APPLY TO EACH STATION\n",
+                      "example": "SEATTLE"
+                    },
+                    "destinationStateCode": {
+                      "type": "string",
+                      "description": "The identifier of the State / Province.  \n",
+                      "example": "WA"
+                    },
+                    "destinationSwitchingLimitsUsedIndicator": {
+                      "type": "string",
+                      "description": "Indicates \"T\" (True) or \"F\" (False) whether the price is valid also for all revenue stations within the Switching Limits of the Destination.  This is based on the destination rail carrier in the revenue route and how that carrier defines what other stations (if any) are included within the switching limits of that destination station.\n\nFor example, BNSF says CICERO, IL (and some other Illinois stations) are within the Switching Limits of CHICAGO, IL, but CSXT says that CICERO, IL and HAMMOND, IN (different state) are within SWL of CHICAGO. \n",
+                      "minLength": 1,
+                      "maxLength": 1,
+                      "example": "F"
+                    },
+                    "destinationGeographicGroupName": {
+                      "type": "string",
+                      "description": "Identifies a given short name for a specific geographic group within a given business group.  The members of geographic groups may be different between different business groups even though the group name may be the same.\n",
+                      "example": "SEATTLE PORTS"
+                    },
+                    "destinationGeographicGroupNumber": {
+                      "type": "string",
+                      "description": "A unique key that identifies a given specific geographic group being used as destination in a service price package. ",
+                      "example": "216601236"
+                    },
+                    "serviceCode": {
+                      "type": "string",
+                      "description": "The first column of the Shipment Condition Code is the 'V' field (Value field). This identifies the Intermodal Service Code when the Shipment Condition code (SHPMT_COND_ELE_CD) is set to ISCO.",
+                      "example": "25"
+                    },
+                    "bnsfServiceLevelCode": {
+                      "type": "string",
+                      "description": "The first column of the Shipment Condition Code is the 'V' field (Value field). This identifies the BNSF Intermodal Service Level Code when the Shipment Condition code (SHPMT_COND_ELE_CD) is set to BN06.",
+                      "example": "P"
+                    },
+                    "priorOriginGeographicTypeCode": {
+                      "type": "string",
+                      "description": "The first column of the Shipment Condition Code is the 'V' field (Value field). This identifies the Prior Origin Geographic Type Code when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACPO.\n",
+                      "example": "SL"
+                    },
+                    "priorOriginFirstQualifierName": {
+                      "type": "string",
+                      "description": "This is the second column of the Shipment Condition and is referred to as the 'F' field (Range From field).  The 'F' field might not be a range. This identifies the Prior Origin First Qualifier Name when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACPO.\n",
+                      "example": "093900"
+                    },
+                    "priorOriginSecondQualifierName": {
+                      "type": "string",
+                      "description": "This is the third column of the Shipment Condition and is referred to as the 'T' field (Range To field).  The 'T' field might not be a range. This identifies the Prior Origin Second Qualifier Name when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACPO.\n",
+                      "example": "093989"
+                    },
+                    "finalDestinationGeographicTypeCode": {
+                      "type": "string",
+                      "description": "The first column of the Shipment Condition Code is the 'V' field (Value field). This identifies the Final Destination Geographic Type Code when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACFD.\n",
+                      "example": "PS"
+                    },
+                    "finalDestinationFirstQualifierName": {
+                      "type": "string",
+                      "description": "This is the second column of the Shipment Condition and is referred to as the 'F' field (Range From field).  The 'F' field might not be a range. This identifies the Final Destination First Qualifier Name when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACFD.\n",
+                      "example": "66210"
+                    },
+                    "finalDestinationSecondQualifierName": {
+                      "type": "string",
+                      "description": "This is the third column of the Shipment Condition and is referred to as the 'T' field (Range To field).  The 'T' field might not be a range. This identifies the Final Destination Second Qualifier Name when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to ACFD.\n",
+                      "example": "66219"
+                    },
+                    "servicePricePackageId": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "The identifier of the Service Price Package table.  This is a surrogate key identity column of table TSVC_PRC_PKG.\n",
+                      "example": 31608704
+                    },
+                    "servicePackageCommodityLowStcc": {
+                      "type": "string",
+                      "description": "Identifies the low end STCC (Standard Transportation Commodity Code) code number within a range, otherwise it identifies a non-range single STCC to be used.\n",
+                      "example": "4611110"
+                    },
+                    "servicePackageCommodityHighStcc": {
+                      "type": "string",
+                      "description": "Identifies the high end STCC (Standard Transportation Commodity Code) code number within a range of STCC.\n",
+                      "example": "4611127"
+                    },
+                    "servicePackageLoadEmptyCode": {
+                      "type": "string",
+                      "description": "Code indicate whether the price can applied to Load or Empty intermodal move",
+                      "example": "E"
+                    },
+                    "commodityGroupShortName": {
+                      "type": "string",
+                      "description": "Identifies a given short name for a specific commodity group within a given business group.  The members of commodity groups may be different between different business groups even though the group name may be the same.\n",
+                      "example": "EMPTY CONTAINER"
+                    },
+                    "commodityGroupLongName": {
+                      "type": "string",
+                      "description": "Identifies a given long name for a specific commodity group within a given business group.  The members of commodity groups may be different between different business groups even though the group name may be the same.\n",
+                      "example": "EMPTY CONTAINER"
+                    },
+                    "commodityGroupNumber": {
+                      "type": "string",
+                      "description": "A unique key that identifies a specific commodity group used in a service price package of a price authority.",
+                      "example": "104093082"
+                    },
+                    "revenueRouteDescription": {
+                      "type": "string",
+                      "description": "A description of the Route with the carrier abbreviations and the off-going junction abbreviations.\n",
+                      "example": "BNSF Direct"
+                    },
+                    "equipmentTypeDescription": {
+                      "type": "string",
+                      "description": "A description of the Equipment Type which may be a railcar or other intermodal type of transport carried on rail.\n",
+                      "example": "BOXCAR (Carload) --OR-- CONTAINER (Intermodal)"
+                    },
+                    "equipmentOwnerTypeLabel": {
+                      "type": "string",
+                      "description": "A name or label given to describe whether the equipment owner is a Shipper or a Rail Carrier or is unknown.\n",
+                      "example": "SHIPPER OWNED"
+                    },
+                    "equipmentUsageStatusCode": {
+                      "type": "string",
+                      "description": "Identifies if the equipment is empty or loaded and this applies mainly to Intermodal, so Carload can be blank.\n",
+                      "example": "EMPTY"
+                    },
+                    "equipmentGroupShortDescription": {
+                      "type": "string",
+                      "description": "A short description of a given Shipment Contition Group as of a specified Version. This identifies the Equipment when the  Shipment Condition Group Version has a Group Type Code (SHPMT_COND_GRP_TYP_CD) is set to \"E\".\n",
+                      "example": "20CM"
+                    },
+                    "equipmentGroupShortName": {
+                      "type": "string",
+                      "description": "Identifies a given short name for a specific Shipment Condition group within a given business group.  The members of Shipment Condition groups may be different between different business groups even though the group name may be the same. This identifies the Equipment when the  Shipment Condition Group Version has a Group Type Code (SHPMT_COND_GRP_TYP_CD) is set to \"E\".\n",
+                      "example": "20CM-MAX. CONT. W/O CHASSIS"
+                    },
+                    "equipmentGroupLongName": {
+                      "type": "string",
+                      "description": "Identifies a given long name for a specific Shipment Condition group within a given business group.  The members of Shipment Condition groups may be different between different business groups even though the group name may be the same. This identifies the Equipment when the  Shipment Condition Group Version has a Group Type Code (SHPMT_COND_GRP_TYP_CD) is set to \"E\".\n",
+                      "example": "20 FOOT MAXIMUM LENGTH CONTAINER WITHOUT A CHASSIS"
+                    },
+                    "equipmentMinimumInsideLengthFeetInches": {
+                      "type": "string",
+                      "description": "This is the second column of the Shipment Condition and is referred to as the 'F' field (Range From field).  The 'F' field might not be a range. This identifies the Equipment Minimum Inside Length in Feet and Inches when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to EQIL.",
+                      "example": "000-00"
+                    },
+                    "equipmentMaximumInsideLengthFeetInches": {
+                      "type": "string",
+                      "description": "This is the third column of the Shipment Condition and is referred to as the 'T' field (Range To field).  The 'T' field might not be a range. This identifies the Equipment Maximum Inside Length in Feet and Inches when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to EQIL.",
+                      "example": "015-11"
+                    },
+                    "equipmentMinimumOutsideLengthFeetInches": {
+                      "type": "string",
+                      "description": "This is the second column of the Shipment Condition and is referred to as the 'F' field (Range From field).  The 'F' field might not be a range. This identifies the Equipment Minimum Outside Length in Feet and Inches when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to EQOL.\n",
+                      "example": "000-00"
+                    },
+                    "equipmentMaximumOutsideLengthFeetInches": {
+                      "type": "string",
+                      "description": "This is the third column of the Shipment Condition and is referred to as the 'T' field (Range To field).  The 'T' field might not be a range. This identifies the Equipment Maximum Outside Length in Feet and Inches when the  Shipment Condition code (SHPMT_COND_ELE_CD) is set to EQOL.\n",
+                      "example": "020-00"
+                    },
+                    "servicePackageConditionGroupShortName": {
+                      "type": "string",
+                      "description": "Identifies a given short name for a specific Shipment Condition group within a given business group.  The members of Shipment Condition groups may be different between different business groups even though the group name may be the same. This identifies the Service Package Condition when the  Shipment Condition Group Version has a Group Type Code (SHPMT_COND_GRP_TYP_CD) is set to \"M\" (M=Matrix). This Group is contains additional shipment conditions that further qualifies or restricts a given service which are not generally considered equipment related conditions.",
+                      "example": "R11 DEST MUST WT LIMIT  NEW"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "priceAuthorityGroups": {
+                "type": "object",
+                "description": "Identifies all of the Groups that may defined for a give Price Authority and may consist of Geographic Groups, Commodity Groups, and Shipment Condition Groups.",
+                "required": [
+                  "geographicGroup",
+                  "commodityGroup",
+                  "shipmentConditionGroup"
+                ],
+                "properties": {
+                  "geographicGroup": {
+                    "type": "array",
+                    "description": "Identifies a Geographic Group which contains one or more Geographic Elements that qualify a Price Authority.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "geoGroupMembers"
+                      ],
+                      "properties": {
+                        "geoGroupShortName": {
+                          "type": "string",
+                          "example": "BNSF 5 CHICAGO"
+                        },
+                        "geoGroupMembers": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "County of DUPAGE,IL"
+                          },
+                          "nullable": false
+                        }
+                      },
+                      "additionalProperties": false,
+                      "nullable": false
+                    },
+                    "nullable": false
+                  },
+                  "commodityGroup": {
+                    "type": "array",
+                    "description": "Identifies a Commodity Group which contains one or more Commodity Elements that qualify a Price Authority.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "commodityGroupMembers"
+                      ],
+                      "properties": {
+                        "commodityGroupShortName": {
+                          "type": "string"
+                        },
+                        "commodityGroupMembers": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "2499700-2499799"
+                          },
+                          "nullable": false
+                        }
+                      },
+                      "additionalProperties": false,
+                      "nullable": false
+                    },
+                    "nullable": false
+                  },
+                  "shipmentConditionGroup": {
+                    "type": "array",
+                    "description": "Identifies a Shipment Condition Group which contains one or more Shipment Condition Elements that qualify a Price Authority.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "shipmentConditionGroupDescription",
+                        "shipmentConditionGroupPublishedText"
+                      ],
+                      "properties": {
+                        "shipmentConditionGroupShortName": {
+                          "type": "string",
+                          "example": "EQ-FLAT,CB <74' SYS <205K"
+                        },
+                        "shipmentConditionGroupDescription": {
+                          "type": "string",
+                          "example": "System Flats <=74ft,  <=205,000lbs"
+                        },
+                        "shipmentConditionGroupPublishedText": {
+                          "type": "string",
+                          "example": "Price applies in System Centerbeam Flat Cars (Mechanical Designation: FBC - Centerbeam Flat Car), with inside length less than or equal to 74 feet with a minimum weight exceeding 1 pounds but not exceeding 205,000 pounds and System cars are owned or leased by the following class 1 carriers: BNSF, CN, UP, CP, CSXT, NS or KCS."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "nullable": false
+                    },
+                    "nullable": false
+                  }
+                },
+                "additionalProperties": false,
+                "nullable": false
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "prices_response": {
+        "type": "object",
+        "title": "Prices Response",
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Response status of the API",
+            "example": "SUCCESS"
+          },
+          "message": {
+            "type": "object",
+            "title": "Message",
+            "properties": {
+              "errors": {
+                "type": "array",
+                "title": "Errors",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": false
+              },
+              "results": {
+                "$ref": "#/components/schemas/Price_Authority"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          },
+          "httpStatus": {
+            "type": "string",
+            "title": "Http Status",
+            "description": "Response status code of the API",
+            "example": "200"
+          }
+        },
+        "additionalProperties": false,
+        "nullable": false
+      },
+      "customerInvoice": {
+        "type": "object",
+        "title": "Customer Invoice",
+        "required": [
+          "customerInvoiceDetails"
+        ],
+        "properties": {
+          "customerInvoiceDetails": {
+            "type": "object",
+            "title": "Customer Invoice Details",
+            "properties": {
+              "billDueAmount": {
+                "type": "string",
+                "title": "Bill Due Amount",
+                "description": "The amount due in US dollars after adjustments and payments have been applied to total bill amount.",
+                "example": "$1999.99"
+              },
+              "invoiceNumber": {
+                "type": "string",
+                "title": "Invoice Number",
+                "description": "Number that uniquely identifies a bill, regardless of the type of bill.",
+                "example": "12345ABD"
+              },
+              "invoiceTypeName": {
+                "type": "string",
+                "title": "Invoice Type Name",
+                "description": "The designation of the invoice type. Valid values include: Freight.",
+                "example": "Freight"
+              },
+              "billDueDate": {
+                "type": "string",
+                "title": "Bill Due Date",
+                "description": "Date a bill is due for payment.",
+                "example": "2023-01-10"
+              },
+              "billOfLadingId": {
+                "type": "string",
+                "title": "Bill Of Lading Id",
+                "description": "Unique identifier for an instance of an internal or external customer request for the shipment of lading via rail.",
+                "example": "100200AB"
+              },
+              "waybillDate": {
+                "type": "string",
+                "title": "Waybill Date",
+                "description": "Waybill Date is the day, month, and year specified on a waybill, expressed as CCYYMMDD where CC represents the first two digits of the calendar year. Can not be in the future.",
+                "example": "2023-01-10"
+              },
+              "invoiceDate": {
+                "type": "string",
+                "title": "Invoice Date",
+                "description": "Date an invoice was created.",
+                "example": "2023-01-10"
+              },
+              "waybillNumber": {
+                "type": "string",
+                "title": "Waybill Number",
+                "description": "Waybill Number is the carrier accounting number of a waybill.",
+                "example": "989999"
+              },
+              "freightRateAuthoritySourceName": {
+                "type": "string",
+                "title": "Freight Rate Authority Source Name",
+                "description": "The source from which the rate authority for freight charges to customers is defined.",
+                "example": "TARIFF_ITEM"
+              },
+              "billAdjustedAmount": {
+                "type": "string",
+                "title": "Bill Adjusted Amount",
+                "description": "The amount to be added or subtracted from the bill amount.",
+                "example": "$323.99"
+              },
+              "billPreviouslyDisputedIndicator": {
+                "type": "string",
+                "title": "Bill Previously Disputed Indicator",
+                "description": "Indicates whether the bill has been previously disputed or not. Valid values: Y (The bill has been previously disputed), N (The bill has not been previously disputed)",
+                "example": "Y"
+              },
+              "invoiceRecipientCompanyCode": {
+                "type": "string",
+                "title": "Invoice Recipient Company Code",
+                "description": "Code indicating the subsidiary company or other outside company that is the recipient of the invoice amount. Valid values include: 01 (The Atchison, Topeka and Santa Fe Railway Company), 02 (The Clinton and Oklahoma Western Railroad Company), 18 (The Star Lake Railroad Company).",
+                "example": "01"
+              },
+              "businessUnitCode": {
+                "type": "string",
+                "title": "Business Unit Code",
+                "description": "Code that identifies the high level business unit a shipment is associated with. Valid values include: 01 (Intermodal), 03 (Automotive and Steel), 04 (Bulk Commodities), 05 (Consumer Products), 06 (Forest Products), 07 (Grain Products), etc.",
+                "example": "01"
+              },
+              "patronCode": {
+                "type": "string",
+                "title": "Patron Code",
+                "description": "An approved patron code represents a customer who ships (or wants to ship) with BNSF and has established a credit arrangement with the BNSF treasury department.",
+                "example": "ABCD12"
+              },
+              "cashBookCode": {
+                "type": "string",
+                "title": "Cash Book Code",
+                "description": "Code assigned by accounting indicating the type of charges for bookkeeping purposes. Valid values include: 201=Rental Bills, 202=Miscellaneous Railroad Bills, 211=Car Repair Bills, 215 =Rolling Stock, 220=Crossing Maintenance Bills, etc.",
+                "example": "201"
+              },
+              "cashBookGroupCode": {
+                "type": "string",
+                "title": "Cash Book Group Code",
+                "description": "Code assigned by accounting indicating the grouping of charges for bookkeeping purposes. Valid values include: DEM (Demurrage), FIN (Finance).",
+                "example": "DEM"
+              },
+              "payerOfFreight633": {
+                "type": "string",
+                "title": "Payer of Freight 633",
+                "description": "Name of the person or entity with responsibility for paying charges associated with the shipment. Value has been abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.",
+                "example": "ACMECUST"
+              },
+              "payerOfFreightFullName": {
+                "type": "string",
+                "title": "Payer of Freight Full Name",
+                "description": "Full name of the person or entity with responsibility for paying charges associated with the shipment.",
+                "example": "ACME Customer"
+              },
+              "payerOfFreightAddressText": {
+                "type": "string",
+                "title": "Payer of Freight Address Text",
+                "description": "The full address of the person or entity with responsibility for paying charges associated with the shipment.",
+                "example": "345 Dream St. Fort Worth 76137 US"
+              },
+              "careOfPartyFullName": {
+                "type": "string",
+                "title": "Care of Party Full Name",
+                "description": "The full name of a receiver of rail cars on behalf of the actual consignee (the physical delivery point).",
+                "example": "Care of Party Customer"
+              },
+              "attentionPartyFullName": {
+                "type": "string",
+                "title": "Attention Party Full Name",
+                "description": "The name of the person or entity to whose attention information of a waybill will be sent.",
+                "example": "Attention Customer"
+              },
+              "cifId": {
+                "type": "string",
+                "title": "CIF Id",
+                "description": "CIF ID (Customer Identification File) is a unique identifier used in exchanges of shipment information to accurately identify a transportation company customers and their locations.",
+                "example": "656999"
+              },
+              "shipper633": {
+                "type": "string",
+                "title": "Shipper 633",
+                "description": "Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.",
+                "example": "ACMECUST"
+              },
+              "shipperFullName": {
+                "type": "string",
+                "title": "Shipper Full Name",
+                "description": "Full name of a Customer, acting as the Shipper.",
+                "example": "ACME Customer"
+              },
+              "origin333": {
+                "type": "string",
+                "title": "Origin 333",
+                "description": "Name of a City, defined as the origin of a shipment, which has been abbreviated from the City's Full Name through the use of a standardized programmatic process.",
+                "example": "TRNTOWN"
+              },
+              "originStateCode": {
+                "type": "string",
+                "title": "Origin State Code",
+                "description": "The code, as assigned by a national body such as the US Postal Service, for a state, province, or territory for a given origin.",
+                "example": "TX"
+              },
+              "consignee633": {
+                "type": "string",
+                "title": "Consignee 633",
+                "description": "Name of a Customer, acting as the Consignee (AKA Receiver), which has been abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.",
+                "example": "CNSGNEE"
+              },
+              "consigneeFullName": {
+                "type": "string",
+                "title": "Consignee Full Name",
+                "description": "The full name of a customer that is filling the role of Consignee. A Consignee, also referred to as the \"Receiver\", is the company or individual receiving a shipment at a destination.",
+                "example": "Consignee"
+              },
+              "destination333": {
+                "type": "string",
+                "title": "Destination 333",
+                "description": "Name of a City, defined as the destination of a shipment, which has been abbreviated from the City's Full Name through the use of a standardized programmatic process.",
+                "example": "TRNVILL"
+              },
+              "destinationStateCode": {
+                "type": "string",
+                "title": "Destination State Code",
+                "description": "The code, as assigned by a national body such as the US Postal Service, for a state, province, or territory for a given destination.",
+                "example": "MT"
+              },
+              "currencyCode": {
+                "type": "string",
+                "title": "Currency Code",
+                "description": "Code to designate a currency based on the ISO 4217 standard. Valid values include: USD, MXN, CAD, etc.",
+                "example": "CAD"
+              },
+              "intermodalServicePlanCode": {
+                "type": "string",
+                "title": "Intermodal Service Plan Code",
+                "description": "Code that defines the service plan associated with intermodal shipments. Valid values include: 25 (Ramp to Ramp service, Domestic, Rail owned equipment), 80 (Door to Door service, International, Steamship Owned equipment), etc.",
+                "example": "25"
+              },
+              "intermodalServiceLevelCode": {
+                "type": "string",
+                "title": "Intermodal Service Level Code",
+                "description": "A code representation of the level of service BNSF provides/offers, which indicates intermodal transportation service (transit time) on BNSF's network. Service levels are reflected in the intermodal price authorities and service schedules. Valid values are: E (Expedited), P (Premium), V (Value), Y (Empty).",
+                "example": "E"
+              },
+              "freightUnitRateList": {
+                "type": "array",
+                "title": "Freight Unit Rate List",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "freightPerUnitRate": {
+                      "type": "string",
+                      "title": "Freight Per Unit Rate",
+                      "description": "The amount in dollars per unit of freight.",
+                      "example": "$999.50"
+                    },
+                    "freightUnitCount": {
+                      "type": "string",
+                      "title": "Freight Unit Count",
+                      "description": "The number of freight units.",
+                      "example": "5"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "miscellaneousChargeList": {
+                "type": "array",
+                "title": "Miscellaneous Charge List",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "miscellaneousChargeAmount": {
+                      "type": "string",
+                      "title": "Miscellaneous Charge Amount",
+                      "description": "Amount in dollars for miscellaneous charges.",
+                      "example": "$1999.99"
+                    },
+                    "miscellaneousChargeTypeCode": {
+                      "type": "string",
+                      "title": "Miscellaneous Charge Type Code",
+                      "description": "Code to indicate the type of miscellaneous charges. Valid values include: CCA (Carrier Credit Allowance), TRN (Transit), SWC (Switching Charges), etc.",
+                      "example": "CCA"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "customerWaybillReferenceNumberList": {
+                "type": "array",
+                "title": "Customer Waybill Reference Number List",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "waybillReferenceNumberTypeCode": {
+                      "type": "string",
+                      "title": "Waybill Reference Number Type Code",
+                      "description": "A code defining the type of reference number or identifier associated with a Waybill.",
+                      "example": "WBREFNBR"
+                    },
+                    "waybillReferenceNumberTypeName": {
+                      "type": "string",
+                      "title": "Waybill Reference Number Type Name",
+                      "description": "A short, free-form description of a code defining the type of reference number or identifier associated with a Waybill.",
+                      "example": "Waybill Customer Reference"
+                    },
+                    "waybillReferenceNumber": {
+                      "type": "string",
+                      "title": "Waybill Reference Number",
+                      "description": "A reference number or identifier associated with a Waybill.",
+                      "example": "123456"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "paymentList": {
+                "type": "array",
+                "title": "Payment List",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "customerInvoicePaymentNumber": {
+                      "type": "string",
+                      "title": "Customer Invoice Payment Number",
+                      "description": "Number identifying a payment made by a customer against an invoice. The payment can be made with a check, previous credits or other means.",
+                      "example": "1002501"
+                    },
+                    "customerInvoicePaymentDate": {
+                      "type": "string",
+                      "title": "Customer Invoice Payment Date",
+                      "description": "Date payment was made by a customer against an invoice.",
+                      "example": "2023-01-18"
+                    },
+                    "customerInvoicePaymentAmount": {
+                      "type": "string",
+                      "title": "Customer Invoice Payment Amount",
+                      "description": "Amount of payment issued by a customer against an invoice.",
+                      "example": "$1999.99"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "equipmentList": {
+                "type": "array",
+                "title": "Equipment List",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "accountingWaybillEquipmentGroupId": {
+                      "type": "string",
+                      "title": "Accounting Waybill Equipment Group Id",
+                      "description": "Identifier used to group one or more freight rating result entries together for association to the accounting waybill equipment for which they apply.",
+                      "example": "0"
+                    },
+                    "equipmentInitial": {
+                      "type": "string",
+                      "title": "Equipment Initial",
+                      "description": "Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.",
+                      "example": "ABCD"
+                    },
+                    "equipmentNumber": {
+                      "type": "string",
+                      "title": "Equipment Number",
+                      "description": "Equipment Number is the sequencing or serial part of an equipment units identifying number.",
+                      "example": "123456"
+                    },
+                    "commodityDescription": {
+                      "type": "string",
+                      "title": "Commodity Description",
+                      "description": "Description of the commodity.",
+                      "example": "PLASTC"
+                    },
+                    "stcc": {
+                      "type": "string",
+                      "title": "STCC",
+                      "description": "STCC (Standard Transportation Commodity Code) number identifying a Commodity.",
+                      "example": "2821142"
+                    },
+                    "carKindCode": {
+                      "type": "string",
+                      "title": "Car Kind Code",
+                      "description": "Code that identifies the physical characteristics for equipment as defined by BNSF Railway itself.",
+                      "example": "A7E"
+                    },
+                    "aarCarKindCode": {
+                      "type": "string",
+                      "title": "AAR Car Kind Code",
+                      "description": "Code that identifies the physical characteristics for equipment as defined by AAR (Association of American Railroads)",
+                      "example": "Z130"
+                    },
+                    "shipmentNetScaleWeightPounds": {
+                      "type": "string",
+                      "title": "Shipment Net Scale Weight Pounds",
+                      "description": "The net scale weight of a shipment, as measured in pounds.",
+                      "example": "100"
+                    },
+                    "freightRateMinimumWeightPounds": {
+                      "type": "string",
+                      "title": "Freight Rate Minimum Weight Pounds",
+                      "description": "The minimum weight in pounds of a piece of equipment and cargo that make possible a freight rate to take effect.",
+                      "example": "2000"
+                    },
+                    "equipmentLengthFeet": {
+                      "type": "string",
+                      "title": "Equipment Length Feet",
+                      "description": "The length, in feet, of a piece of rail equipment.",
+                      "example": "23"
+                    },
+                    "equipmentOutsideHeightFeet": {
+                      "type": "string",
+                      "title": "Equipment Outside Height Feet",
+                      "description": "The height, in feet, of the outside of a piece of equipment.",
+                      "example": "20"
+                    },
+                    "equipmentVolumeCubicFeet": {
+                      "type": "string",
+                      "title": "Equipment Volume Cubic Feet",
+                      "description": "Volume capacity of a piece of equipment in cubic feet.",
+                      "example": "7300"
+                    },
+                    "billOfLadingId": {
+                      "type": "string",
+                      "title": "Bill Of Lading Id",
+                      "description": "Unique identifier for an instance of an internal or external customer request for the shipment of lading via rail.",
+                      "example": "100200AB"
+                    },
+                    "aarRule260CarrierAbbreviation": {
+                      "type": "string",
+                      "title": "AAR Rule 260 Carrier Abbreviation",
+                      "description": "Abbreviation of the carrier that is to assume responsibility for the movement of a shipment at the junction location per the AAR Rule 260.",
+                      "example": "AERC"
+                    },
+                    "cotId": {
+                      "type": "string",
+                      "title": "COT Id",
+                      "description": "Identifier assigned by the marketing department that guarantees future placement of equipment for a specific period and locks in a rate for the customer that is awarded the Certificate of Transportation (COT).",
+                      "example": "COT123456"
+                    },
+                    "cotCreditAmount": {
+                      "type": "string",
+                      "title": "COT Credit Amount",
+                      "description": "Certificate of Transportation (COT) credit amount in dollars applied to a movement waybill.",
+                      "example": "$1999.99"
+                    },
+                    "cotPremiumAmount": {
+                      "type": "string",
+                      "title": "COT Premium Amount",
+                      "description": "Certificate of Transportation (COT) premium amount in dollars applied to a movement waybill.",
+                      "example": "$1999.99"
+                    },
+                    "cotDiscountAmount": {
+                      "type": "string",
+                      "title": "COT Discount Amount",
+                      "description": "Certificate of Transportation (COT) discount in dollars applied to a movement waybill.",
+                      "example": "$1999.99"
+                    },
+                    "cotEffectiveRateDate": {
+                      "type": "string",
+                      "title": "COT Effective Rate Date",
+                      "description": "Date the Certificate of Transportation (COT) rate becomes effective.",
+                      "example": "2023-01-10"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "vinList": {
+                "type": "array",
+                "title": "VIN List",
+                "description": "Comma separated list of VIN (Vehicle Identification Numbers).",
+                "items": {
+                  "type": "string",
+                  "example": "4Y1SL65848Z411439, 1HGBH41JXMN109186, 1FTFX1E57JKE37092"
+                },
+                "nullable": false
+              },
+              "totalGrossEquipmentCommodityWeightPounds": {
+                "type": "string",
+                "title": "Equipment Gross Scale Weight Pounds",
+                "description": "Total weight of equipment and commodity in pounds.",
+                "example": "200"
+              },
+              "totalCommodityWeightPounds": {
+                "type": "string",
+                "title": "Shipment Net Scale Weight Pounds",
+                "description": "The total weight in pounds of the commodity.",
+                "example": "100"
+              },
+              "totalEquipmentTarePounds": {
+                "type": "string",
+                "title": "Equipment Tare Pounds",
+                "description": "The total weight in pounds of all empty equipment.",
+                "example": "500"
+              },
+              "totalCotCreditAmount": {
+                "type": "string",
+                "title": "Total COT Credit Amount",
+                "description": "Certificate of Transportation (COT) total credit amount in dollars applied to a movement waybill.",
+                "example": "$1999.99"
+              },
+              "totalInvoiceAmount": {
+                "type": "string",
+                "title": "Total Invoice Amount",
+                "description": "Total amount of the invoice in dollars.",
+                "example": "$1999.99"
+              },
+              "totalBillDueAmount": {
+                "type": "string",
+                "title": "Total Bill Due Amount",
+                "description": "The total amount due in US dollars after adjustments and payments have been applied to total bill amount.",
+                "example": "$1999.99"
+              },
+              "totalInvoicePaymentAmount": {
+                "type": "string",
+                "title": "Total Invoice Payment Amount",
+                "description": "The total payment amount issued by a customer against an invoice.",
+                "example": "$1999.99"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          },
+          "apiResponseElementCount": {
+            "type": "string",
+            "title": "API Response Element Count",
+            "description": "Number of individual elements within the API response.",
+            "example": "5"
+          },
+          "apiResponsePageNumber": {
+            "type": "string",
+            "title": "API Response Page Number",
+            "description": "Current page number within the API response.",
+            "example": "2"
+          },
+          "apiResponseElementPerPageCount": {
+            "type": "string",
+            "title": "API Response Element Per Page Count",
+            "description": "Number of individual elements per page within the API response.",
+            "example": "8"
+          },
+          "apiResponseTotalCurrentInvoiceAmount": {
+            "type": "string",
+            "title": "API Response Total Current Invoice Amount",
+            "description": "Total amount of the current invoices within the API response which bill due date is later or equal to the current date.",
+            "example": "$1000.18"
+          },
+          "apiResponseTotalPastInvoiceAmount": {
+            "type": "string",
+            "title": "API Response Total Past Invoice Amount",
+            "description": "Total amount of the past invoices within the API response which bill due date is before the current date.",
+            "example": "$18999.00"
+          },
+          "apiResponseTotalInvoiceAmount": {
+            "type": "string",
+            "title": "API Response Total Invoice Amount",
+            "description": "Total amount of the invoices included in the API response.",
+            "example": "$19999.18"
+          }
+        },
+        "additionalProperties": false,
+        "nullable": false
+      },
+      "OD_Pairs_Response": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "odPairsList": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "originState": {
+                      "type": "string",
+                      "description": "Origin state identifier",
+                      "example": "IL"
+                    },
+                    "originCity": {
+                      "type": "string",
+                      "description": "Origin station identifier",
+                      "example": "CHICAGO"
+                    },
+                    "destinationState": {
+                      "type": "string",
+                      "description": "Destination state identifier",
+                      "example": "TX"
+                    },
+                    "destinationCity": {
+                      "type": "string",
+                      "description": "Destination station identifier",
+                      "example": "HOUSTON"
+                    },
+                    "originSPLC": {
+                      "type": "string",
+                      "example": "380000"
+                    },
+                    "originFSAC": {
+                      "type": "string",
+                      "example": "66000"
+                    },
+                    "originR260JCT": {
+                      "type": "string",
+                      "example": "CHGO"
+                    },
+                    "destSPLC": {
+                      "type": "string",
+                      "example": "684800"
+                    },
+                    "destFSAC": {
+                      "type": "string",
+                      "example": "35100"
+                    },
+                    "destR260JCT": {
+                      "type": "string",
+                      "example": "HUSTN"
+                    },
+                    "miles": {
+                      "type": "string",
+                      "example": "1257"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "200"
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": null,
+                      "nullable": true
+                    }
+                  },
+                  "additionalProperties": false,
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "status": {
+                "type": "string",
+                "example": "SUCCESS"
+              },
+              "httpStatus": {
+                "type": "string",
+                "example": "200"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          }
+        },
+        "nullable": false
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "**Bad Request**\n\nThe request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications."
+      },
+      "401": {
+        "description": "**Unauthorized**\n\nIndicates that the request requires user authentication information. The client MAY repeat the request with a suitable Authorization."
+      },
+      "403": {
+        "description": "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+      },
+      "404": {
+        "description": "**Not Found**\n\nThe server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation."
+      },
+      "405": {
+        "description": "**Method Not Allowed**\n\nThe request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation."
+      },
+      "429": {
+        "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+      },
+      "500": {
+        "description": "**Internal Server Error**\n\nThe server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware."
+      },
+      "504": {
+        "description": "**Gateway Timeout**\n\nThe server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again."
+      }
+    },
+    "requestBodies": {
+      "Post_Rates": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "priceAuthorityNumber",
+                "priceAuthorityOwnerIssuedName"
+              ],
+              "properties": {
+                "priceAuthorityItemNumber": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "A number that Identifies an Owner Issued Item (or Implementing Agreement) which is used to identify a more granular reference to a given price when combined with the Owner ID, Owner Issued Name, and Owner Issued Number.  Marketing sometimes divides a given Price Authority into what might be referred to as sub-authorities which are identified by a given Owner Issued Item Number.  The only characters allowed in the number are zero (0) through nine (9) and one decimal point (if needed).  The number must not exceed ten (10) characters in length; a decimal point counts as a character.  The number of positions to the right of the decimal point must not exceed four (4) characters:  eg, '00123.4567' would be valid.  If a Price Authority does not actually have a item number, then the item number will be set to ' ' (Blank).\n",
+                  "example": 100
+                },
+                "priceAuthorityNumber": {
+                  "type": "number",
+                  "format": "float",
+                  "example": 105355
+                },
+                "priceAuthorityOwnerIssuedName": {
+                  "type": "string",
+                  "description": "A name must be assigned by the Owner of a Price Authority which is combined with the Owner's ID, an Owner Issued Number, and an optional Owner Issued Item Number to help uniquely identify an official document (Authority) containing price(s) for shipment(s).  It may consist of any alpha numeric character string excluding special characters, which may be a minimum of one character and a maximum of ten characters in length; examples include:  BNSF, BNSFQ, QTYELLOW, C, CIRC, NSPQ, MA42MW, etc.\n",
+                  "example": "BNSFQ"
+                },
+                "searchDate": {
+                  "type": "string",
+                  "description": "If not entered, then current date is used or else Search Date should be today or future date only.",
+                  "example": "2021-09-01"
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            }
+          }
+        }
+      },
+      "Post_Invoice": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "patronCodeList"
+              ],
+              "properties": {
+                "billOfLadingList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on list of values provided on shipper's bill of lading Identifier.",
+                    "example": "999999"
+                  },
+                  "nullable": false
+                },
+                "destinationList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on list of destination names provided. It is the name of destination city that was used to rate a shipment.",
+                    "example": "ARCO, WA"
+                  },
+                  "nullable": false
+                },
+                "equipmentIdList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on Equipment Id in Invoice. Equipment Id is the combination of Equipment Initial and Equipment Number. Equipment List  is the prefix or alphabetic part of an equipment units identifying number. This is used when there is no requirement for a specific type of equipment. i.e. locomotives, box cars, gondolas, flats, vans, etc. Equipment Number used with equipment initials to uniquely identify equipment. This is used when there is no specific requirement for a specific type of equipment. ",
+                    "example": "MBLX34238"
+                  },
+                  "nullable": false
+                },
+                "fromDueDate": {
+                  "type": "string",
+                  "description": "Filter based on Due Date of bill - begin range",
+                  "example": "2023-01-29"
+                },
+                "fromInvoiceDate": {
+                  "type": "string",
+                  "description": "Filter based on Invoice Date of bill - begin range",
+                  "example": "2023-01-29"
+                },
+                "fromWayBillDate": {
+                  "type": "string",
+                  "description": "Filter based on Waybill Date of bill - begin range",
+                  "example": "2023-01-29"
+                },
+                "invoiceNumberList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on list of Invoice Number provided .Invoice Number that uniquely identifies a bill regardless of the type of bill.",
+                    "example": "999999999"
+                  },
+                  "nullable": false
+                },
+                "invoiceTypeList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on type of invoices, Right now only \"Freight\" type is supported.",
+                    "example": "Freight"
+                  },
+                  "nullable": false
+                },
+                "originList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on list of origin names provided, origin name is the name of the origin city that was used to rate a shipment.",
+                    "example": "AMELIA, TX"
+                  },
+                  "nullable": false
+                },
+                "patronCodeList": {
+                  "type": "array",
+                  "description": "Filter based on patron code in bill, Accepts list of patron codes. An approved patron code represents a customer who ships (or wants to ship) with BNSF and has established a credit arrangement with the BNSF treasury department. ",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on patron code in bill, Accepts list of patron codes. An approved patron code represents a customer who ships (or wants to ship) with BNSF and has established a credit arrangement with the BNSF treasury department. ",
+                    "example": "0108990041"
+                  },
+                  "nullable": false
+                },
+                "rateAuthorityList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on rate authority in the bill.",
+                    "example": "BNSFC999999999999999999999"
+                  },
+                  "nullable": false
+                },
+                "stccList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on List of STCC .STCC (Standard Transportation Commodity Code) number identifying a Commodity. Note: STCC_NUMBER is the combination of Product Classification (PROD_CLS) and Product Classification Number (PROD_CLS_NBR).Note: The STCC (Standard Transportation Commodity Code) is a publication containing specific product information used on waybills and other shipping documents. A STCC code is a seven digit numeric code representing 38 commodity groupings. Assignment of a STCC Code is associated by a commodity description developed to conform with exact descriptions in freight transportation classifications of rail and motor carriers.",
+                    "example": "4905752"
+                  },
+                  "nullable": false
+                },
+                "toDueDate": {
+                  "type": "string",
+                  "description": "Filter based on Due Date of bill - end range",
+                  "example": "2023-01-29"
+                },
+                "toInvoiceDate": {
+                  "type": "string",
+                  "description": "Filter based on Invoice Dates of bill - end range",
+                  "example": "2023-01-31"
+                },
+                "toWayBillDate": {
+                  "type": "string",
+                  "description": "Filter based on Waybill Date of bill - end range",
+                  "example": "2023-01-29"
+                },
+                "tracerList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on tracer number if anything assigned to the invoices.",
+                    "example": "99999999999"
+                  },
+                  "nullable": false
+                },
+                "wayBillNumberList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Filter based on waybill numbers provided in list. The number the shipper (issuing company) has placed on a Waybill.",
+                    "example": "999999"
+                  },
+                  "nullable": false
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            }
+          }
+        }
+      },
+      "Post_oD_Pairs": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "oDPairsList",
+                "stcc"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date",
+                  "description": " Shipment date to be considered for pulling the miles",
+                  "example": "2025-10-12"
+                },
+                "oDPairsList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "destinationCity",
+                      "destinationState",
+                      "originCity",
+                      "originState"
+                    ],
+                    "properties": {
+                      "destinationCity": {
+                        "type": "string",
+                        "description": "Destination station identifier",
+                        "example": "HOUSTON"
+                      },
+                      "destinationState": {
+                        "type": "string",
+                        "description": "Destination state identifier",
+                        "example": "TX"
+                      },
+                      "originCity": {
+                        "type": "string",
+                        "description": "Origin station identifier",
+                        "example": "CHICAGO"
+                      },
+                      "originState": {
+                        "type": "string",
+                        "description": "Origin state identifier",
+                        "example": "IL"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "nullable": false
+                  },
+                  "nullable": false
+                },
+                "stcc": {
+                  "type": "string",
+                  "description": "7 digit STCC (Standard Transportation Commodity Code) number identifying a Commodity. ",
+                  "example": "1111110"
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

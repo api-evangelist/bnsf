@@ -3,116 +3,111 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: BNSF
 providerId: bnsf
+generated: '2026-09-06'
+method: searched
+source: >-
+  components/responses/429 in BNSF's own published OpenAPI documents, e.g.
+  https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json
+docs:
+- https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+modified: '2026-09-06'
 tags:
-  - Freight
-  - Railroad
-  - Shipping
-  - Trains
-  - Intermodal
-  - Logistics
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the BNSF API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+- Freight
+- Railroad
+- Rate Limiting
+- Throttling
+description: >-
+  BNSF publishes its API Gateway throttle limits verbatim inside the shared 429 response of every one
+  of its eight OpenAPI documents. Every operation in the catalog (59 of 59) declares a 429 response
+  carrying these limits. Limits are stated as flat gateway throttles, not as plan tiers — BNSF
+  publishes no priced plans, so there is no per-tier variation to record.
+limit_count: 3
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+  note: >-
+    BNSF documents no rate-limit response headers. Neither the OpenAPI documents nor the developer
+    pages define X-RateLimit-*, RateLimit-* or Retry-After, and no response object in any of the
+    eight specs declares a headers block. A client learns it is throttled only from the 429 status
+    code and must back off on its own schedule.
 responseCodes:
   throttled: 429
   quotaExceeded: 429
-  serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - BNSF Tracing API
-      - BNSF Hub Operations API
-      - BNSF Pricing & Rates API
-      - BNSF Schedules API
-      - BNSF Waybill Management API
-      - BNSF Reference Files API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - BNSF Tracing API
-      - BNSF Hub Operations API
-      - BNSF Pricing & Rates API
-      - BNSF Schedules API
-      - BNSF Waybill Management API
-      - BNSF Reference Files API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - BNSF Tracing API
-      - BNSF Hub Operations API
-      - BNSF Pricing & Rates API
-      - BNSF Schedules API
-      - BNSF Waybill Management API
-      - BNSF Reference Files API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - BNSF Tracing API
-      - BNSF Hub Operations API
-      - BNSF Pricing & Rates API
-      - BNSF Schedules API
-      - BNSF Waybill Management API
-      - BNSF Reference Files API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - BNSF Tracing API
-      - BNSF Hub Operations API
-      - BNSF Pricing & Rates API
-      - BNSF Schedules API
-      - BNSF Waybill Management API
-      - BNSF Reference Files API
+- name: Per-second, per-partner, per-service
+  scope: partner-per-service
+  metric: requests_per_second
+  limit: 1
+  timeFrame: second
+  enforced_by: BNSF API Gateway
+  applies: all services
+- name: Per-minute, per-partner, per-service
+  scope: partner-per-service
+  metric: requests_per_minute
+  limit: 15
+  timeFrame: minute
+  enforced_by: BNSF API Gateway
+  applies: all services
+- name: Per-minute, per-service (aggregate across all partners)
+  scope: service
+  metric: requests_per_minute
+  limit: 100
+  timeFrame: minute
+  enforced_by: BNSF API Gateway
+  applies: all services
+  note: >-
+    A shared ceiling. One partner's traffic can exhaust it for every other partner on the same
+    service, which is a capacity fact a consumer cannot observe from its own quota.
+payload_limits:
+- name: Bulk trace request ceiling
+  metric: units_per_request
+  limit: 300
+  applies:
+  - POST /v1/vins
+  - POST /v1/cars
+  - POST /v1/units
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- name: Unit-train request ceiling
+  metric: trains_per_request
+  limit: 25
+  applies:
+  - POST /v1/ag-trains
+  - POST /v1/coal-trains
+  - POST /v1/ip-trains
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- name: Rail-mile inquiry ceiling
+  metric: shipments_per_request
+  limit: 1000
+  applies:
+  - POST /v1/rail-miles
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- name: Open-invoice patron-code ceiling
+  metric: patron_codes_per_request
+  limit: 5
+  applies:
+  - POST /v1/invoices
+  source: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/
+- name: Default and maximum page size on list endpoints
+  metric: records_per_page
+  limit: 2000
+  applies:
+  - GET /v1/cars
+  - GET /v1/units
+  source: BNSF OpenAPI parameter description for `limit`
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+- name: Backoff on 429
+  description: >-
+    BNSF's own wording: "Upon receiving such exceptions, you can resubmit failed requests in a
+    rate-limited manner, complying with the API Gateway throttle limits." No Retry-After value is
+    supplied, so the client chooses the interval.
+- name: 504 recovery
+  description: >-
+    On a 504 Gateway Timeout BNSF instructs callers to wait about one minute before retrying.
+  source: components/responses/504 in the published OpenAPI documents
 maintainers:
-  - FN: Kin Lane
-    email: kinlane@gmail.com
+- FN: Kin Lane
+  email: kinlane@gmail.com

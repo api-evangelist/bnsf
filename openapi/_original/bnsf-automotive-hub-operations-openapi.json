@@ -1,0 +1,1382 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "description": "",
+    "termsOfService": "http://www.bnsf.com/site-terms-of-use.html",
+    "contact": {
+      "name": "BNSF Customer API",
+      "email": "CustomerAPI@bnsf.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bnsf.com:6443"
+    }
+  ],
+  "paths": {
+    "/v1/pregate/automotive/haulaway-entry": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Haul Away Gate Entry Request - Allow truckers and/or dispatchers to submit load details prior to an actual ingate for an automotive haul away move.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/haulawayGateEntryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/haulawayGateEntryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/vehicles/addHold": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "​​AddHold Request - Haulway or OEM will have the capability to add hold on VIN at Origin or Destination (\"O\"  or \"D\")",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/automotiveVehicleHoldAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "vinHoldResponseMessageText": {
+                      "type": "string",
+                      "title": "VIN Hold Response Message Text",
+                      "example": "ACCEPTED HOLD REQUEST"
+                    }
+                  },
+                  "nullable": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/vehicles/releaseHold": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "​​Release Hold Request - This enables Haulway and OEM to release existing Hold on a VIN.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/automotiveVehicleHoldRelease"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "vinHoldResponseMessageText": {
+                      "type": "string",
+                      "title": "VIN Hold Response Message Text",
+                      "example": "ACCEPTED HOLD REQUEST"
+                    }
+                  },
+                  "nullable": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/gate-pass/ramp/{aarRampCode}/vehicle/{vin}": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Haulway Carries - Retrieves information of a entry request that is already posted.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AAR_Ramp_Code"
+          },
+          {
+            "$ref": "#/components/parameters/Vin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gateEntryRequestList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/gate-pass/ramp/{aarRampCode}/gate-pass/{gatePassCode}": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Haulway Carries - Retrieves information of a entry request that is already posted.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AAR_Ramp_Code"
+          },
+          {
+            "$ref": "#/components/parameters/Gate_Pass_Code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gateEntryRequestList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/exit-request": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Haul Away Gate Exit Request – Allow truckers and/or dispatchers to submit load details AT outgate.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/gateExitRequestFromHaulaway"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateExitRequestResponseFromBNSF"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    },
+    "/v1/pre-outgate": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Haul‑Away Gate Pre-Exit Request – Allow dispatchers to submit load details BEFORE ARRIVING to outgate the load for the dealer.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/preOutageRequestFromHaulway"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK**\n\nThe request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreOutageResponseFromBNSF"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "504": {
+            "$ref": "#/components/responses/504"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "haulawayGateEntryRequest": {
+        "type": "object",
+        "title": "Haulaway Gate Entry Request",
+        "required": [
+          "scac",
+          "aarRampCode",
+          "haulawayGatePassId",
+          "haulawayDriverId"
+        ],
+        "properties": {
+          "scac": {
+            "type": "string",
+            "title": "SCAC",
+            "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+            "example": "ABCD"
+          },
+          "aarRampCode": {
+            "type": "string",
+            "title": "AAR Ramp Code",
+            "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+            "example": "TX027"
+          },
+          "haulawayGatePassId": {
+            "type": "string",
+            "title": "Haulaway Gate Pass ID",
+            "description": "The gate pass ID is assigned by a haulaway carrier. As there are multiple haulaway carriers, this value is not guaranteed to be unique across all haulers, therefore duplicate values are possible.",
+            "example": "ABCD1234"
+          },
+          "haulawayLoadId": {
+            "type": "string",
+            "title": "Haulaway Load ID",
+            "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+            "example": "ABCD1234"
+          },
+          "haulawayTrailerNumber": {
+            "type": "string",
+            "title": "Haulaway Trailer Number",
+            "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "5688T"
+          },
+          "haulawayTruckNumber": {
+            "type": "string",
+            "title": "Haulaway Truck Number",
+            "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "Q1025"
+          },
+          "haulawayDriverId": {
+            "type": "string",
+            "title": "Haulaway Driver ID",
+            "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+            "example": "K18"
+          },
+          "automotiveVehicles": {
+            "type": "array",
+            "title": "Automotive Vehicles",
+            "items": {
+              "type": "object",
+              "required": [
+                "vin"
+              ],
+              "properties": {
+                "vin": {
+                  "type": "string",
+                  "title": "VIN",
+                  "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                  "example": "1X6XXXXX2XX566133"
+                },
+                "automotiveVehicleDamages": {
+                  "type": "array",
+                  "title": "Automotive Vehicle Damages",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "automotiveVehicleDamagedAreaCode": {
+                        "type": "string",
+                        "title": "Automotive Vehicle Damaged Area Code",
+                        "description": "Code that defines the area of an automobile where damage has been reported.",
+                        "example": "03"
+                      },
+                      "automotiveVehicleDamageTypeCode": {
+                        "type": "string",
+                        "title": "Automotive Vehicle Damage Type Code",
+                        "description": "Code that defines the type of damage to an automobile that has been reported.",
+                        "example": "04"
+                      },
+                      "automotiveVehicleDamageSeverityCode": {
+                        "type": "string",
+                        "title": "Automotive Vehicle Damage Severity Code",
+                        "description": "Code that defines the severity of damage to an automobile that has been reported.",
+                        "example": "2"
+                      }
+                    },
+                    "nullable": false
+                  },
+                  "nullable": false
+                }
+              },
+              "nullable": false
+            },
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "haulawayGateEntryResponse": {
+        "type": "object",
+        "title": "Haulaway Gate Entry Response ",
+        "required": [
+          "scac",
+          "haulawayDriverId",
+          "aarRampCode",
+          "haulawayGatePassId"
+        ],
+        "properties": {
+          "scac": {
+            "type": "string",
+            "title": "SCAC",
+            "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+            "example": "ABCD"
+          },
+          "haulawayDriverId": {
+            "type": "string",
+            "title": "Haulaway Driver ID",
+            "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+            "example": "K18"
+          },
+          "aarRampCode": {
+            "type": "string",
+            "title": "AAR Ramp Code",
+            "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+            "example": "TX027"
+          },
+          "haulawayGatePassId": {
+            "type": "string",
+            "title": "Haulaway Gate Pass ID",
+            "description": "The gate pass ID is assigned by a haulaway carrier. As there are multiple haulaway carriers, this value is not guaranteed to be unique across all haulers, therefore duplicate values are possible.",
+            "example": "ABCD1234"
+          },
+          "bnsfHaulawayGatePassId": {
+            "type": "string",
+            "title": "Haulaway Pass Id",
+            "description": "The unique identifier of a gate pass, as generated by BNSF, for every load received from a Haulaway Carrier through the EPOD (Electronic Proof of Delivery) process.",
+            "example": "EQAEM6"
+          },
+          "haulawayLoadId": {
+            "type": "string",
+            "title": "Haulaway Load ID",
+            "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+            "example": "ABCD1234"
+          },
+          "haulawayTrailerNumber": {
+            "type": "string",
+            "title": "Haulaway Trailer Number",
+            "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "5688T"
+          },
+          "haulawayTruckNumber": {
+            "type": "string",
+            "title": "Haulaway Truck Number",
+            "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "Q1025"
+          },
+          "automotiveVehicles": {
+            "type": "array",
+            "title": "Automotive Vehicles",
+            "items": {
+              "type": "object",
+              "required": [
+                "vin",
+                "commodityStorageZoneName",
+                "commodityStorageZoneBayName"
+              ],
+              "properties": {
+                "vin": {
+                  "type": "string",
+                  "title": "VIN",
+                  "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                  "example": "1X6XXXXX2XX566133"
+                },
+                "commodityStorageZoneName": {
+                  "type": "string",
+                  "title": "commodityStorageZoneName",
+                  "description": "The name of a zone, within a facility or station's storage area, where a commodity (e.g. automobile) is stored or parked.",
+                  "example": "PIZN"
+                },
+                "commodityStorageZoneBayName": {
+                  "type": "string",
+                  "title": "commodityStorageZoneBayName",
+                  "description": "The name of a bay, within a facility or station's storage area, where a commodity (e.g. automobile) is stored or parked.",
+                  "example": "A1"
+                }
+              },
+              "nullable": false
+            },
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "automotiveVehicleHoldAdd": {
+        "type": "object",
+        "title": "Automotive Vehicle Hold Add",
+        "required": [
+          "automotiveVehicleHoldChangeRequestedById",
+          "automotiveHoldOriginDestinationCode",
+          "vinList"
+        ],
+        "properties": {
+          "automotiveVehicleHoldChangeRequestedById": {
+            "type": "string",
+            "title": "Automotive Vehicle Hold Change Requested By ID",
+            "description": "Identifier of the entity that has requested a hold status change for automotive vehicles (by VIN). Values originate from other sources and may include SCAC, Manufacturer ID, etc.",
+            "example": "ABCD"
+          },
+          "automotiveHoldOriginDestinationCode": {
+            "type": "string",
+            "title": "Automotive Hold Origin Destination Code",
+            "description": "Code that defines if the associated Automotive hold information relates to an origin or destination location.",
+            "example": "O (Origin)"
+          },
+          "vinList": {
+            "type": "array",
+            "title": "VIN List",
+            "description": "Comma separated list of VIN (Vehicle Identification Numbers).",
+            "items": {
+              "type": "string",
+              "example": "12345678901234567"
+            },
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "automotiveVehicleHoldRelease": {
+        "type": "object",
+        "title": "Automotive Vehicle Hold Release",
+        "required": [
+          "automotiveVehicleHoldChangeRequestedById",
+          "vinList"
+        ],
+        "properties": {
+          "automotiveVehicleHoldChangeRequestedById": {
+            "type": "string",
+            "title": "Automotive Vehicle Hold Change Requested By ID",
+            "description": "Identifier of the entity that has requested a hold status change for automotive vehicles (by VIN). Values originate from other sources and may include SCAC, Manufacturer ID, etc.",
+            "example": "ABCD"
+          },
+          "vinList": {
+            "type": "array",
+            "title": "VIN List",
+            "description": "Comma separated list of VIN (Vehicle Identification Numbers).",
+            "items": {
+              "type": "string",
+              "example": "12345678901234567"
+            },
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "gateEntryRequestList": {
+        "type": "object",
+        "title": "Gate Entry Request List",
+        "properties": {
+          "gateEntryRequestList": {
+            "type": "array",
+            "description": "Collection of entry requests ",
+            "items": {
+              "type": "object",
+              "properties": {
+                "carrierScac": {
+                  "type": "string",
+                  "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+                  "example": "CASF"
+                },
+                "driverId": {
+                  "type": "string",
+                  "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+                  "example": "S53045369122"
+                },
+                "aarRampCode": {
+                  "type": "string",
+                  "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+                  "example": "IL022"
+                },
+                "gatePassCode": {
+                  "type": "string",
+                  "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                  "example": "20349891"
+                },
+                "haulPassCode": {
+                  "type": "string",
+                  "description": "The gate pass ID is assigned by a haulaway carrier. As there are multiple haulaway carriers, this value is not guaranteed to be unique across all haulers, therefore duplicate values are possible.",
+                  "example": "IEY6UY"
+                },
+                "loadNumber": {
+                  "type": "string",
+                  "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                  "example": "20349891"
+                },
+                "trailerNumber": {
+                  "type": "string",
+                  "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+                  "example": "22410"
+                },
+                "truckNumber": {
+                  "type": "string",
+                  "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+                  "example": "22409"
+                },
+                "requestTimestamp": {
+                  "type": "string",
+                  "description": "Timestamp at which the request is posted.",
+                  "example": "2023-12-07T12:21:02.605-06:00"
+                },
+                "ingateTimestamp": {
+                  "type": "string",
+                  "description": "Timestamp at which the request is ingated.",
+                  "example": "2023-12-07T12:21:02.605-06:00"
+                },
+                "ingateUserId": {
+                  "type": "string",
+                  "description": "User id used to ingate the request.",
+                  "example": "USER"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Current status of the load.",
+                  "example": "A"
+                },
+                "loadedVehicles": {
+                  "type": "array",
+                  "description": "List of Vins",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "vin": {
+                        "type": "string",
+                        "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                        "example": "1FMSK7DH6PGC01166"
+                      },
+                      "zone": {
+                        "type": "string",
+                        "description": "Zone information of the VIN.",
+                        "example": "2 digit alpha numberic value. Ex. A1"
+                      },
+                      "bay": {
+                        "type": "string",
+                        "description": "Bay information of the vin",
+                        "example": "alpha numeric value "
+                      },
+                      "damages": {
+                        "type": "array",
+                        "description": "List of damages",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "location": {
+                              "type": "string",
+                              "description": "Code that defines the area of an automobile where damage has been reported.",
+                              "example": "numeric values Ex : 1,2,3"
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Code that defines the type of damage to an automobile that has been reported.",
+                              "example": "numeric values Ex : 1,2,3"
+                            },
+                            "severity": {
+                              "type": "string",
+                              "description": "Code that defines the severity of damage to an automobile that has been reported.",
+                              "example": "numeric values Ex : 1,2,3"
+                            }
+                          },
+                          "nullable": false
+                        },
+                        "nullable": false
+                      }
+                    },
+                    "nullable": false
+                  },
+                  "nullable": false
+                }
+              },
+              "nullable": false
+            },
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "gateExitRequestFromHaulaway": {
+        "type": "object",
+        "required": [
+          "carrierScac",
+          "driverLicense",
+          "gatePassCode",
+          "loadNumber",
+          "loadedVehicles",
+          "outGateLocation",
+          "trailerNumber",
+          "truckNumber"
+        ],
+        "properties": {
+          "carrierScac": {
+            "type": "string",
+            "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+            "example": "SPMA"
+          },
+          "driverLicense": {
+            "type": "string",
+            "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+            "example": "16435"
+          },
+          "gatePassCode": {
+            "type": "string",
+            "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+            "example": "552IRB"
+          },
+          "loadNumber": {
+            "type": "string",
+            "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+            "example": "389772"
+          },
+          "loadedVehicles": {
+            "type": "array",
+            "description": "List of VINs",
+            "items": {
+              "type": "object",
+              "required": [
+                "vin"
+              ],
+              "properties": {
+                "damages": {
+                  "type": "array",
+                  "description": "List of damages",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string",
+                        "description": "Code that defines the area of an automobile where damage has been reported.",
+                        "example": "25"
+                      },
+                      "severity": {
+                        "type": "string",
+                        "description": "Code that defines the severity of damage to an automobile that has been reported.",
+                        "example": "2"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Code that defines the type of damage to an automobile that has been reported.",
+                        "example": "2"
+                      }
+                    },
+                    "nullable": false
+                  },
+                  "nullable": false
+                },
+                "vin": {
+                  "type": "string",
+                  "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                  "example": "4JGFB4FB0TB515072"
+                }
+              },
+              "nullable": false
+            },
+            "nullable": false
+          },
+          "outGateLocation": {
+            "type": "string",
+            "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+            "example": "CA052"
+          },
+          "trailerNumber": {
+            "type": "string",
+            "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "PLANOBM"
+          },
+          "truckNumber": {
+            "type": "string",
+            "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+            "example": "1102"
+          }
+        },
+        "additionalProperties": false,
+        "nullable": false
+      },
+      "GateExitRequestResponseFromBNSF": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "description": "List of errors:\n0000 - Vin is valid and present in table /\nE002 - Vin is not present in table /\nE0003 - Multiple Vins Found /\nE9999 - Error Querying for Vin",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "example": "0000"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Vin is valid and present in table"
+                },
+                "vin": {
+                  "type": "string",
+                  "example": "4JGFB4FB0TB515072"
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            },
+            "nullable": false
+          },
+          "gateExitRequestFromHaulaway": {
+            "type": "object",
+            "properties": {
+              "carrierScac": {
+                "type": "string",
+                "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+                "example": "SPMA"
+              },
+              "driverLicense": {
+                "type": "string",
+                "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+                "example": "16435"
+              },
+              "gatePassCode": {
+                "type": "string",
+                "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                "example": "552IRB"
+              },
+              "loadNumber": {
+                "type": "string",
+                "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                "example": "389772"
+              },
+              "loadedVehicles": {
+                "type": "array",
+                "description": "List of VINs",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "damages": {
+                      "type": "array",
+                      "description": "List of damages",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "location": {
+                            "type": "string",
+                            "description": "Code that defines the area of an automobile where damage has been reported.",
+                            "example": "25"
+                          },
+                          "severity": {
+                            "type": "string",
+                            "description": "Code that defines the severity of damage to an automobile that has been reported.",
+                            "example": "2"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Code that defines the type of damage to an automobile that has been reported.",
+                            "example": "2"
+                          }
+                        },
+                        "nullable": false
+                      },
+                      "nullable": false
+                    },
+                    "vin": {
+                      "type": "string",
+                      "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                      "example": "4JGFB4FB0TB515072"
+                    }
+                  },
+                  "nullable": false
+                },
+                "nullable": false
+              },
+              "outGateLocation": {
+                "type": "string",
+                "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+                "example": "CA052"
+              },
+              "trailerNumber": {
+                "type": "string",
+                "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+                "example": "PLANOBM"
+              },
+              "truckNumber": {
+                "type": "string",
+                "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+                "example": "1102"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          },
+          "haulPass": {
+            "type": "string",
+            "description": "The gate pass ID is assigned by a haulaway carrier. As there are multiple haulaway carriers, this value is not guaranteed to be unique across all haulers, therefore duplicate values are possible.",
+            "example": "AIL6YJ"
+          }
+        },
+        "additionalProperties": false,
+        "nullable": false
+      },
+      "preOutageRequestFromHaulway": {
+        "type": "object",
+        "properties": {
+          "preGateRequestData": {
+            "type": "object",
+            "required": [
+              "carrierScac",
+              "driverLicense",
+              "gatePassCode",
+              "loadNumber",
+              "outGateLocation",
+              "trailerNumber",
+              "truckNumber",
+              "vin"
+            ],
+            "properties": {
+              "carrierScac": {
+                "type": "string",
+                "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+                "example": "DEAA"
+              },
+              "driverLicense": {
+                "type": "string",
+                "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+                "example": "WDL55BTJ263B"
+              },
+              "gatePassCode": {
+                "type": "string",
+                "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                "example": "703241"
+              },
+              "loadNumber": {
+                "type": "string",
+                "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                "example": "703241"
+              },
+              "outGateLocation": {
+                "type": "string",
+                "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+                "example": "OR002"
+              },
+              "trailerNumber": {
+                "type": "string",
+                "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+                "example": "1111"
+              },
+              "truckNumber": {
+                "type": "string",
+                "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+                "example": "2222"
+              },
+              "vin": {
+                "type": "array",
+                "description": "List of VINs - Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                "items": {
+                  "type": "string",
+                  "example": "3FTTW8SA6TRA22427"
+                },
+                "nullable": false
+              }
+            },
+            "additionalProperties": false,
+            "nullable": false
+          }
+        },
+        "nullable": false
+      },
+      "PreOutageResponseFromBNSF": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "description": "List of errors:\n0000 - Vin is valid and present in table /\nE002 - Vin is not present in table /\nE0003 - Multiple Vins Found /\nE9999 - Error Querying for Vin",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "vin": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            },
+            "nullable": false,
+            "example": []
+          },
+          "preGateResponseData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "carrierScac": {
+                  "type": "string",
+                  "description": "SCAC (Standard Carrier Alpha Code) consists of a two to four character alpha abbreviation used to designate a transportation company. SCACs are assigned by NMFTA (National Motor Freight Traffic Association).",
+                  "example": "DEAA"
+                },
+                "driverLicense": {
+                  "type": "string",
+                  "description": "A value assigned to identify a haulaway truck driver. Value may be a Driver License Number or a value assigned by a haulaway carrier itself.",
+                  "example": "WDL55BTJ263B"
+                },
+                "gatePassCode": {
+                  "type": "string",
+                  "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                  "example": "703241"
+                },
+                "haulPassCode": {
+                  "type": "string",
+                  "description": "BNSF generated unique code for entry/exit requests",
+                  "example": "CPHWBK"
+                },
+                "loadNumber": {
+                  "type": "string",
+                  "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+                  "example": "703241"
+                },
+                "loadedVehicles": {
+                  "type": "array",
+                  "description": "List of VINs",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "bay": {
+                        "type": "string",
+                        "description": "A designated spot within a zone where shipments are staged for loading or unloading.",
+                        "example": "R12"
+                      },
+                      "damages": {
+                        "type": "array",
+                        "description": "List of damages",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "location": {
+                              "type": "string",
+                              "description": "Code that defines the area of an automobile where damage has been reported.",
+                              "example": "00"
+                            },
+                            "severity": {
+                              "type": "string",
+                              "description": "Code that defines the severity of damage to an automobile that has been reported.",
+                              "example": "0"
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Code that defines the type of damage to an automobile that has been reported.",
+                              "example": "00"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "nullable": false
+                        },
+                        "nullable": false
+                      },
+                      "vin": {
+                        "type": "string",
+                        "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+                        "example": "3FTTW8SA6TRA22427"
+                      },
+                      "zone": {
+                        "type": "string",
+                        "description": "A section of the parking lot that contains multiple bays for organizing shipments.",
+                        "example": "R"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "nullable": false
+                  },
+                  "nullable": false
+                },
+                "outGateLocation": {
+                  "type": "string",
+                  "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+                  "example": "OR002"
+                },
+                "trailerNumber": {
+                  "type": "string",
+                  "description": "Identification number assigned to a Trailer (part of a tractor trailer) as supplied by the haulaway carrier.",
+                  "example": "1111"
+                },
+                "truckNumber": {
+                  "type": "string",
+                  "description": "Identification number assigned to a Truck (part of a tractor trailer) as supplied by the haulaway carrier.",
+                  "example": "2222"
+                }
+              },
+              "additionalProperties": false,
+              "nullable": false
+            },
+            "nullable": false
+          }
+        },
+        "additionalProperties": false,
+        "nullable": false
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "**Bad Request**\n\nThe request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications."
+      },
+      "401": {
+        "description": "**Unauthorized**\n\nIndicates that the request requires user authentication information. The client MAY repeat the request with a suitable Authorization."
+      },
+      "403": {
+        "description": "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation.\n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+      },
+      "404": {
+        "description": "**Not Found**\n\nThe server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation."
+      },
+      "405": {
+        "description": "**Method Not Allowed**\n\nThe request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation."
+      },
+      "429": {
+        "description": "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+      },
+      "500": {
+        "description": "**Internal Server Error**\n\nThe server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware."
+      },
+      "504": {
+        "description": "**Gateway Timeout**\n\nThe server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again."
+      }
+    },
+    "parameters": {
+      "Vin": {
+        "name": "vin",
+        "in": "path",
+        "description": "Vehicle Identification Number (VIN) is a unique, standardized, alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "title": "vin",
+          "description": "A Vehicle Identification Number (VIN) is a unique, standardized alphanumeric ID used by the automotive industry to identify individual motor vehicles.",
+          "example": "1FMSK7DH6PGC01166"
+        },
+        "example": "1FMSK7DH6PGC01166"
+      },
+      "AAR_Ramp_Code": {
+        "name": "aarRampCode",
+        "in": "path",
+        "description": "Code assigned by the AAR (Association Of American Railroads) that uniquely identifies automotive ramps used in loading and unloading trains throughout North America.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "title": "aarRampCode",
+          "description": "A code assigned by the AAR (Association of American Railroads) that uniquely identifies automotive ramps used for loading and unloading trains throughout North America.",
+          "example": "AZ007"
+        },
+        "example": "IL022"
+      },
+      "Gate_Pass_Code": {
+        "name": "gatePassCode",
+        "in": "path",
+        "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "title": "gatePassCode",
+          "description": "Identification of a specific load as assigned by the haulaway carrier itself. As the value is assigned externally it may or may not be unique.",
+          "example": "20349891"
+        },
+        "example": "20349891"
+      }
+    },
+    "requestBodies": {
+      "postEquipmentDll": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "title": "Schema",
+              "properties": {
+                "equipment_list": {
+                  "type": "array",
+                  "title": "Equipment List",
+                  "items": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 10,
+                    "example": "BNFZ103071"
+                  },
+                  "minItems": 1,
+                  "maxItems": 300,
+                  "nullable": false
+                }
+              },
+              "nullable": false
+            }
+          }
+        }
+      },
+      "flipInputList": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "title": "Schema",
+              "properties": {
+                "flipInputList": {
+                  "type": "array",
+                  "title": "flipInputList",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "equipmentInitial": {
+                        "type": "string",
+                        "example": "BNSF"
+                      },
+                      "equipmentNumber": {
+                        "type": "string",
+                        "example": "12345"
+                      },
+                      "station333": {
+                        "type": "string",
+                        "example": "DALLAS"
+                      },
+                      "stationStateCode": {
+                        "type": "string",
+                        "example": "TX"
+                      }
+                    },
+                    "nullable": false
+                  },
+                  "minItems": 1,
+                  "maxItems": 300,
+                  "nullable": false
+                }
+              },
+              "nullable": false
+            }
+          }
+        }
+      },
+      "updateParkingInput": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "title": "Schema",
+              "properties": {
+                "equipmentInitial": {
+                  "type": "string",
+                  "example": "BNSF"
+                },
+                "equipmentLotLocationName": {
+                  "type": "string",
+                  "example": "A"
+                },
+                "equipmentLotRowLocationName": {
+                  "type": "string",
+                  "example": "A"
+                },
+                "equipmentLotRowSpotLocationName": {
+                  "type": "string",
+                  "example": "A"
+                },
+                "equipmentNumber": {
+                  "type": "string",
+                  "example": "12345"
+                },
+                "station333": {
+                  "type": "string",
+                  "example": "DALLAS"
+                },
+                "stationStateCode": {
+                  "type": "string",
+                  "example": "TX"
+                },
+                "truckerDriverLicenseNumber": {
+                  "type": "string",
+                  "example": "12345"
+                },
+                "truckerDriverLicenseStateCode": {
+                  "type": "string",
+                  "example": "TX"
+                }
+              },
+              "nullable": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

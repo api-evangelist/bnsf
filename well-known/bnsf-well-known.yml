@@ -1,0 +1,119 @@
+generated: '2026-09-06'
+method: probed
+source: >-
+  Anonymous HTTPS probes of every host this record knows: the registrable domain and www,
+  both OpenAPI servers[] hosts (api.bnsf.com, api-trial.bnsf.com), and the docs/console host
+  (www.bnsf.com). No discovery document named an authorization server, so no third host was added.
+note: >-
+  BNSF serves no /.well-known/ documents on any host. www.bnsf.com and bnsf.com answer every
+  /.well-known/ path with a soft-404 HTML page (HTTP 404, 91,320 bytes of site chrome). The two API
+  hosts sit behind a mutual-TLS gate that rejects every anonymous request on port 443 with a 13-byte
+  HTTP 403 before routing, so nothing under /.well-known/ is reachable without an approved client
+  certificate. This is a recorded ABSENCE — no WellKnown or SecurityTxt pointer is emitted from it.
+hosts:
+- host: www.bnsf.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: bnsf.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: api.bnsf.com
+  note: mutual-TLS gateway; anonymous requests are refused with a 13-byte 403 before routing
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+  - path: /llms.txt
+    status: 403
+    file: null
+- host: api-trial.bnsf.com
+  note: mutual-TLS gateway; anonymous requests are refused with a 13-byte 403 before routing
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+  - path: /llms.txt
+    status: 403
+    file: null

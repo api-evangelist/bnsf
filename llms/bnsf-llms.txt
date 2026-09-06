@@ -1,0 +1,89 @@
+# BNSF Railway — Customer API
+
+> BNSF Railway operates one of the largest freight rail networks in North America — over 32,000 route
+> miles across 28 states and three Canadian provinces. The BNSF Customer API is a customer-facing
+> REST surface of 59 operations across eight services, covering shipment tracing, intermodal and
+> automotive hub gate operations, pricing and invoices, intermodal schedules, waybill management,
+> rail reference data and diagnostics. Every request requires certificate-based mutual TLS on port
+> 6443. There is no API key and no OAuth.
+
+Generated: 2026-09-06 by API Evangelist (method: generated). BNSF publishes no llms.txt of its own —
+https://www.bnsf.com/llms.txt returned 404 when probed on 2026-09-06. Everything below is grounded in
+BNSF's own published OpenAPI documents and developer pages; nothing is inferred.
+
+## What an agent needs to know before calling
+
+- Base URL, production: https://api.bnsf.com:6443 — trial: https://api-trial.bnsf.com:6443
+- Authentication: mutual TLS only. A client certificate in x509 PEM, from a recognised public CA,
+  effective no longer than 36 months, with Extended Key Usage Client Authentication
+  (OID 1.3.6.1.5.5.7.3.2). Let's Encrypt, webCARES, Cloudflare, self-signed and private certificates
+  are refused. There is no Authorization header anywhere on this surface.
+- Onboarding is not self-service: a BNSF.com User ID plus a certificate registered through the
+  Customer Portal, then up to five business days of BNSF-side configuration.
+- Data visibility is bound to the company on the certificate. You see equipment whose waybill names
+  your company; anything else returns empty, not an error.
+- 27 of the 59 operations are "Restricted Services" needing separate approval and available in
+  Production only.
+- Rate limits: 1 request/second and 15 requests/minute per partner per service, plus a shared
+  100 requests/minute per service across all partners. Exhaustion returns 429 with no Retry-After.
+- There is no idempotency key on any operation. Do not blind-retry a write.
+
+## Developer documentation
+
+- [API Center home](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/): entry point
+- [Getting Started](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/): certificate requirements, onboarding, Postman walkthrough, troubleshooting
+- [Catalog](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/): every operation, described in one page
+- [Developer's Console](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/): BNSF's own Swagger UI over the eight OpenAPI documents
+- [Push Notifications](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/push-notifications/): the six webhook events, with full payloads
+- [Registration](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/): how to get a certificate registered
+- [API Support](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/): FAQ, support hours, Restricted Services, the ZS monitoring role and Letters of Authorization
+
+## Machine-readable contracts published by BNSF
+
+- [Tracing API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json): 15 operations — carload, intermodal, automotive VIN and unit-train tracing plus trip plans
+- [Intermodal Hub Operations API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json): 23 operations — dray booking and plans, DVIR, flips, ingate/outgate and their validators, pre-gates, J1 receipts, unit details, parking
+- [Automotive Hub Operations API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json): 7 operations — haul-away gate entry and exit, VIN holds, gate-pass lookups
+- [Prices and Rates API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json): 4 operations — carload and intermodal price authorities, open invoices, rail miles
+- [Reference Files API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/reference-files.json): 5 operations — event codes, stations, STCC, hazardous STCC, Umler
+- [Waybill Management API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json): 2 operations — submit a bill of lading, retrieve the active waybill
+- [Schedules API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json): 1 operation — intermodal schedules
+- [Diagnostics API](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json): 2 operations — health check, analytic event
+
+## Event surface
+
+BNSF POSTs six event types to a consumer-supplied HTTPS endpoint: Bad Order, Drayage Booking,
+Geofence, Overload, Local Service Notification and Price Update. Payloads are published in full on
+the Push Notifications page. There is no signature header, no delivery id and no retry policy;
+BNSF's own guidance is to queue what arrives and process it yourself. No AsyncAPI document is
+published.
+
+## Domain vocabulary
+
+This API is written in rail industry standards, not in bespoke identifiers. Expect AAR reporting
+marks (equipmentInitial + equipmentNumber), STCC commodity codes, SPLC and OPSL geography codes,
+NMFTA SCACs, AAR ramp codes, AAR Accounting Rule 11, Umler equipment characteristics, and the 633
+party / 333 station code systems. The waybill contract carries 90 explicit EDI Mapping annotations
+binding its JSON fields to ANSI X12 data elements — a shipper already exchanging X12 404 rail
+shipment information can map field to field.
+
+## What BNSF does not publish
+
+- No client SDK in any language; no GitHub organisation; no public Postman collection.
+- No pricing page and no API plans — access is a customer relationship, not a metered product.
+- No status page, no changelog, no deprecation or versioning policy, no SLA.
+- No /.well-known/ documents on any host (probed 2026-09-06: 404 on www.bnsf.com and bnsf.com, 403
+  from the mutual-TLS gateway on api.bnsf.com and api-trial.bnsf.com).
+- No MCP server and no A2A agent card.
+- No RFC 9457 problem details; no error body schema of any kind.
+
+## API Evangelist artifacts in this repository
+
+- openapi/ — the eight documents, verbatim in _original/ and enriched (titles, tags, operationIds,
+  security schemes) in openapi/, with every change recorded in overlays/
+- authentication/, conventions/, errors/, lifecycle/, conformance/, data-model/ — derived and searched
+  profiles of the runtime semantics
+- rate-limits/, plans/, sandbox/ — the published throttles, the measured absence of plans, and the
+  Trial environment
+- asyncapi/bnsf-webhooks.yml — the six-event push catalogue
+- skills/ — six packaged Agent Skills grounded in real operationIds
+- mcp/bnsf-mcp.yml — a candidate tool list; no server exists

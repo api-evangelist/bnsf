@@ -1,0 +1,871 @@
+generated: '2026-09-06'
+method: derived
+source: $ref graph and identifier fields across the eight BNSF OpenAPI documents in openapi/
+description: 'Entity graph for the BNSF Customer API. BNSF publishes no object reference page, so this is derived
+  entirely from the component schemas of its own specifications. The surface has no global resource identifiers
+  and no id prefixes: entities are joined on rail-industry composite keys, not on opaque ids.'
+entity_count: 61
+relationship_count: 9
+join_keys:
+- key: equipmentInitial + equipmentNumber
+  standard: AAR reporting marks
+  meaning: the identity of one railcar, trailer or container; the primary key of the whole surface
+  used_by:
+  - trace
+  - intermodal-hub-operations
+  - automotive-hub-operations
+  - waybill
+  - reference-files
+- key: vin
+  standard: ISO 3779 vehicle identification number
+  meaning: identity of one finished vehicle on the automotive surface
+  used_by:
+  - trace
+  - automotive-hub-operations
+- key: <party>633
+  standard: rail industry customer/party code
+  meaning: identifies shipper, consignee, supplier, payer and other waybill parties
+  used_by:
+  - intermodal-hub-operations
+  - webhooks
+  - waybill
+- key: <place>333
+  standard: rail industry station/city code
+  meaning: origin, destination, event and scale locations
+  used_by:
+  - prices
+  - intermodal-hub-operations
+  - automotive-hub-operations
+  - diagnostics
+  - webhooks
+- key: scac
+  standard: NMFTA Standard Carrier Alpha Code
+  meaning: identifies the trucking or steamship company on a move
+  used_by:
+  - automotive-hub-operations
+  - intermodal-hub-operations
+  - webhooks
+- key: aarRampCode
+  standard: AAR ramp code
+  meaning: identifies the automotive ramp facility
+  used_by:
+  - automotive-hub-operations
+- key: stcc
+  standard: Standard Transportation Commodity Code
+  meaning: identifies what is being hauled; the join between reference data and pricing
+  used_by:
+  - reference-files
+  - prices
+- key: waybillNumber
+  standard: rail waybill number
+  meaning: the shipment document a trace event or a bad-order notice hangs off
+  used_by:
+  - waybill
+  - webhooks
+  - trace
+no_opaque_ids_note: There is no id prefix scheme and no UUID anywhere on this surface. Every join is a composite
+  of industry codes, which means an integrator must already hold the rail vocabulary to use the API at all — but
+  also that records join cleanly to any other Class I railroad feed using the same codes.
+entities:
+- name: j1_receipt
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: j1_receipt
+  field_count: 87
+  fields_sample:
+  - agsDefectFoundIndicator
+  - attachedDispositionCode
+  - attachedUnit
+  - badOrderIndicator
+  - booth
+  - carInitial
+  - carKindCarTypeCode
+  - carKindCode
+  - carNumber
+  - commodityDescription
+  - destinationReleasedCustomer633
+  - destinationStateCode
+  - destinationStation333
+  - driverLicenseNumber
+- name: intermodal
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Intermodal
+  field_count: 54
+  fields_sample:
+  - bnsfTransitGoalDate
+  - bnsfTransitGoalTime
+  - carId
+  - chassisId
+  - confirmedEstimatedCustomerNotificationDate
+  - confirmedEstimatedCustomerNotificationTime
+  - customerRequestedDate
+  - customerRequestedTime
+  - demurrageAmount
+  - demurrageStartDate
+  - destinationRailNetworkLocationName
+  - equipmentInitial
+  - equipmentNumber
+  - estimatedShipmentAvailabilityDate
+- name: station
+  service: BNSF Reference Files API
+  spec: openapi/bnsf-reference-files-openapi.yml
+  type: array
+  title: Station
+  field_count: 48
+  fields_sample:
+  - scac
+  - fsac
+  - splc
+  - railincRegisteredStationIndicator
+  - stationName
+  - station333
+  - stationStateCode
+  - railincStation333
+  - r260JunctionCode
+  - stationSixCharacterAbbreviation
+  - stationThreeCharacterAbbreviation
+  - stationTwoCharacterAbbreviation
+  - stationTimeZoneCode
+  - crewTimeReportingTimeZoneCode
+- name: unit_information
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: unit_information
+  field_count: 44
+  fields_sample:
+  - badOrderIndicator
+  - carKindCarTypeCode
+  - carKindCode
+  - destinationStateCode
+  - destinationStation333
+  - errorMessage
+  - estimatedDerampDate
+  - estimatedDerampTime
+  - eventCode
+  - eventDate
+  - eventTime
+  - fullBilledIndicator
+  - gateEditCode
+  - gateEditMessage
+- name: carload
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Carload
+  field_count: 36
+  fields_sample:
+  - destinationRailNetworkLocationName
+  - equipmentInitial
+  - equipmentNumber
+  - equipmentLoadStatusCode
+  - estimatedShipmentAvailabilityDate
+  - estimatedShipmentAvailabilityTime
+  - finalDestinationRailNetworkLocationName
+  - finalScheduledEventDescription
+  - lastEventDate
+  - lastEventDescription
+  - lastEventTime
+  - lastEventRailNetworkLocationName
+  - lastReportingSCAC
+  - latitude
+- name: carloadV2
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: carloadV2
+  field_count: 34
+  fields_sample:
+  - careOfParty633
+  - careOfPartyFullName
+  - consignee633
+  - consigneeFullName
+  - destinationRailNetworkLocationName
+  - equipmentInitial
+  - equipmentNumber
+  - equipmentLoadStatusCode
+  - estimatedShipmentAvailabilityDate
+  - estimatedShipmentAvailabilityTime
+  - finalDestinationRailNetworkLocationName
+  - finalScheduledEventDescription
+  - lastEventDate
+  - lastEventDescription
+- name: vins
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Vins
+  field_count: 24
+  fields_sample:
+  - commodityVin
+  - carId
+  - destinationRailNetworkLocationName
+  - estimatedShipmentAvailabilityDate
+  - estimatedShipmentAvailabilityTime
+  - finalScheduledEventDescription
+  - finalDestinationRailNetworkLocationName
+  - lastEventDate
+  - lastEventDescription
+  - lastEventTime
+  - lastEventRailNetworkLocationName
+  - lastReportingSCAC
+  - latitude
+  - longitude
+- name: hazardousCommodities
+  service: BNSF Reference Files API
+  spec: openapi/bnsf-reference-files-openapi.yml
+  type: array
+  title: Hazardous Commodities
+  field_count: 23
+  fields_sample:
+  - stcc
+  - commodityRegulatoryAuthorityCode
+  - hazardousCommodityProperShippingNameSequenceNumber
+  - unnaNumber
+  - hazardousCommodityClassificationCode
+  - hazardousCommoditySecondaryClassificationCode
+  - canadianHazardousCommoditySubsidiaryClassification1
+  - canadianHazardousCommoditySubsidiaryClassification2
+  - canadianHazardousCommoditySubsidiaryClassification3
+  - commodityPackagingGroupCode1
+  - commodityPackagingGroupCode2
+  - commodityPackagingGroupCode3
+  - hazardousCommodityProperShippingName
+  - hazardousCommodityProperShippingAugmentationRequiredIndicator
+- name: Intermodal_Pregate
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 22
+  fields_sample:
+  - carKindCode
+  - chassisInitial
+  - chassisNumber
+  - dvirRequiredIndicator
+  - equipmentDoorSealNumber
+  - equipmentInitial
+  - equipmentLengthFeet
+  - equipmentNumber
+  - estimatedGateMoveDatetime
+  - gateEquipmentMovementTypeCode
+  - pickupNumber
+  - railpassId
+  - shipper633
+  - station333
+- name: umler
+  service: BNSF Reference Files API
+  spec: openapi/bnsf-reference-files-openapi.yml
+  type: array
+  title: UMLER
+  field_count: 20
+  fields_sample:
+  - equipmentInitial
+  - equipmentNumber
+  - equipmentGroupCode
+  - equipmentDraftGearTypeCode
+  - grossRailWeightPounds
+  - shipmentLoadLimitPounds
+  - equipmentTareWeightPounds
+  - equipmentExternalLengthInches
+  - equipmentTruckSideBearingTypeCode
+  - equipmentSpeedRestrictionLoadEmptyStatusCode
+  - equipmentSpeedRestrictionCode
+  - specialConditionHandlingInstructionsCodeOne
+  - specialConditionHandlingInstructionsCodeTwo
+  - specialConditionHandlingInstructionsCodeThree
+- name: Gate_Move_Request
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 19
+  fields_sample:
+  - carKindCode
+  - chassisInitial
+  - chassisNumber
+  - equipmentDoorSealNumber
+  - equipmentInitial
+  - equipmentLengthFeet
+  - equipmentNumber
+  - pickupNumber
+  - railpassId
+  - shipper633
+  - station333
+  - stationStateCode
+  - tractorLicensePlateNumber
+  - tractorLicenseStateCode
+- name: intermodal_schedules
+  service: BNSF Schedules API
+  spec: openapi/bnsf-schedules-openapi.yml
+  type: object
+  title: Intermodal Schedules
+  field_count: 17
+  fields_sample:
+  - additionalDescription
+  - additionalDetails
+  - businessTypeName
+  - destinationAvailabilityDayOfWeekName
+  - destinationAvailabilityTime
+  - destinationStationName
+  - destinationStateCode
+  - equipmentTypeName
+  - bnsfTransitGoalHourCount
+  - interchangeDeliveredSCAC
+  - interchangeReceivedSCAC
+  - originCutoffDayOfWeekName
+  - originCutoffTime
+  - originStationName
+- name: ag
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Agriculture
+  field_count: 16
+  fields_sample:
+  - destinationRailNetworkLocationName
+  - emptyCarCount
+  - estimatedShipmentAvailabilityDateTime
+  - lastEventDateTime
+  - lastEventDescription
+  - lastEventRailNetworkLocationName
+  - latitude
+  - loadedCarCount
+  - longitude
+  - nextTrainId
+  - originRailNetworkLocationName
+  - shuttleTrainPermitNumber
+  - shuttleOperatorCompanyAbbreviation
+  - shuttleOrderRequesterAbbreviation
+- name: drayBooking
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: DrayBooking
+  field_count: 12
+  fields_sample:
+  - drayageBookingNumber
+  - destinationStateCode
+  - destinationStation333
+  - destinationStationLotLocationName
+  - originStateCode
+  - originStation333
+  - originStationLotLocationName
+  - drayageMovementMethodName
+  - drayageShuttleTypeName
+  - drayageShuttleMovementTypeName
+  - truckerScac
+  - units
+- name: coal
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Coal
+  field_count: 11
+  fields_sample:
+  - destinationRailNetworkLocationName
+  - emptyCarCount
+  - estimatedShipmentAvailabilityDateTime
+  - lastEventDateTime
+  - lastEventDescription
+  - lastEventRailNetworkLocationName
+  - latitude
+  - loadedCarCount
+  - longitude
+  - originRailNetworkLocationName
+  - trainId
+- name: haulawayGateEntryResponse
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: 'Haulaway Gate Entry Response '
+  field_count: 9
+  fields_sample:
+  - scac
+  - haulawayDriverId
+  - aarRampCode
+  - haulawayGatePassId
+  - bnsfHaulawayGatePassId
+  - haulawayLoadId
+  - haulawayTrailerNumber
+  - haulawayTruckNumber
+  - automotiveVehicles
+- name: haulawayGateEntryRequest
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: Haulaway Gate Entry Request
+  field_count: 8
+  fields_sample:
+  - scac
+  - aarRampCode
+  - haulawayGatePassId
+  - haulawayLoadId
+  - haulawayTrailerNumber
+  - haulawayTruckNumber
+  - haulawayDriverId
+  - automotiveVehicles
+- name: gateExitRequestFromHaulaway
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 8
+  fields_sample:
+  - carrierScac
+  - driverLicense
+  - gatePassCode
+  - loadNumber
+  - loadedVehicles
+  - outGateLocation
+  - trailerNumber
+  - truckNumber
+- name: customerInvoice
+  service: BNSF Prices and Rates API
+  spec: openapi/bnsf-prices-openapi.yml
+  type: object
+  title: Customer Invoice
+  field_count: 7
+  fields_sample:
+  - customerInvoiceDetails
+  - apiResponseElementCount
+  - apiResponsePageNumber
+  - apiResponseElementPerPageCount
+  - apiResponseTotalCurrentInvoiceAmount
+  - apiResponseTotalPastInvoiceAmount
+  - apiResponseTotalInvoiceAmount
+- name: StreetEnRouteResponse
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: StreetEnRouteResponse
+  field_count: 6
+  fields_sample:
+  - chassisInitial
+  - chassisNumber
+  - dvirRequiredIndicator
+  - httpErrors
+  - httpResponseCode
+  - railpassId
+- name: DvirInputBean
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: DvirInputBean
+  field_count: 5
+  fields_sample:
+  - chassisInitial
+  - chassisNumber
+  - dvirRequiredIndicator
+  - station333
+  - stationStateCode
+- name: Generic_User_Provided_Details
+  service: BNSF Diagnostics API
+  spec: openapi/bnsf-diagnostics-openapi.yml
+  type: object
+  title: null
+  field_count: 4
+  fields_sample:
+  - userProvidedEventTypeName
+  - userProvidedStation333
+  - userProvidedStationStateCode
+  - userProvidedValues
+- name: j1_response
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: j1_response
+  field_count: 4
+  fields_sample:
+  - j1PdfData
+  - J1 Receipt
+  - unitInitial
+  - unitNumber
+- name: tripPlan
+  service: BNSF Reference Files API
+  spec: openapi/bnsf-reference-files-openapi.yml
+  type: object
+  title: Event Code
+  field_count: 4
+  fields_sample:
+  - jobStatus
+  - jobStatusDescription
+  - resultSet
+  - rowCount
+- name: tripPlan
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Trip Plan
+  field_count: 4
+  fields_sample:
+  - jobStatus
+  - jobStatusDescription
+  - resultSet
+  - rowCount
+- name: CarsResult
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Cars Result
+  field_count: 4
+  fields_sample:
+  - jobStatus
+  - jobStatusDescription
+  - resultSet
+  - rowCount
+- name: vinDetails
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Vin Details
+  field_count: 4
+  fields_sample:
+  - jobStatus
+  - jobStatusDescription
+  - resultSet
+  - rowCount
+- name: vinInspections
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: Vin Inspections
+  field_count: 4
+  fields_sample:
+  - jobStatus
+  - jobStatusDescription
+  - resultSet
+  - rowCount
+- name: automotiveVehicleHoldAdd
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: Automotive Vehicle Hold Add
+  field_count: 3
+  fields_sample:
+  - automotiveVehicleHoldChangeRequestedById
+  - automotiveHoldOriginDestinationCode
+  - vinList
+- name: GateExitRequestResponseFromBNSF
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 3
+  fields_sample:
+  - errors
+  - gateExitRequestFromHaulaway
+  - haulPass
+- name: DrayBookingResponse
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: DrayBookingResponse
+  field_count: 3
+  fields_sample:
+  - httpErrors
+  - httpResponseCode
+  - drayBooking
+- name: empties_domestic_response
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: empties_domestic_response
+  field_count: 3
+  fields_sample:
+  - errors
+  - status
+  - unitList
+- name: IngateResponse
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: IngateResponse
+  field_count: 3
+  fields_sample:
+  - equipmentLotLocationInstructions
+  - httpResponseCode
+  - railpassId
+- name: Intermodal_Station
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 3
+  fields_sample:
+  - equipmentLotLocations
+  - station333
+  - stationStateCode
+- name: j1_receipt_response
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: j1_receipt_response
+  field_count: 3
+  fields_sample:
+  - errors
+  - j1Details
+  - status
+- name: Pickup_Number_Request
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: Pickup Number Request
+  field_count: 3
+  fields_sample:
+  - equipmentInitial
+  - equipmentNumber
+  - pickupNumber
+- name: unit_location
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: unit_location
+  field_count: 3
+  fields_sample:
+  - lotLocation
+  - rowLocation
+  - spotLocation
+- name: prices_response
+  service: BNSF Prices and Rates API
+  spec: openapi/bnsf-prices-openapi.yml
+  type: object
+  title: Prices Response
+  field_count: 3
+  fields_sample:
+  - status
+  - message
+  - httpStatus
+- name: stcc
+  service: BNSF Reference Files API
+  spec: openapi/bnsf-reference-files-openapi.yml
+  type: array
+  title: stcc
+  field_count: 3
+  fields_sample:
+  - stcc
+  - commodityDescription
+  - commodityDescriptionAbbreviation
+- name: automotiveVehicleHoldRelease
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: Automotive Vehicle Hold Release
+  field_count: 2
+  fields_sample:
+  - automotiveVehicleHoldChangeRequestedById
+  - vinList
+- name: PreOutageResponseFromBNSF
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 2
+  fields_sample:
+  - errors
+  - preGateResponseData
+- name: OutgateResponse
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: OutgateResponse
+  field_count: 2
+  fields_sample:
+  - railpassId
+  - httpResponseCode
+- name: Pickup_Number
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: Pickup Number
+  field_count: 2
+  fields_sample:
+  - pickupNumber
+  - pickupNumberValidIndicator
+- name: gateEntryRequestList
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: Gate Entry Request List
+  field_count: 1
+  fields_sample:
+  - gateEntryRequestList
+- name: preOutageRequestFromHaulway
+  service: BNSF Automotive Hub Operations API
+  spec: openapi/bnsf-automotive-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - preGateRequestData
+- name: DrayPlan
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: Dray Plan
+  field_count: 1
+  fields_sample:
+  - intermodalUnits
+- name: equipmentFlip
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: Equipment Flip
+  field_count: 1
+  fields_sample:
+  - equipmentFlips
+- name: IntermodalUnits
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - intermodalUnits
+- name: intermodalUnits
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: object
+  title: intermodalUnitsRequest
+  field_count: 1
+  fields_sample:
+  - intermodalUnits
+- name: Price_Authority
+  service: BNSF Prices and Rates API
+  spec: openapi/bnsf-prices-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - priceAuthority
+- name: OD_Pairs_Response
+  service: BNSF Prices and Rates API
+  spec: openapi/bnsf-prices-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - data
+- name: intermodalUnits
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: object
+  title: intermodalUnitsRequest
+  field_count: 1
+  fields_sample:
+  - intermodalUnits
+- name: billOfLading
+  service: BNSF Waybill Management API
+  spec: openapi/bnsf-waybill-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - billOfLading
+- name: Waybill_Details
+  service: BNSF Waybill Management API
+  spec: openapi/bnsf-waybill-openapi.yml
+  type: object
+  title: null
+  field_count: 1
+  fields_sample:
+  - customerWaybillDetails
+- name: unit_list
+  service: BNSF Intermodal Hub Operations API
+  spec: openapi/bnsf-intermodal-hub-operations-openapi.yml
+  type: array
+  title: unit_list
+  field_count: 0
+  fields_sample: []
+- name: equipment_list
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: Equipment List
+  field_count: 0
+  fields_sample: []
+- name: train_list_ag
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: Train List Agriculture
+  field_count: 0
+  fields_sample: []
+- name: train_list_coal
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: Train List Coal
+  field_count: 0
+  fields_sample: []
+- name: train_list_ip
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: Train List Ip
+  field_count: 0
+  fields_sample: []
+- name: unit_list
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: unit_list
+  field_count: 0
+  fields_sample: []
+- name: vin_list
+  service: BNSF Tracing API
+  spec: openapi/bnsf-trace-openapi.yml
+  type: array
+  title: vin_list
+  field_count: 0
+  fields_sample: []
+relationships:
+- from: DrayBookingResponse
+  to: drayBooking
+  type: has_many
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: empties_domestic_response
+  to: unit_information
+  type: has_many
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: j1_receipt
+  to: unit_location
+  type: has_many
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: j1_receipt
+  to: unit_information
+  type: has_many
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: j1_receipt_response
+  to: j1_response
+  type: has_many
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: j1_response
+  to: j1_receipt
+  type: has_one
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: unit_information
+  to: unit_location
+  type: has_one
+  via: $ref
+  service: BNSF Intermodal Hub Operations API
+- from: prices_response
+  to: Price_Authority
+  type: has_many
+  via: $ref
+  service: BNSF Prices and Rates API
+- from: CarsResult
+  to: carloadV2
+  type: has_many
+  via: $ref
+  service: BNSF Tracing API
+render: null
