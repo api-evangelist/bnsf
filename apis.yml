@@ -55,6 +55,8 @@ apis:
   humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
   baseURL: https://api.bnsf.com:6443
   tags:
+  - Automotive
+  tags_raw:
   - AUTOMOTIVE
   properties:
   - type: OpenAPI
@@ -147,6 +149,8 @@ apis:
   humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
   baseURL: https://api.bnsf.com:6443
   tags:
+  - Intermodal
+  tags_raw:
   - INTERMODAL
   properties:
   - type: OpenAPI
@@ -239,6 +243,8 @@ apis:
   humanURL: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/
   baseURL: https://api.bnsf.com:6443
   tags:
+  - Trains
+  tags_raw:
   - TRAINS
   properties:
   - type: OpenAPI
