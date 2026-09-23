@@ -1,0 +1,72 @@
+{
+  "provider": "bnsf",
+  "sources": [
+    "_original/bnsf-automotive-hub-operations-openapi.json",
+    "_original/bnsf-diagnostics-openapi.json",
+    "_original/bnsf-intermodal-hub-operations-openapi.json",
+    "_original/bnsf-prices-openapi.json",
+    "_original/bnsf-reference-files-openapi.json",
+    "_original/bnsf-schedules-openapi.json",
+    "_original/bnsf-trace-openapi.json",
+    "_original/bnsf-waybill-openapi.json"
+  ],
+  "outputs": [
+    "bnsf-requests-api-openapi.yml",
+    "bnsf-automotive-api-openapi.yml",
+    "bnsf-carload-api-openapi.yml",
+    "bnsf-intermodal-api-openapi.yml",
+    "bnsf-trains-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "bnsf-automotive-hub-operations-openapi.json: info.title missing",
+    "bnsf-diagnostics-openapi.json: info.title missing",
+    "bnsf-intermodal-hub-operations-openapi.json: info.title missing",
+    "bnsf-prices-openapi.json: info.title missing",
+    "bnsf-reference-files-openapi.json: info.title missing",
+    "bnsf-schedules-openapi.json: info.title missing",
+    "bnsf-trace-openapi.json: info.title missing",
+    "bnsf-waybill-openapi.json: info.title missing"
+  ],
+  "notes": [
+    "8 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (8 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "bnsf-automotive-hub-operations-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-automotive-hub-operations-openapi.json: declared missing tag: Requests",
+    "bnsf-diagnostics-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-diagnostics-openapi.json: declared missing tag: Requests",
+    "bnsf-intermodal-hub-operations-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-intermodal-hub-operations-openapi.json: declared missing tag: Requests",
+    "bnsf-prices-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-prices-openapi.json: declared missing tag: Requests",
+    "bnsf-reference-files-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-reference-files-openapi.json: declared missing tag: Requests",
+    "bnsf-schedules-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-schedules-openapi.json: declared missing tag: Requests",
+    "bnsf-trace-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-trace-openapi.json: declared missing tag: AUTOMOTIVE",
+    "bnsf-trace-openapi.json: declared missing tag: CARLOAD",
+    "bnsf-trace-openapi.json: declared missing tag: INTERMODAL",
+    "bnsf-trace-openapi.json: declared missing tag: TRAINS",
+    "bnsf-waybill-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "bnsf-waybill-openapi.json: declared missing tag: Requests",
+    "tag 'Requests' spans 7 source specs (bnsf-automotive-hub-operations-openapi.json, bnsf-diagnostics-openapi.json, bnsf-intermodal-hub-operations-openapi.json, bnsf-prices-openapi.json, bnsf-reference-files-openapi.json, bnsf-schedules-openapi.json, bnsf-waybill-openapi.json): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/bnsf-waybill-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-trace-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-schedules-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-reference-files-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-prices-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-intermodal-hub-operations-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-diagnostics-openapi.yml: archived document superseded by a larger archived document",
+    "_original/bnsf-automotive-hub-operations-openapi.yml: archived document superseded by a larger archived document",
+    "bnsf-automotive-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bnsf-carload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bnsf-intermodal-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bnsf-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bnsf-trains-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

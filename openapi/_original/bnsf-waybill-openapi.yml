@@ -1,3 +1,5 @@
+# x-archived-from: bnsf-waybill-openapi.yml
+# x-archived-on: 2026-09-16
 openapi: 3.0.0
 info:
   title: BNSF Waybill Management API

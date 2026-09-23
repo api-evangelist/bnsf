@@ -1,0 +1,469 @@
+openapi: 3.2.0
+info:
+  title: Bnsf TRAINS API
+  description: ''
+  termsOfService: http://www.bnsf.com/site-terms-of-use.html
+  contact:
+    name: BNSF Customer API
+    email: CustomerAPI@bnsf.com
+  version: '1.0'
+servers:
+- url: https://api.bnsf.com:6443
+tags:
+- name: TRAINS
+paths:
+  /v1/trains:
+    get:
+      tags:
+      - TRAINS
+      summary: Trains - Provides current status, with tracing details for all unit train types
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/ag'
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '413':
+          description: '**Payload Too Large**
+
+
+            The request entity is larger than limits defined by server.'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1Trains
+      x-operation-id-source: derived
+  /v1/ag-trains:
+    post:
+      tags:
+      - TRAINS
+      summary: Ag Trains - Provides current status, with tracing details for up to 25 Ag trains
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Schema
+              properties:
+                trainList:
+                  $ref: '#/components/schemas/train_list_ag'
+              additionalProperties: false
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/ag'
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '413':
+          description: '**Payload Too Large**
+
+
+            The request entity is larger than limits defined by server.'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: postV1AgTrains
+      x-operation-id-source: derived
+  /v1/coal-trains:
+    post:
+      tags:
+      - TRAINS
+      summary: Coal Trains - Provides current status, with tracing details for up to 25 Coal…
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Schema
+              properties:
+                trainList:
+                  $ref: '#/components/schemas/train_list_coal'
+              additionalProperties: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/coal'
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '413':
+          description: '**Payload Too Large**
+
+
+            The request entity is larger than limits defined by server.'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: postV1CoalTrains
+      x-operation-id-source: derived
+  /v1/ip-trains:
+    post:
+      tags:
+      - TRAINS
+      summary: IP Trains - Provides current status, with tracing details up to 25 industrial…
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Schema
+              properties:
+                trainList:
+                  $ref: '#/components/schemas/train_list_ip'
+              additionalProperties: false
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/ag'
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '413':
+          description: '**Payload Too Large**
+
+
+            The request entity is larger than limits defined by server.'
+        '429':
+          description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return **429 Too Many Requests** error response to the Client.  Upon receiving such exceptions, the client can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits.\n"
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: postV1IpTrains
+      x-operation-id-source: derived
+components:
+  responses:
+    '429':
+      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
+    '500':
+      description: '**Internal Server Error**
+
+
+        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware.'
+    '405':
+      description: '**Method Not Allowed**
+
+
+        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation.'
+  schemas:
+    ag:
+      type: object
+      title: Agriculture
+      properties:
+        destinationRailNetworkLocationName:
+          type: string
+          title: destinationRailNetworkLocationName
+          description: 'The final BNSF operating station and state. This can be different than customer destination. See **finalDestinationRailNetworkLocationName** the final rail station and state as stated on the waybill.  '
+          example: LOSANGELE, CA
+        emptyCarCount:
+          type: integer
+          format: int32
+          title: emptyCarCount
+          description: Number of empty cars on the train
+          example: 115
+        estimatedShipmentAvailabilityDateTime:
+          type: string
+          title: estimatedShipmentAvailabilityDateTime
+          description: 'Estimated date and time that the shipment becomes available to the customer
+
+            '
+          example: 10/14/2019 00:40
+        lastEventDateTime:
+          type: string
+          title: lastEventDateTime
+          example: 2023-02-11 19:41
+        lastEventDescription:
+          type: string
+          title: lastEventDescription
+          description: 'Description of most recent event
+
+            '
+          example: Passing
+        lastEventRailNetworkLocationName:
+          type: string
+          title: lastEventRailNetworkLocationName
+          description: The location of the most recently reported event. See Event Description.
+          example: REDROCK, OK
+        latitude:
+          type: number
+          format: float
+          title: Latitude
+          description: Last reported latitude of the shipment.
+          example: 37.260433
+        loadedCarCount:
+          type: integer
+          format: int32
+          title: loadedCarCount
+          description: Number of loaded cars on the train
+          example: 115
+        longitude:
+          type: number
+          format: float
+          title: Longitude
+          description: Last reported longitude of the shipment.
+          example: -97.60999
+        nextTrainId:
+          type: string
+          title: nextTrainId
+          description: Next train ID
+          example: XTACEDI915
+        originRailNetworkLocationName:
+          type: string
+          title: originRailNetworkLocationName
+          description: The origin station and state of the shipment.
+          example: ALLIANCE, TX
+        shuttleTrainPermitNumber:
+          type: string
+          title: shuttleTrainPermitNumber
+          description: Shuttle train permint number
+          example: '1331164'
+        shuttleOperatorCompanyAbbreviation:
+          type: string
+          title: shuttleOperatorCompanyAbbreviation
+          description: 'Shuttle current trip operator customer abbreviation
+
+            '
+          example: AGCO
+        shuttleOrderRequesterAbbreviation:
+          type: string
+          title: shuttleOrderRequesterAbbreviation
+          description: 'Shuttle order requester customer abbreviation
+
+            '
+          example: AGCO
+        shuttleOwnerCompanyAbbreviation:
+          type: string
+          title: shuttleOwnerCompanyAbbreviation
+          description: 'Shuttle owner customer abbreviation
+
+            '
+          example: USCOMLLC
+        trainId:
+          type: string
+          title: trainId
+          description: 'The code that identifies a specific train and is used to locate cars, units, or shipments. Train IDs consist of four parts:
+
+
+            Type: Train type, based on the commodity being transported, or the speed the train needs to move. Valid values range from A to Z.
+
+            Symbol: A combination of carrier interchange and the number of trains out that day.
+
+            Day: The day of the month the train departed from origin location, in mm-dd format.
+
+            Schedule ID: A value from A to Z.
+
+            '
+          example: GBRETAC908
+      additionalProperties: false
+    train_list_ag:
+      type: array
+      title: Train List Agriculture
+      items:
+        type: string
+        example: GBRETAC907
+      minItems: 1
+      maxItems: 300
+      example:
+      - GBRETAC907
+      - GBRETAC908
+    coal:
+      type: object
+      title: Coal
+      properties:
+        destinationRailNetworkLocationName:
+          type: string
+          title: destinationRailNetworkLocationName
+          description: 'The final BNSF operating station and state. This can be different than customer destination. See **finalDestinationRailNetworkLocationName** the final rail station and state as stated on the waybill.  '
+          example: LOSANGELE, CA
+        emptyCarCount:
+          type: integer
+          format: int32
+          title: emptyCarCount
+          description: Number of empty cars on the train
+          example: 100
+        estimatedShipmentAvailabilityDateTime:
+          type: string
+          title: estimatedShipmentAvailabilityDateTime
+          description: 'Estimated date and time that the shipment becomes available to the customer
+
+            '
+          example: 10/14/2019 00:40
+        lastEventDateTime:
+          type: string
+          title: lastEventDateTime
+          example: 2023-02-28 12:49
+        lastEventDescription:
+          type: string
+          title: lastEventDescription
+          description: 'Description of most recent event
+
+            '
+          example: Passing
+        lastEventRailNetworkLocationName:
+          type: string
+          title: lastEventRailNetworkLocationName
+          description: The location of the most recently reported event. See Event Description.
+          example: REDROCK, OK
+        latitude:
+          type: number
+          format: float
+          title: Latitude
+          description: Last reported latitude of the shipment.
+          example: 37.260433
+        loadedCarCount:
+          type: integer
+          format: int32
+          title: loadedCarCount
+          description: Number of loaded cars on the train
+          example: 0
+        longitude:
+          type: number
+          format: float
+          title: Longitude
+          description: Last reported longitude of the shipment.
+          example: -97.60999
+        originRailNetworkLocationName:
+          type: string
+          title: originRailNetworkLocationName
+          description: The origin station and state of the shipment.
+          example: ALLIANCE, TX
+        trainId:
+          type: string
+          title: trainId
+          description: 'The code that identifies a specific train and is used to locate cars, units, or shipments. Train IDs consist of four parts:
+
+
+            Type: Train type, based on the commodity being transported, or the speed the train needs to move. Valid values range from A to Z.
+
+            Symbol: A combination of carrier interchange and the number of trains out that day.
+
+            Day: The day of the month the train departed from origin location, in mm-dd format.
+
+            Schedule ID: A value from A to Z.
+
+            '
+          example: UKRFCPG031
+      additionalProperties: false
+    train_list_ip:
+      type: array
+      title: Train List Ip
+      items:
+        type: string
+        example: UKRFCPG032
+      minItems: 1
+      maxItems: 300
+      example:
+      - UKRFCPG032
+      - UKRFCPG031
+    train_list_coal:
+      type: array
+      title: Train List Coal
+      items:
+        type: string
+        example: CBTMCOB044
+      minItems: 1
+      maxItems: 300
+      example:
+      - CBTMCOB044
+      - CBTMCOB045

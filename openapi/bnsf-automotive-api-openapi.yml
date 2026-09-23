@@ -1,0 +1,783 @@
+openapi: 3.2.0
+info:
+  title: Bnsf AUTOMOTIVE API
+  description: ''
+  termsOfService: http://www.bnsf.com/site-terms-of-use.html
+  contact:
+    name: BNSF Customer API
+    email: CustomerAPI@bnsf.com
+  version: '1.0'
+servers:
+- url: https://api.bnsf.com:6443
+tags:
+- name: Automotive
+paths:
+  /v1/trip-plan-automotive:
+    get:
+      tags:
+      - Automotive
+      summary: Trip Plan - Returns list of significant events planned for a VIN from origin to…
+      parameters:
+      - name: vin
+        in: query
+        description: VIN
+        schema:
+          type: string
+          example: BNSF
+        example: 4S4WMACD2N3441052
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tripPlan'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1TripPlanAutomotive
+      x-operation-id-source: derived
+  /v1/vins:
+    post:
+      tags:
+      - Automotive
+      summary: VINS - Returns tracing details for requested VINS, up to 300 at a time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Schema
+              properties:
+                vinList:
+                  $ref: '#/components/schemas/vin_list'
+              additionalProperties: false
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Schema
+                properties:
+                  elements:
+                    type: array
+                    title: Elements
+                    items:
+                      $ref: '#/components/schemas/vins'
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: postV1Vins
+      x-operation-id-source: derived
+  /v1/vin-details:
+    get:
+      tags:
+      - Automotive
+      summary: VIN Details - Returns detailed information about your VIN shipments
+      parameters:
+      - name: vinList
+        in: query
+        description: VIN List - Optional parameter with a limit of 300 VINs. If not present, this service returns all VINs accessible by user.
+        schema:
+          type: string
+          example: 2HGFE1F70PH310453,2ABCD1F70PH310453
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vinDetails'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1VinDetails
+      x-operation-id-source: derived
+  /v1/vin-inspections:
+    get:
+      tags:
+      - Automotive
+      summary: VIN Inspections- Returns detailed information about inspections of your VIN…
+      parameters:
+      - name: vinList
+        in: query
+        description: VIN List - This required parameter has a minimum of one VIN and a limit of 20 comma-separated VINs.
+        required: true
+        schema:
+          type: string
+          example: 2HGFE1F70PH310453
+      responses:
+        '200':
+          description: '**OK**
+
+
+            The request has succeeded.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vinInspections'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        '504':
+          $ref: '#/components/responses/504'
+      operationId: getV1VinInspections
+      x-operation-id-source: derived
+components:
+  schemas:
+    vins:
+      type: object
+      title: Vins
+      properties:
+        commodityVin:
+          type: string
+          title: commodityVin
+          description: 'Vehicle Identification Number
+
+            '
+          example: 1FM5K8GC9LGA16302
+        carId:
+          type: string
+          title: carId
+          description: 'The car initial and number used to move the intermodal unit or VIN
+
+            '
+          example: BNSF301578
+        destinationRailNetworkLocationName:
+          type: string
+          title: destinationRailNetworkLocationName
+          description: 'The final BNSF operating station and state. This can be different than customer destination. See **finalDestinationRailNetworkLocationName** the final rail station and state as stated on the waybill.  '
+          example: LOSANGELE, CA
+        estimatedShipmentAvailabilityDate:
+          type: string
+          title: estimatedShipmentAvailabilityDate
+          description: 'Estimated date that the shipment becomes available to the customer
+
+            '
+          example: 09/21/2019
+        estimatedShipmentAvailabilityTime:
+          type: string
+          title: estimatedShipmentAvailabilityTime
+          description: 'Estimated time that the shipment becomes available to the customer
+
+            '
+          example: 02:00
+        finalScheduledEventDescription:
+          type: string
+          title: finalScheduledEventDescription
+          description: Description of the final scheduled event in the trip plan
+          example: Deramp
+        finalDestinationRailNetworkLocationName:
+          type: string
+          title: finalDestinationRailNetworkLocationName
+          description: The final station and state as stated on the waybill.
+          example: SANBERNAR, CA
+        lastEventDate:
+          type: string
+          title: lastEventDate
+          description: Date of most recent event.
+          example: 09/17/2019
+        lastEventDescription:
+          type: string
+          title: lastEventDescription
+          description: 'Description of most recent event
+
+            '
+          example: Passing
+        lastEventTime:
+          type: string
+          title: lastEventTime
+          description: Time of most recent event.
+          example: 07:24
+        lastEventRailNetworkLocationName:
+          type: string
+          title: lastEventRailNetworkLocationName
+          description: The location of the most recently reported event. See Event Description.
+          example: DARLING, AZ
+        lastReportingSCAC:
+          type: string
+          title: lastReportingSCAC
+          description: Carrier abbreviation reporting the most recent event.
+          example: BNSF
+        latitude:
+          type: number
+          format: float
+          title: Latitude
+          description: Last reported latitude of the shipment.
+          example: 37.260433
+        longitude:
+          type: number
+          format: float
+          title: Longitude
+          description: Last reported longitude of the shipment.
+          example: -97.60999
+        message:
+          type: string
+          title: Message
+          description: Message regarding VIN search.
+          example: You are not an authorized waybill party to track this VIN. Please verify your information and try again.
+        nextSCAC:
+          type: string
+          title: nextSCAC
+          description: The next carrier to move the shipment after BNSF.
+          example: UP
+        nextScheduledEventDate:
+          type: string
+          title: nextScheduledEventDate
+          description: The estimated date the next scheduled event will occur.
+          example: 09/18/2019
+        nextScheduledEventDescription:
+          type: string
+          title: nextScheduledEventDescription
+          description: The next scheduled event to occur in the trip plan.
+          example: Train Departed
+        nextScheduledEventStateCode:
+          type: string
+          title: nextScheduledEventStateCode
+          description: The state where the next scheduled event will occur.
+          example: AZ
+        nextScheduledEventStation333:
+          type: string
+          title: nextScheduledEventStation333
+          description: The station where the next scheduled event will occur.
+          example: WILJCT
+        nextScheduledEventTime:
+          type: string
+          title: nextScheduledEventTime
+          description: The estimated time the next scheduled event will occur.
+          example: 08:33
+        originRailNetworkLocationName:
+          type: string
+          title: originRailNetworkLocationName
+          description: The origin station and state of the shipment.
+          example: ALLIANCE, TX
+        shipmentExceptionDescription:
+          type: string
+          title: shipmentExceptionDescription
+          description: 'A description of any exception that applies to the shipment
+
+            '
+          example: WILD DETECTOR/ WHL CONDITION
+        trainId:
+          type: string
+          title: trainId
+          description: 'The code that identifies a specific train and is used to locate cars, units, or shipments. Train IDs consist of four parts:
+
+
+            Type: Train type, based on the commodity being transported, or the speed the train needs to move. Valid values range from A to Z.
+
+            Symbol: A combination of carrier interchange and the number of trains out that day.
+
+            Day: The day of the month the train departed from origin location, in mm-dd format.
+
+            Schedule ID: A value from A to Z.
+
+            '
+          example: HBARGAL125A
+      additionalProperties: false
+    tripPlan:
+      type: object
+      title: Trip Plan
+      description: Travel itinerary for rail equipment.
+      properties:
+        jobStatus:
+          type: integer
+          format: int32
+          title: jobStatus
+          minimum: 1
+          maximum: 4
+          example: 4
+        jobStatusDescription:
+          type: string
+          title: jobStatusDescription
+          example: Job is complete
+        resultSet:
+          type: array
+          title: resultSet
+          items:
+            type: object
+            required:
+            - equipmentInitial
+            - equipmentNumber
+            - estimatedEventDatetimeIndicator
+            - eventDatetime
+            - eventDescription
+            - eventLocation
+            - sequenceNumber
+            - trainId
+            properties:
+              equipmentInitial:
+                type: string
+                title: Equipment Initial
+                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                example: BNSF
+              equipmentNumber:
+                type: string
+                title: Equipment Number
+                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                example: '12345'
+              estimatedEventDatetimeIndicator:
+                type: string
+                title: Estimated Event DateTime Indicator
+                description: Indicates if the Event DateTime is estimated or actual.
+                example: Y
+              eventDatetime:
+                type: string
+                title: Event DateTime
+                description: Date and Time when a given event was created. This represents the complete Date (YYYY-MM-DD), on the Gregorian calendar, along with a valid complete Time (HH:MM:SS:xx)
+                example: 2021-11-17 15.47.51
+              eventDescription:
+                type: string
+                title: Event Description
+                description: Description for an Event Code used to define an event or activity occurring on the rail network.
+                example: Train Departure
+              eventLocation:
+                type: string
+                title: Event Location Name
+                description: The combined name of the City and State Code where the event will or has occurred.
+                example: CLOVIS NM
+              sequenceNumber:
+                type: number
+                format: float
+                title: Trip Plan Segment Sequence Number
+                description: The sequence number applied to the processing (occurrence) of equipment through individual trip plan segments.
+                example: 110
+              trainId:
+                type: string
+                title: Train ID
+                description: The identification of an train.
+                example: S MEMSCO 1 15
+            additionalProperties: false
+        rowCount:
+          type: string
+          title: rowCount
+          example: '1'
+      additionalProperties: false
+    vinInspections:
+      type: object
+      title: Vin Inspections
+      description: Vin Inspections
+      properties:
+        jobStatus:
+          type: integer
+          format: int32
+          title: jobStatus
+          minimum: 1
+          maximum: 4
+          example: 4
+        jobStatusDescription:
+          type: string
+          title: jobStatusDescription
+          example: Job is complete
+        resultSet:
+          type: array
+          title: resultSet
+          items:
+            type: object
+            properties:
+              aiagDamageAreaCode:
+                type: string
+                title: AIAG Damage Area Code
+                description: Code defined by the AIAG (Automotive Industry Action Group) to specify the area on a vehicle that has been damaged during its transportation.
+                example: '10'
+              aiagDamageAreaDescription:
+                type: string
+                title: AIAG Damage Area Description
+                description: Description of the area on a vehicle that has been damaged during its transportation, as defined by the AIAG (Automotive Industry Action Group).
+                example: DOOR-LEFT FRONT
+              aiagDamageSeverityCode:
+                type: string
+                title: AIAG Damage Severity Code
+                description: Code to indicate the severity of the damage identified on a vehicle as it changed possession during its transportation, as defined by the AIAG (Automotive Industry Action Group).
+                example: '1'
+              aiagDamageSeverityDescription:
+                type: string
+                title: AIAG Damage Severity Description
+                description: Description of the severity of the damage identified on a vehicle as it changed possession during its transportation, as defined by the AIAG (Automotive Industry Action Group).
+                example: 'LESS THAN & INCLUDING 1" '
+              aiagDamageTypeCode:
+                type: string
+                title: AIAG Damage Type Code
+                description: Code to designate the type of damage identified on a vehicle as it changed possession during its transportation, as defined by the AIAG (Automotive Industry Action Group).
+                example: '20'
+              aiagDamageTypeDescription:
+                type: string
+                title: AIAG Damage Type Description
+                description: Type of damage identified on a vehicle as it changed possession during its transportation, as defined by the AIAG (Automotive Industry Action Group).
+                example: 'GLASS - CRACKED '
+              cstVehicleInspectionTypeCode:
+                type: string
+                title: CST Vehicle Inspection Type Code
+                description: Type of inspection made to a vehicle transported by BNSF, as defined in Customer Shipment Tracking.
+                example: '88'
+              cstVehicleInspectionTypeDescription:
+                type: string
+                title: CST Vehicle Inspection Type Description
+                description: Description of the type of inspection performed on a vehicle transported by BNSF, as defined in Customer Shipment Tracking.
+                example: DESTINATION INSPECTION UNDERLOAD
+              vehicleInspectionDate:
+                type: string
+                title: Vehicle Inspection Date
+                description: Date of the inspection of a vehicle transported by BNSF.
+                example: '2023-01-10'
+              vehicleInspectiontime:
+                type: string
+                title: Vehicle InspectionTime
+                description: Time of the inspection of a vehicle transported by BNSF.
+                example: '15:55'
+              vin:
+                type: string
+                title: VIN
+                description: A vehicle identification number (VIN) (also called a chassis number or frame number) is a unique code, including a serial number, used by the automotive industry to identify individual motor vehicles, towed vehicles, motorcycles, scooters and mopeds, as defined in ISO 3779 (content and structure) and ISO 4030 (location and attachment).
+                example: JH4CC2540NC006770
+            additionalProperties: false
+        rowCount:
+          type: string
+          title: rowCount
+          example: '1'
+      additionalProperties: false
+    vin_list:
+      type: array
+      title: vin_list
+      items:
+        type: string
+        minLength: 17
+        maxLength: 17
+        example: 2FMHK6DTXKBA27109
+      minItems: 1
+      maxItems: 300
+      example:
+      - 2FMHK6DTXKBA27109
+      - 1FMHK6DTXKBA27109
+    vinDetails:
+      type: object
+      title: Vin Details
+      description: Vin Details
+      properties:
+        jobStatus:
+          type: integer
+          format: int32
+          title: jobStatus
+          minimum: 1
+          maximum: 4
+          example: 4
+        jobStatusDescription:
+          type: string
+          title: jobStatusDescription
+          example: Job is complete
+        resultSet:
+          type: array
+          title: resultSet
+          items:
+            type: object
+            properties:
+              asnCreatedIndicator:
+                type: string
+                title: ASN Created Indicator
+                description: Indicates whether an ASN (Advanced Shipping Notice) was created for a shipment or not.
+                example: Y
+              autorackDeckPositionNumber:
+                type: string
+                title: Autorack Deck Position Number
+                description: The position where a vehicle is placed in the autorack deck.
+                example: '2'
+              autorackOnSpotIndicator:
+                type: string
+                title: Autorack On Spot Indicator
+                description: Indicates whether the autorack is on spot or actually placed for unloading.
+                example: Y
+              autorackTypeDescription:
+                type: string
+                title: Autorack Type Description
+                description: Type of autorack.
+                example: Uni-level
+              billOfLadingId:
+                type: string
+                title: Bill Of Lading Id
+                description: Unique identifier for an instance of an internal or external customer request for the shipment of lading via rail.
+                example: 100200AB
+              carInitial:
+                type: string
+                title: Car Initial
+                description: Initials, also known as reporting marks, assigned to a piece of railroad equipment by the equipment's owner. Value is used with Car Number to uniquely identify a piece of equipment.
+                example: BNSF
+              carNumber:
+                type: string
+                title: Car Number
+                description: Number assigned to a piece of on rail railroad equipment by the equipment's owner. Value is used with Car Initials to uniquely identify a piece of equipment.
+                example: '123456'
+              consignee633:
+                type: string
+                title: Consignee 633
+                description: Name of a Customer, acting as the Consignee (AKA Receiver), which has been abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.
+                example: AMERHONMOTOR
+              customerNotifiedDatetime:
+                type: string
+                title: Customer Notified DateTime
+                description: Date and time a BNSF customer was notified about their shipment.
+                example: 2023-01-10 10:55
+              destinationWaybillLocationName:
+                type: string
+                title: Destination Waybill Location Name
+                description: Standard abbreviation of the city and the state code of the location that is defined as the destination of a shipment in the Waybill.
+                example: ALLIANCE, TX
+              estimatedShipmentAvailabilityDatetime:
+                type: string
+                title: Estimated Shipment Availability DateTime
+                description: The date and time when a shipment will be available for the consignee to pick it up.
+                example: 2023-01-10 10:55
+              haulawayCompanyName:
+                type: string
+                title: Haulaway Company Name
+                description: The name of the company to which a haulaway belongs to.
+                example: Sierra Mountain Express Inc.
+              haulawayScac:
+                type: string
+                title: Haulaway SCAC
+                description: The SCAC (Standard Carrier Alpha Code) of a haulaway.
+                example: SUME
+              inventoryYardCheckDatetime:
+                type: string
+                title: Inventory Yard Check DateTime
+                description: "Date and time when the yard check to maintain the inventory of which shipments \nare in the hub and where took place."
+                example: 2023-01-10 10:55
+              ladingRampRailNetworkLocationName:
+                type: string
+                title: Lading Ramp Rail Network Location Name
+                description: Standard abbreviation of the city and the state code of the rail network location where a lading was ramped.
+                example: SANBERNAR, CA
+              lastEventDatetime:
+                type: string
+                title: Last Event DateTime
+                description: Date and time of the last event recorded.
+                example: '2023-01-10'
+              lastEventDescription:
+                type: string
+                title: Last Event Description
+                description: Description of the last event recorded.
+                example: Train Departure
+              lastEventRailNetworkLocationName:
+                type: string
+                title: Last Event Rail Network Location Name
+                description: Standard abbreviation of the city and the state code of the rail network location where the last reported event occurred.
+                example: SANBERNAR, CA
+              'latitude ':
+                type: string
+                title: 'Latitude '
+                description: Last reported latitude of the shipment.
+                example: '37.260433'
+              longitude:
+                type: string
+                title: Longitude
+                description: Last reported longitude of the shipment.
+                example: '-97.60999'
+              newVehicleIndicator:
+                type: string
+                title: New Vehicle Indicator
+                description: Indicates whether the vehicle is new or not.
+                example: Y
+              nextScheduledEventDate:
+                type: string
+                title: Next Scheduled Event Date
+                description: The date when the next scheduled event will take place.
+                example: '2023-01-10'
+              nextScheduledEventDescription:
+                type: string
+                title: Next Scheduled Event Description
+                description: Description of the next scheduled event.
+                example: Train Arrival
+              nextScheduledEventStation333:
+                type: string
+                title: Next Scheduled Event Station 333
+                description: Name of the city where the next scheduled event will occur. This name has been abbreviated from the city's full name through the use of a standardized programmatic algorithm.
+                example: BELEN
+              nextScheduledEventStationStateCode:
+                type: string
+                title: Next Scheduled Event Station State Code
+                description: The state code for a station where the next scheduled event will occur.
+                example: NM
+              nextScheduledEventTime:
+                type: string
+                title: Next Scheduled Event Time
+                description: The date when the next scheduled event will take place.
+                example: '14:25'
+              originWaybillLocationName:
+                type: string
+                title: Origin Waybill Location Name
+                description: Standard abbreviation of the city and the state code of the location that is defined as the origin of a shipment in the Waybill.
+                example: LOSANGELE, CA
+              outgateDatetime:
+                type: string
+                title: Outgate DateTime
+                description: The date when the outgate took place.
+                example: 2023-01-10 10:55
+              parkingLotZoneBayCode:
+                type: string
+                title: Parking Lot Zone Bay Code
+                description: Code of the bay used along with the zone to locate the spot in the parking lot where shipments are unloaded from the railcar.
+                example: '725'
+              parkingLotZoneCode:
+                type: string
+                title: Parking Lot Zone Code
+                description: Code to locate the zone in a parking lot where shipments are unloaded from the railcar.
+                example: LOTD
+              shipper633:
+                type: string
+                title: Shipper 633
+                description: Name of a Customer, acting as the Shipper, which has been abbreviated from the Customer's full Legal Name through the use of a standardized programmatic process.
+                example: ACMECUST
+              stcc:
+                type: string
+                title: STCC
+                description: STCC (Standard Transportation Commodity Code) number identifying a Commodity.
+                example: '2821142'
+              trainId:
+                type: string
+                title: Train Id
+                description: The identification of an train. (The composite of the type, symbol, section, day, and priority.)
+                example: HBARGAL125A
+              vehicleBodyClassName:
+                type: string
+                title: Vehicle Body Class Name
+                description: The body style of a vehicle that informs its shape, number of doors, and mechanical setup.
+                example: Sedan
+              vehicleDealerAddress:
+                type: string
+                title: Vehicle Dealer Address
+                description: The address of a vehicle dealer.
+                example: 821 N Main Street, Roswell, NM 88201
+              vehicleDealerCode:
+                type: string
+                title: Vehicle Dealer Code
+                description: Vehicle Dealer Code is assigned by a vehicle manufacturer as a way to identify a dealer that they conduct business with.
+                example: '251631'
+              vehicleInspectionDamageFoundIndicator:
+                type: string
+                title: Vehicle Inspection Damage Found Indicator
+                description: Indicates whether damage was found during the inspection of a vehicle that was transported by BNSF.
+                example: Y
+              vehicleMakeName:
+                type: string
+                title: Vehicle Make Name
+                description: The car manufacturer who makes the vehicle or the vehicle's brand.
+                example: Chevrolet
+              vehicleModelName:
+                type: string
+                title: Vehicle Model Name
+                description: The design of a vehicle, in the context of the manufacturer's range or series of vehicles.
+                example: Corvette
+              vehiclePreBayDatetime:
+                type: string
+                title: Vehicle Pre-Bay DateTime
+                description: Date and time when a vehicle was assigned the zone and bay information where it will be placed in the parking lot after being unloaded from the railcar.
+                example: 2023-01-10 10:55
+              vehicleUnloadedDatetime:
+                type: string
+                title: Vehicle Unloaded DateTime
+                description: Date and time when a vehicle was unloaded from the railcar.
+                example: 2023-01-10 10:55
+              vin:
+                type: string
+                title: VIN
+                description: A vehicle identification number (VIN) (also called a chassis number or frame number) is a unique code, including a serial number, used by the automotive industry to identify individual motor vehicles, towed vehicles, motorcycles, scooters and mopeds, as defined in ISO 3779 (content and structure) and ISO 4030 (location and attachment).
+                example: JH4CC2540NC006770
+              waybillDate:
+                type: string
+                title: Waybill Date
+                description: Waybill Date is the day, month, and year specified on a waybill. Value can not be a future date.
+                example: '2023-07-14'
+              waybillNumber:
+                type: string
+                title: Waybill Number
+                description: Waybill Number is the carrier accounting number of a waybill.
+                example: '989999'
+            additionalProperties: false
+        rowCount:
+          type: string
+          title: rowCount
+          example: '1'
+      additionalProperties: false
+  responses:
+    '429':
+      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+    '500':
+      description: '**Internal Server Error**
+
+
+        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware.'
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
+    '405':
+      description: '**Method Not Allowed**
+
+
+        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation.'

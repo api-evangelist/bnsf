@@ -1,3 +1,5 @@
+# x-archived-from: bnsf-reference-files-openapi.yml
+# x-archived-on: 2026-09-16
 openapi: 3.0.0
 info:
   title: BNSF Reference Files API
