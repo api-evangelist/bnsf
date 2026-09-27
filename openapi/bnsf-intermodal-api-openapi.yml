@@ -165,17 +165,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    equipment_list:
-      type: array
-      title: Equipment List
-      items:
-        type: string
-        example: BNSF123456
-      minItems: 1
-      maxItems: 300
-      example:
-      - BNSF123456
-      - BNSF301133
     tripPlan:
       type: object
       title: Trip Plan
@@ -254,6 +243,17 @@ components:
           title: rowCount
           example: '1'
       additionalProperties: false
+    equipment_list:
+      type: array
+      title: Equipment List
+      items:
+        type: string
+        example: BNSF123456
+      minItems: 1
+      maxItems: 300
+      example:
+      - BNSF123456
+      - BNSF301133
     intermodal:
       type: object
       title: Intermodal
@@ -566,23 +566,6 @@ components:
   responses:
     '429':
       description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
-    '404':
-      description: '**Not Found**
-
-
-        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
-    '403':
-      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
-    '400':
-      description: '**Bad Request**
-
-
-        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
-    '504':
-      description: '**Gateway Timeout**
-
-
-        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
     '500':
       description: '**Internal Server Error**
 
@@ -593,3 +576,20 @@ components:
 
 
         The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation.'
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
