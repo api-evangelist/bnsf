@@ -208,85 +208,48 @@ paths:
       operationId: getV1TripPlanCarload
       x-operation-id-source: derived
 components:
+  responses:
+    '504':
+      description: '**Gateway Timeout**
+
+
+        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
+    '429':
+      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
+    '500':
+      description: '**Internal Server Error**
+
+
+        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware.'
+    '404':
+      description: '**Not Found**
+
+
+        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
+    '405':
+      description: '**Method Not Allowed**
+
+
+        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation.'
+    '403':
+      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    '400':
+      description: '**Bad Request**
+
+
+        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
   schemas:
-    tripPlan:
-      type: object
-      title: Trip Plan
-      description: Travel itinerary for rail equipment.
-      properties:
-        jobStatus:
-          type: integer
-          format: int32
-          title: jobStatus
-          minimum: 1
-          maximum: 4
-          example: 4
-        jobStatusDescription:
-          type: string
-          title: jobStatusDescription
-          example: Job is complete
-        resultSet:
-          type: array
-          title: resultSet
-          items:
-            type: object
-            required:
-            - equipmentInitial
-            - equipmentNumber
-            - estimatedEventDatetimeIndicator
-            - eventDatetime
-            - eventDescription
-            - eventLocation
-            - sequenceNumber
-            - trainId
-            properties:
-              equipmentInitial:
-                type: string
-                title: Equipment Initial
-                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
-                example: BNSF
-              equipmentNumber:
-                type: string
-                title: Equipment Number
-                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
-                example: '12345'
-              estimatedEventDatetimeIndicator:
-                type: string
-                title: Estimated Event DateTime Indicator
-                description: Indicates if the Event DateTime is estimated or actual.
-                example: Y
-              eventDatetime:
-                type: string
-                title: Event DateTime
-                description: Date and Time when a given event was created. This represents the complete Date (YYYY-MM-DD), on the Gregorian calendar, along with a valid complete Time (HH:MM:SS:xx)
-                example: 2021-11-17 15.47.51
-              eventDescription:
-                type: string
-                title: Event Description
-                description: Description for an Event Code used to define an event or activity occurring on the rail network.
-                example: Train Departure
-              eventLocation:
-                type: string
-                title: Event Location Name
-                description: The combined name of the City and State Code where the event will or has occurred.
-                example: CLOVIS NM
-              sequenceNumber:
-                type: number
-                format: float
-                title: Trip Plan Segment Sequence Number
-                description: The sequence number applied to the processing (occurrence) of equipment through individual trip plan segments.
-                example: 110
-              trainId:
-                type: string
-                title: Train ID
-                description: The identification of an train.
-                example: S MEMSCO 1 15
-            additionalProperties: false
-        rowCount:
-          type: string
-          title: rowCount
-          example: '1'
-      additionalProperties: false
+    equipment_list:
+      type: array
+      title: Equipment List
+      items:
+        type: string
+        example: BNSF123456
+      minItems: 1
+      maxItems: 300
+      example:
+      - BNSF123456
+      - BNSF301133
     carload:
       type: object
       title: Carload
@@ -497,44 +460,81 @@ components:
           description: Is a unique identifier for an instance of an internal or external customer request for the Bill of Lading via rail.
           example: 017415FD
       additionalProperties: false
-    equipment_list:
-      type: array
-      title: Equipment List
-      items:
-        type: string
-        example: BNSF123456
-      minItems: 1
-      maxItems: 300
-      example:
-      - BNSF123456
-      - BNSF301133
-  responses:
-    '429':
-      description: "**Too Many Requests**\n\nThe BNSF API Gateway enforces rate limits to maintain application security and performance.  Current rate limits are set as follows:\n* 1 API Request Per Second, Per Partner, Per Service\n* 15 API Requests Per Minute, Per Partner, Per Service\n* 100 API Request Per Minute, Per Service\n \nWhen requests exceed these limits the API Gateway will return a **429 Too Many Requests** error response. Upon receiving such exceptions, you can resubmit failed requests in a rate-limited manner, complying with the API Gateway throttle limits. "
-    '500':
-      description: '**Internal Server Error**
-
-
-        The server encountered an unexpected condition which prevented it from fulfilling the request. This is always a problem on the server side. Our internal support systems will be made aware.'
-    '405':
-      description: '**Method Not Allowed**
-
-
-        The request HTTP method is known by the server but has been disabled and cannot be used for that resource. For example, you may be using GET when POST is required. Please consult the documentation.'
-    '404':
-      description: '**Not Found**
-
-
-        The server cannot find the requested resource (URI). That is, the address of the endpoint in your request does not exist. Please consult the documentation.'
-    '400':
-      description: '**Bad Request**
-
-
-        The request could not be understood by the server due to incorrect syntax. Do not repeat the request without modifications.'
-    '504':
-      description: '**Gateway Timeout**
-
-
-        The server is acting as a gateway and cannot get a response in time for a request. Wait about one minute then try again.'
-    '403':
-      description: "Unauthorized request. Here are the most common causes:\n    \n* You are getting 403 Access Denied.\n\n   * It takes a few days for us to get you set up after you register. When set up is complete, you will receive an email letting you know. If you have not received the email, please wait up to five business days. Let us know via API Support if you still have not received the email after five business days.\n   * You can also get this error if your certificate is not configured properly on your side. Please review the Mutual Authentication in the Getting Started section of our documentation. \n\n\n* You are getting 403 \"message\": \"Insufficient privileges\" when accessing a restricted service for which you do not have permission. You can use our Registration form to request access. Be sure to explain the situation in the \"Please explain how you intend to use the API\" field.\n"
+    tripPlan:
+      type: object
+      title: Trip Plan
+      description: Travel itinerary for rail equipment.
+      properties:
+        jobStatus:
+          type: integer
+          format: int32
+          title: jobStatus
+          minimum: 1
+          maximum: 4
+          example: 4
+        jobStatusDescription:
+          type: string
+          title: jobStatusDescription
+          example: Job is complete
+        resultSet:
+          type: array
+          title: resultSet
+          items:
+            type: object
+            required:
+            - equipmentInitial
+            - equipmentNumber
+            - estimatedEventDatetimeIndicator
+            - eventDatetime
+            - eventDescription
+            - eventLocation
+            - sequenceNumber
+            - trainId
+            properties:
+              equipmentInitial:
+                type: string
+                title: Equipment Initial
+                description: Equipment Initial is the prefix or alphabetic part of an equipment units identifying number.
+                example: BNSF
+              equipmentNumber:
+                type: string
+                title: Equipment Number
+                description: Equipment Number is the sequencing or serial part of an equipment units identifying number.
+                example: '12345'
+              estimatedEventDatetimeIndicator:
+                type: string
+                title: Estimated Event DateTime Indicator
+                description: Indicates if the Event DateTime is estimated or actual.
+                example: Y
+              eventDatetime:
+                type: string
+                title: Event DateTime
+                description: Date and Time when a given event was created. This represents the complete Date (YYYY-MM-DD), on the Gregorian calendar, along with a valid complete Time (HH:MM:SS:xx)
+                example: 2021-11-17 15.47.51
+              eventDescription:
+                type: string
+                title: Event Description
+                description: Description for an Event Code used to define an event or activity occurring on the rail network.
+                example: Train Departure
+              eventLocation:
+                type: string
+                title: Event Location Name
+                description: The combined name of the City and State Code where the event will or has occurred.
+                example: CLOVIS NM
+              sequenceNumber:
+                type: number
+                format: float
+                title: Trip Plan Segment Sequence Number
+                description: The sequence number applied to the processing (occurrence) of equipment through individual trip plan segments.
+                example: 110
+              trainId:
+                type: string
+                title: Train ID
+                description: The identification of an train.
+                example: S MEMSCO 1 15
+            additionalProperties: false
+        rowCount:
+          type: string
+          title: rowCount
+          example: '1'
+      additionalProperties: false
