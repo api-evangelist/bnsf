@@ -286,6 +286,9 @@ apis:
   - type: Specification
     url: https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json
 common:
+- type: CapabilityMap
+  url: capabilities/bnsf-capability-edges.yml
+  name: BNSF Business Capability Map
 - type: Overlay
   url: overlays/bnsf-trace-overlay.yaml
 - type: Overlay

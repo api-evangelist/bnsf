@@ -1,0 +1,56 @@
+slug: bnsf
+provider: BNSF
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Automotive
+  spec_file: bnsf-automotive-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.8
+  evidence: GET /v1/trip-plan-automotive 'Returns list of significant events planned for a VIN from origin
+    to…'; POST /v1/vins 'Returns tracing details for requested VINS'
+  reason: Despite the 'Automotive' tag, the operations are rail shipment tracing and trip-plan events
+    for vehicle (VIN) shipments — freight transport execution and visibility, i.e. logistics operations
+    within the supply chain, not an automotive-industry capability.
+- tag: CARLOAD
+  spec_file: bnsf-carload-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.8
+  evidence: GET /v1/cars 'Returns tracing details for railcars on the BNSF network'; GET /v1/trip-plan-carload
+    'Returns list of significant events planned for a railcar equipment…'
+  reason: Railcar shipment tracing and trip-plan events — freight transport execution and in-transit visibility,
+    mapping to Logistics Operations Management.
+- tag: Intermodal
+  spec_file: bnsf-intermodal-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.8
+  evidence: GET /v1/units 'Returns tracing details for units on the BNSF network'; GET /v1/trip-plan-intermodal
+    'Returns list of significant events planned for an intermodal…'
+  reason: Intermodal unit tracing and trip planning is freight transport execution and shipment visibility
+    — Logistics Operations Management.
+- tag: TRAINS
+  spec_file: bnsf-trains-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.75
+  evidence: GET /v1/trains 'Provides current status, with tracing details for all unit train types'; POST
+    /v1/coal-trains 'Provides current status, with tracing details for up to 25 Coal…'
+  reason: Train status and tracing details for unit trains — transport execution monitoring in the freight
+    network, i.e. logistics operations rather than any asset or product capability.
