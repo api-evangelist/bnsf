@@ -1,0 +1,12 @@
+{
+ "url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json",
+ "requested_url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 160498,
+ "sha256": "b9e2a5ba75a4f6c2494b4e321f1b388ed60428e7563c780b1f5ac8dccf7627e3",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}

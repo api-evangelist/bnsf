@@ -1,0 +1,12 @@
+{
+ "url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json",
+ "requested_url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 117428,
+ "sha256": "777129ca823f69adb93d5f8e82b3b3c0028fe6efbb1c5bd8fb3d84c91662ad70",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

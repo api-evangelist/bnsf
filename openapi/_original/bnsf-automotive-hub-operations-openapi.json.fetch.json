@@ -1,0 +1,12 @@
+{
+ "url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json",
+ "requested_url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 56313,
+ "sha256": "99256a51c862de61e51a0d74f4a98d95d947ab7c33a43032af0f9a749315ca75",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}

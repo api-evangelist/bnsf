@@ -1,0 +1,12 @@
+{
+ "url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json",
+ "requested_url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 10118,
+ "sha256": "3ce31a6be0794464d40c60cf5f49e2c20bdf1f1da012a641b8b4142e520a1ca6",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

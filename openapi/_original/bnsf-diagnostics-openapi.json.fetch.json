@@ -1,0 +1,12 @@
+{
+ "url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json",
+ "requested_url": "https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 7947,
+ "sha256": "db7f3613ea70356e008c17634d9c84f87a12901b0b8174237096b0d285eb5661",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
