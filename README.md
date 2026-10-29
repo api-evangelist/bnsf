@@ -1,4 +1,4 @@
-# BNSF (bnsf)
+# BNSF
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,263 +66,153 @@
 
 BNSF Railway, a subsidiary of Berkshire Hathaway Inc., operates one of the largest freight rail networks in North America — more than 32,000 route miles across 28 states and three Canadian provinces, connecting to Mexico through rail lines in Texas. BNSF publishes a genuine customer-facing API programme: eight OpenAPI 3.0 documents totalling 59 operations covering shipment tracing, intermodal and automotive hub gate operations, freight pricing and invoices, intermodal schedules, waybill management, rail reference data and diagnostics, plus a six-event webhook push surface. Every call is authenticated with certificate-based mutual TLS on port 6443; there is no API key and no OAuth, and 27 of the 59 operations are Restricted Services requiring separate authorisation.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/bnsf/refs/heads/main/apis.yml)
+**Areas:** Freight · Railroad · Rail · Shipping · Trains · Intermodal · Logistics · Supply Chain · Transportation
 
-## Scope
+## BNSF on APIs.io
 
-- **Type:** Index
-- **Position:** Producing
+Everything profiled for BNSF is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/bnsf/](https://apis.io/providers/bnsf/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Freight
-- Railroad
-- Shipping
-- Trains
-- Intermodal
-- Logistics
-- Supply Chain
-- Transportation
+- [BNSF AUTOMOTIVE API](https://apis.io/apis/bnsf/bnsf-automotive-api/) — The AUTOMOTIVE API from BNSF — 4 operation(s) for automotive.
+- [BNSF CARLOAD API](https://apis.io/apis/bnsf/bnsf-carload-api/) — The CARLOAD API from BNSF — 3 operation(s) for carload.
+- [BNSF INTERMODAL API](https://apis.io/apis/bnsf/bnsf-intermodal-api/) — The INTERMODAL API from BNSF — 2 operation(s) for intermodal.
+- [BNSF Requests API](https://apis.io/apis/bnsf/bnsf-requests-api/) — The Requests API from BNSF — 41 operation(s) for requests.
+- [BNSF TRAINS API](https://apis.io/apis/bnsf/bnsf-trains-api/) — The TRAINS API from BNSF — 4 operation(s) for trains.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-02-06
-- **Modified:** 2026-09-06
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### BNSF Tracing API
+Event-driven and webhook contracts.
 
-The BNSF Tracing API provides real-time shipment tracing from origin to destination for automotive VINs, carload railcars, intermodal units and unit trains. Fifteen operations cover position, trip plans and significant-event history. Bulk POST forms accept up to 300 VINs, cars or units per request and up to 25 unit trains; list endpoints page at a default and maximum of 2,000 records. None of the fifteen is a Restricted Service, which makes this the surface a newly registered caller can use first.
+- [Bnsf Webhooks](https://apis.io/asyncapis/bnsf/bnsf-webhooks/)
 
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
+#### MCP servers (1)
 
-#### Tags
+Model Context Protocol servers that expose the API to agents.
 
-- Freight
-- Railroad
-- Tracking
-- Tracing
-- Shipping
-- Intermodal
+- [bnsf-mcp.yml](https://apis.io/servers/bnsf/bnsf-mcp-yml/)
 
-#### Properties
+#### Agentic access (1)
 
-- **OpenAPI:** [openapi/bnsf-trace-openapi.yml](openapi/bnsf-trace-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-trace-openapi.json](openapi/_original/bnsf-trace-openapi.json)
-- **Overlay:** [overlays/bnsf-trace-overlay.yaml](overlays/bnsf-trace-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/trace.json)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### BNSF Intermodal Hub Operations API
+- [Bnsf Agentic Access](https://apis.io/agentic-access/bnsf/bnsf-agentic-access/)
 
-The BNSF Intermodal Hub Operations API covers facility operations across the BNSF intermodal hub network: dray bookings and dray plans, driver vehicle inspection reports, authorized flips, hub lot locations, ingate and outgate registration with dedicated validation operations, pre-gate creation and cancellation, J1 gate receipts, pickup numbers, street en-route reporting, unit details, domestic empties and parking updates. Twenty-three operations, twenty-one of them Restricted Services requiring separate BNSF authorisation and available in Production only.
+#### Collections (3)
 
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
+Postman and Open Collection request collections.
 
-#### Tags
+- [Moved to /providers/bnsf/](https://apis.io/collections/bnsf/open-bnsf/)
+- [Moved to /providers/bnsf/](https://apis.io/collections/bnsf/open-bnsf-diagnostics-api/)
+- [Moved to /providers/bnsf/](https://apis.io/collections/bnsf/open-bnsf-reference-files-api/)
 
-- Freight
-- Intermodal
-- Hub
-- Logistics
-- Gate Operations
-- Drayage
+#### Overlays (8)
 
-#### Properties
+OpenAPI overlays, including conversational phrasing for each operation.
 
-- **OpenAPI:** [openapi/bnsf-intermodal-hub-operations-openapi.yml](openapi/bnsf-intermodal-hub-operations-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-intermodal-hub-operations-openapi.json](openapi/_original/bnsf-intermodal-hub-operations-openapi.json)
-- **Overlay:** [overlays/bnsf-intermodal-hub-operations-overlay.yaml](overlays/bnsf-intermodal-hub-operations-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/intermodal-hub-operations.json)
+- [Bnsf Automotive Hub Operations Overlay](https://apis.io/overlays/bnsf/bnsf-automotive-hub-operations-overlay/)
+- [Bnsf Diagnostics Overlay](https://apis.io/overlays/bnsf/bnsf-diagnostics-overlay/)
+- [Bnsf Intermodal Hub Operations Overlay](https://apis.io/overlays/bnsf/bnsf-intermodal-hub-operations-overlay/)
+- [Bnsf Prices Overlay](https://apis.io/overlays/bnsf/bnsf-prices-overlay/)
+- [Bnsf Reference Files Overlay](https://apis.io/overlays/bnsf/bnsf-reference-files-overlay/)
+- [Bnsf Schedules Overlay](https://apis.io/overlays/bnsf/bnsf-schedules-overlay/)
+- [Bnsf Trace Overlay](https://apis.io/overlays/bnsf/bnsf-trace-overlay/)
+- [Bnsf Waybill Overlay](https://apis.io/overlays/bnsf/bnsf-waybill-overlay/)
 
-### BNSF Automotive Hub Operations API
+#### Security (2)
 
-The BNSF Automotive Hub Operations API covers haul-away gate operations at BNSF automotive ramps: gate entry requests submitted before an ingate, gate exit and pre-exit requests, holds placed on and released from a VIN at origin or destination, and gate-pass lookups by AAR ramp code and VIN. Seven operations, keyed on NMFTA SCAC and AAR ramp code, serving truckers, dispatchers and vehicle OEMs.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
+- [Bnsf Authentication](https://apis.io/security/bnsf/bnsf-authentication/)
+- [Bnsf Domain Security](https://apis.io/security/bnsf/bnsf-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Freight
-- Automotive
-- Hub
-- Gate Operations
-- VIN
-- Logistics
+Published plans, tiers and prices.
 
-#### Properties
+- [Bnsf Plans Pricing](https://apis.io/plans/bnsf/bnsf-plans-pricing/)
 
-- **OpenAPI:** [openapi/bnsf-automotive-hub-operations-openapi.yml](openapi/bnsf-automotive-hub-operations-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-automotive-hub-operations-openapi.json](openapi/_original/bnsf-automotive-hub-operations-openapi.json)
-- **Overlay:** [overlays/bnsf-automotive-hub-operations-overlay.yaml](overlays/bnsf-automotive-hub-operations-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/automotive-hub-operations.json)
+#### Rate limits (1)
 
-### BNSF Prices and Rates API
+Published request limits.
 
-The BNSF Prices and Rates API returns freight shipping prices for carload and intermodal moves within a BNSF Price Authority, open invoices for up to five patron codes per request, and rail mileage for BNSF local and AAR Accounting Rule 11 shipments up to 1,000 at a time. Commodity ranges are expressed as STCC bounds and geography accepts SPLC, OPSL, FIPS county, state, ZIP3 and ZIP5 selectors. Three of the four operations are Restricted Services; the rail-mile inquiry is not.
+- [Bnsf Rate Limits](https://apis.io/rate-limits/bnsf/bnsf-rate-limits/)
 
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Freight
-- Pricing
-- Rates
-- Invoices
-- Shipping
-- STCC
+- [Bnsf Finops](https://apis.io/finops/bnsf/bnsf-finops/)
 
-#### Properties
+## Where to find this API
 
-- **OpenAPI:** [openapi/bnsf-prices-openapi.yml](openapi/bnsf-prices-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-prices-openapi.json](openapi/_original/bnsf-prices-openapi.json)
-- **Overlay:** [overlays/bnsf-prices-overlay.yaml](overlays/bnsf-prices-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/prices.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### BNSF Schedules API
+- [Website](https://www.bnsf.com)
+- [Documentation](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
+- [Getting started](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/)
+- [API reference](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
+- [Sign up](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/)
+- [Support](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/)
+- [Blog](https://www.bnsf.com/news-media/railtalk/)
+- [Terms of service](https://www.bnsf.com/site-terms-of-use.html)
+- [Privacy policy](https://www.bnsf.com/privacy-policy.html)
 
-The BNSF Schedules API returns published intermodal transit schedules for the BNSF network, so a shipper can plan departure and arrival timing before booking freight. A single operation, declared as a Restricted Service requiring separate BNSF authorisation.
+## API Evangelist rating
 
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
+**Kin Score 47.6** — developing · rubric 0.25.0 · scored 2026-10-23
 
-#### Tags
-
-- Freight
-- Schedules
-- Transit
-- Intermodal
-
-#### Properties
-
-- **OpenAPI:** [openapi/bnsf-schedules-openapi.yml](openapi/bnsf-schedules-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-schedules-openapi.json](openapi/_original/bnsf-schedules-openapi.json)
-- **Overlay:** [overlays/bnsf-schedules-overlay.yaml](overlays/bnsf-schedules-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/schedules.json)
-
-### BNSF Waybill Management API
-
-The BNSF Waybill Management API submits a bill of lading with the required transit information to create a waybill, and retrieves the current active waybill for a given piece of equipment. Its request schema carries ninety explicit EDI Mapping annotations binding JSON fields to ANSI X12 data elements, so a shipper already exchanging X12 404 rail shipment information can map field to field. The submission operation is a Restricted Service and has no published void, cancel or amend.
-
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
-
-#### Tags
-
-- Freight
-- Waybill
-- Bill of Lading
-- Carload
-- EDI
-- Documentation
-
-#### Properties
-
-- **OpenAPI:** [openapi/bnsf-waybill-openapi.yml](openapi/bnsf-waybill-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-waybill-openapi.json](openapi/_original/bnsf-waybill-openapi.json)
-- **Overlay:** [overlays/bnsf-waybill-overlay.yaml](overlays/bnsf-waybill-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/waybill.json)
-
-### BNSF Reference Files API
-
-The BNSF Reference Files API resolves the rail industry code systems the rest of the BNSF surface is written in: event codes describing equipment activity, station details behind the 333 location codes, STCC commodity codes and their hazardous-materials detail, and Umler equipment characteristics covering dimensions, capacities and weights for freight cars, trailers and containers. Five operations, none of them restricted.
-
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
-
-#### Tags
-
-- Freight
-- Reference
-- Data
-- STCC
-- Stations
-- Umler
-- Hazardous Materials
-
-#### Properties
-
-- **OpenAPI:** [openapi/bnsf-reference-files-openapi.yml](openapi/bnsf-reference-files-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-reference-files-openapi.json](openapi/_original/bnsf-reference-files-openapi.json)
-- **Overlay:** [overlays/bnsf-reference-files-overlay.yaml](overlays/bnsf-reference-files-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/reference-files.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/reference-files.json)
-
-### BNSF Diagnostics API
-
-The BNSF Diagnostics API exposes an unauthenticated gateway health check that answers 200 with the body <status>ok</status> on both the production and trial hosts, and a Restricted analytic-event operation for submitting usage telemetry. The health check is the only operation on the whole BNSF Customer API reachable without a registered client certificate.
-
-- **Human URL:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Base URL:** `https://api.bnsf.com:6443`
-
-#### Tags
-
-- Diagnostics
-- Health Check
-- Monitoring
-- Telemetry
-
-#### Properties
-
-- **OpenAPI:** [openapi/bnsf-diagnostics-openapi.yml](openapi/bnsf-diagnostics-openapi.yml)
-- **OpenAPISource:** [openapi/_original/bnsf-diagnostics-openapi.json](openapi/_original/bnsf-diagnostics-openapi.json)
-- **Overlay:** [overlays/bnsf-diagnostics-overlay.yaml](overlays/bnsf-diagnostics-overlay.yaml)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Specification:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/diagnostics.json)
-
-## Common Properties
-
-- **OpenAPI:** [openapi/bnsf-trace-openapi.yml](openapi/bnsf-trace-openapi.yml)
-- **Authentication:** [authentication/bnsf-authentication.yml](authentication/bnsf-authentication.yml)
-- **Conventions:** [conventions/bnsf-conventions.yml](conventions/bnsf-conventions.yml)
-- **ErrorCatalog:** [errors/bnsf-problem-types.yml](errors/bnsf-problem-types.yml)
-- **Lifecycle:** [lifecycle/bnsf-lifecycle.yml](lifecycle/bnsf-lifecycle.yml)
-- **Conformance:** [conformance/bnsf-conformance.yml](conformance/bnsf-conformance.yml)
-- **DataModel:** [data-model/bnsf-data-model.yml](data-model/bnsf-data-model.yml)
-- **RateLimits:** [rate-limits/bnsf-rate-limits.yml](rate-limits/bnsf-rate-limits.yml)
-- **Plans:** [plans/bnsf-plans-pricing.yml](plans/bnsf-plans-pricing.yml)
-- **Sandbox:** [sandbox/bnsf-sandbox.yml](sandbox/bnsf-sandbox.yml)
-- **Webhooks:** [asyncapi/bnsf-webhooks.yml](asyncapi/bnsf-webhooks.yml)
-- **AgentSkill:** [skills/_index.yml](skills/_index.yml)
-- **LLMsTxt:** [llms/bnsf-llms.txt](llms/bnsf-llms.txt)
-- **X-MCPServerCandidate:** [mcp/bnsf-mcp.yml](mcp/bnsf-mcp.yml)
-- **Packages:** [packages/bnsf-packages.yml](packages/bnsf-packages.yml)
-- **DomainSecurity:** [security/bnsf-domain-security.yml](security/bnsf-domain-security.yml)
-- **AgenticAccess:** [agentic-access/bnsf-agentic-access.yml](agentic-access/bnsf-agentic-access.yml)
-- **FinOps:** [finops/bnsf-finops.yml](finops/bnsf-finops.yml)
-- **Website:** [https://www.bnsf.com](https://www.bnsf.com)
-- **Portal:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **DeveloperPortal:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/)
-- **Documentation:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/catalog/)
-- **APIReference:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **Console:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/developers-console/)
-- **GettingStarted:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/getting-started/)
-- **SignUp:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/registration/)
-- **Support:** [https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/](https://www.bnsf.com/ship-with-bnsf/support-services/customer-api/support/)
-- **Login:** [https://customer2.bnsf.com/](https://customer2.bnsf.com/)
-- **Blog:** [https://www.bnsf.com/news-media/railtalk/](https://www.bnsf.com/news-media/railtalk/)
-- **TermsOfService:** [https://www.bnsf.com/site-terms-of-use.html](https://www.bnsf.com/site-terms-of-use.html)
-- **PrivacyPolicy:** [https://www.bnsf.com/privacy-policy.html](https://www.bnsf.com/privacy-policy.html)
-- **LinkedIn:** [https://www.linkedin.com/company/bnsf-railway](https://www.linkedin.com/company/bnsf-railway)
-
-## Maintainers
-
-- Kin Lane <kinlane@gmail.com>
+| Facet | Score |
+|---|---|
+| Discoverability | 78.6 |
+| Contract quality | 46.6 |
+| Contract governance | 18.2 |
+| Operational transparency | 39.5 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 34.2 |
+
+**Agent readiness 29.4** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | mostly |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/bnsf/](https://apis.io/providers/bnsf/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for BNSF: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/bnsf/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
