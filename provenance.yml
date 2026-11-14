@@ -14,14 +14,26 @@ artifacts:
   capabilities/bnsf-capability-edges.yml:
     method: unknown
     evidence: no authorship recorded
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
+    method: unknown
+    evidence: no authorship recorded
   conformance/bnsf-conformance.yml:
     method: searched
     evidence: declared in the artifact
   conventions/bnsf-conventions.yml:
     method: searched
     evidence: declared in the artifact
+  data-license/bnsf-data-license.yml:
+    method: harvested
+    evidence: declared in the artifact
   data-model/bnsf-data-model.yml:
     method: derived
+    evidence: declared in the artifact
+  eligibility/bnsf-eligibility.yml:
+    method: harvested
     evidence: declared in the artifact
   errors/bnsf-problem-types.yml:
     method: derived
@@ -35,7 +47,7 @@ artifacts:
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -99,6 +111,9 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-11-02T082323.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/bnsf-lifecycle.yml:
@@ -222,6 +237,9 @@ artifacts:
   plans/bnsf-plans-pricing.yml:
     method: searched
     evidence: declared in the artifact
+  privacy/bnsf-privacy-policy.yml:
+    method: harvested
+    evidence: declared in the artifact
   rate-limits/bnsf-rate-limits.yml:
     method: searched
     evidence: declared in the artifact
@@ -254,6 +272,9 @@ artifacts:
     evidence: declared in the artifact
   skills/bnsf-trace-intermodal-and-automotive.md:
     method: generated
+    evidence: declared in the artifact
+  terms/bnsf-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   well-known/bnsf-well-known.yml:
     method: unknown
